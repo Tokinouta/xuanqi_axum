@@ -1,37 +1,8 @@
 pub mod model;
+pub mod web_service;
 
-use actix_files::{Files, NamedFile};
-// use actix_session::{CookieSession, Session};
-use actix_web::{
-    error, get, post,
-    http::{
-        header::{self, ContentType},
-        Method, StatusCode,
-    },
-    middleware, web, App, Either, HttpRequest, HttpResponse, HttpServer, Responder, Result,
-};
-
-#[get("/ra")]
-async fn index(req: HttpRequest) -> impl Responder {
-    let path = "static/index.html";
-    HttpResponse::build(StatusCode::OK)
-        .content_type(ContentType::plaintext())
-        .body(include_str!("./static/index.html"))
-}
-
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
-
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
-
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
-}
+use actix_web::{web, App, HttpServer};
+use web_service::{echo, hello, index, manual_hello};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

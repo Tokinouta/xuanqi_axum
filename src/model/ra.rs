@@ -1,5 +1,3 @@
-use std::{convert::Infallible, io::Error};
-
 use mongodb::{
     options::{ClientOptions, Credential, ServerAddress},
     Client,
