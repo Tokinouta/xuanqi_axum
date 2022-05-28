@@ -1,4 +1,4 @@
-mod model;
+pub mod model;
 
 use actix_files::{Files, NamedFile};
 // use actix_session::{CookieSession, Session};
@@ -35,6 +35,7 @@ async fn manual_hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    model::ra::test_mongodb().await;
     HttpServer::new(|| {
         App::new()
             .service(hello)

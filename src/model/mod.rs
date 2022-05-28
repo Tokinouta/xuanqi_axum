@@ -1,6 +1,8 @@
 use bitflags::bitflags;
 use serde::{Deserialize, Serialize};
 
+pub mod ra;
+
 bitflags! {
     #[derive(Serialize, Deserialize)]
     struct Authority: u32 {
