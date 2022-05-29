@@ -7,7 +7,7 @@ use web_service::{echo, hello, index, manual_hello};
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let client = model::database::create_client().await;
-    model::database::connect_mongodb(&client).await;
+    model::database::list_database_names(&client).await;
 
     HttpServer::new(move || {
         App::new()
