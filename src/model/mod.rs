@@ -1,7 +1,7 @@
 use bitflags::bitflags;
 use serde::{Deserialize, Serialize};
 
-pub mod ra;
+pub mod database;
 
 bitflags! {
     #[derive(Serialize, Deserialize)]
