@@ -1,4 +1,5 @@
 use mongodb::{
+    bson::Document,
     options::{ClientOptions, Credential, ServerAddress},
     Client, Database,
 };
@@ -49,12 +50,22 @@ pub async fn create_database(client: &Client, name: &str) -> Option<Database> {
     }
 }
 
+pub async fn create_item(db: Database, collection: &str, items: Vec<Document>) {
+    let collection = db.collection::<Document>(collection);
+    collection
+        .insert_many(items, None)
+        .await
+        .expect("failed to insert");
+}
+
 #[cfg(test)]
 mod tests {
     use mongodb::bson::{doc, Document};
+    use futures::stream::{StreamExt, TryStreamExt};
 
     // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
     // 注意私有的函数也可以被测试！
+    use super::super::*;
     use super::*;
 
     #[test]
@@ -103,5 +114,75 @@ mod tests {
         };
         let res = tokio_test::block_on(b());
         assert!(!res.contains(&name.to_string()));
+    }
+
+    #[test]
+    fn test_customized_add() {
+        // 生成测试数据
+        let repo = Repo {
+            _id: 0 as u64,
+            name: "rarara".to_string(),
+            owner: String::from("ra"),
+            public_status: PublicStatus::Private,
+            modifiers: vec![String::from("ra"), String::from("ra"), String::from("ra")],
+        };
+
+        let item = Item {
+            _id: 1 as u64,
+            repo: repo.name(),
+            proposer: String::from("ra"),
+            authority: Authority::USER_READ
+                | Authority::USER_WRITE
+                | Authority::GROUP_READ
+                | Authority::GROUP_WRITE
+                | Authority::OTHER_READ
+                | Authority::OTHER_READ,
+            approvement: 0,
+            itemtype: ItemType::Item,
+            name: "Test".to_string(),
+            description: "Test Item".to_string(),
+            description_word_vector: vec!["[<厕所>]+[<小房间>]*0.3".to_string()],
+            word_vector: vec![0.0, 0.0, 0.0],
+            content: Some(Box::new(Item {
+                _id: 2 as u64,
+                repo: repo.name(),
+                proposer: String::from("ra"),
+                authority: Authority::USER_READ | Authority::OTHER_READ,
+                approvement: 0,
+                itemtype: ItemType::File,
+                name: "Test sub".to_string(),
+                description: "Test Sub Item".to_string(),
+                description_word_vector: vec!["[<厕所>]+[<小房间>]*0.3".to_string()],
+                word_vector: vec![1.0, 2.0, 3.0],
+                content: None,
+            })),
+        };
+
+        let a = || async {
+            let name = "rarara";
+            let client = create_client().await;
+            let db = create_database(&client, name).await.unwrap();
+
+            // 创建一个collection用于存储数据
+            let collection = db.collection::<Item>("books");
+            // 待写入的数据
+            let docs = vec![&item];
+
+            // Insert some documents into the "rarara.books" collection.
+            // 写入完成之后才真正能够在数据库中获取到rarara库
+            collection.insert_many(docs, None).await.expect("msg");
+            list_database_names(&client).await;
+            let res = collection.find(doc!{ "proposer": { "$in": [ "ra", "rara" ] } }, None).await.unwrap();
+            client
+                .database(name)
+                .drop(None) // 删除rarara，毕竟是一个测试用的库
+                .await
+                .expect("no such database");
+            let res: Vec<Item> = res.try_collect().await.unwrap();
+
+            res
+        };
+        let res = tokio_test::block_on(a());
+        assert!(res.contains(&item));
     }
 }

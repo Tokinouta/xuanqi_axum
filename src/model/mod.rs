@@ -16,7 +16,7 @@ bitflags! {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct Repo {
+pub struct Repo {
     _id: u64,
     name: String,
     owner: String,
@@ -30,8 +30,8 @@ impl Repo {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Item {
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+pub struct Item {
     _id: u64,
     repo: String,
     proposer: String,
@@ -61,7 +61,7 @@ enum PublicStatus {
     Private,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 enum ItemType {
     Item,
     File,
