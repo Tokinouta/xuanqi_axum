@@ -2,8 +2,14 @@ use actix_web::{
     get, post,
     http::{
         header::{ContentType}, StatusCode,
-    }, HttpRequest, HttpResponse, Responder,
+    }, HttpRequest, HttpResponse, Responder, web,
 };
+use mongodb::Client;
+
+use crate::model::Repo;
+
+const DB_NAME: &str = "myApp";
+const COLL_NAME: &str = "users";
 
 #[get("/ra")]
 pub async fn index(_req: HttpRequest) -> impl Responder {
@@ -25,4 +31,14 @@ pub async fn echo(req_body: String) -> impl Responder {
 
 pub async fn manual_hello() -> impl Responder {
     HttpResponse::Ok().body("Hey there!")
+}
+
+#[get("/create_repo")]
+pub async fn create_repo(client: web::Data<Client>, form: web::Form<Repo>) -> HttpResponse {
+    let collection = client.database(DB_NAME).collection(COLL_NAME);
+    let result = collection.insert_one(form.into_inner(), None).await;
+    match result {
+        Ok(_) => HttpResponse::Ok().body("user added"),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
 }
