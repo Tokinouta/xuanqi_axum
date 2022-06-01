@@ -6,7 +6,7 @@ use actix_web::{
 };
 use mongodb::Client;
 
-use crate::model::Repo;
+use crate::model::{Repo, User};
 
 const DB_NAME: &str = "myApp";
 const COLL_NAME: &str = "users";
@@ -37,6 +37,16 @@ pub async fn manual_hello() -> impl Responder {
 pub async fn create_repo(client: web::Data<Client>, form: web::Form<Repo>) -> HttpResponse {
     let collection = client.database(DB_NAME).collection(COLL_NAME);
     let result = collection.insert_one(form.into_inner(), None).await;
+    match result {
+        Ok(_) => HttpResponse::Ok().body("user added"),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
+}
+
+#[post("/create_user")]
+pub async fn create_user(client: web::Data<Client>, user: web::Form<User>) -> HttpResponse {
+    let collection = client.database(DB_NAME).collection(COLL_NAME);
+    let result = collection.insert_one(user.into_inner(), None).await;
     match result {
         Ok(_) => HttpResponse::Ok().body("user added"),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
