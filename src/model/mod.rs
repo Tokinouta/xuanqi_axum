@@ -1,13 +1,14 @@
 use bitflags::bitflags;
+use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 
 pub mod database;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
-    _id: u64,
-    name: String,
-    password: String
+    _id: Option<ObjectId>,
+    pub name: String,
+    pub password: String
 }
 
 bitflags! {

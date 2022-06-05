@@ -1,8 +1,20 @@
 use mongodb::{
-    bson::Document,
+    bson::{ser::to_document, Document},
     options::{ClientOptions, Credential, ServerAddress},
     Client, Database,
 };
+
+use super::User;
+use futures::stream::StreamExt;
+
+pub const DB_NAME: &str = "myApp";
+pub const COLL_NAME: &str = "users";
+
+#[derive(Debug)]
+pub enum DatabaseError {
+    Mongo(mongodb::error::Error),
+    Bson(mongodb::bson::ser::Error)
+}
 
 pub async fn create_client() -> Client {
     // 尽管这里面看上去都是同步API，但是实际还是需要一个异步环境来执行。否则会报错。
@@ -58,10 +70,35 @@ pub async fn create_item(db: Database, collection: &str, items: Vec<Document>) {
         .expect("failed to insert");
 }
 
+pub async fn verify_user(client: &Client, user: &User) -> Result<bool, DatabaseError> {
+    let db = client.database(DB_NAME).collection::<User>(COLL_NAME);
+    let docu = match to_document(user) {
+        Ok(s) => s,
+        Err(e) => return Err(DatabaseError::Bson(e)),
+    };
+    let res = match db
+        .find(docu, None)
+        .await
+        {
+            Ok(s) => s.count().await,
+            Err(e) => return Err(DatabaseError::Mongo(e)),
+        };
+    Ok(res > 0)
+}
+
+pub async fn add_user(client: &Client, user: &User) -> Result<(), mongodb::error::Error> {
+    let db = client.database(DB_NAME).collection::<User>(COLL_NAME);
+    let res = db.insert_one(user, None).await;
+    match res {
+        Ok(_) => Ok(()),
+        Err(w) => Err(w),
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use mongodb::bson::{doc, Document};
     use futures::stream::{StreamExt, TryStreamExt};
+    use mongodb::bson::{doc, Document};
 
     // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
     // 注意私有的函数也可以被测试！
@@ -172,7 +209,10 @@ mod tests {
             // 写入完成之后才真正能够在数据库中获取到rarara库
             collection.insert_many(docs, None).await.expect("msg");
             list_database_names(&client).await;
-            let res = collection.find(doc!{ "proposer": { "$in": [ "ra", "rara" ] } }, None).await.unwrap();
+            let res = collection
+                .find(doc! { "proposer": { "$in": [ "ra", "rara" ] } }, None)
+                .await
+                .unwrap();
             client
                 .database(name)
                 .drop(None) // 删除rarara，毕竟是一个测试用的库
@@ -184,5 +224,38 @@ mod tests {
         };
         let res = tokio_test::block_on(a());
         assert!(res.contains(&item));
+    }
+
+    #[test]
+    fn test_verify_suer() {
+        // 生成测试数据
+        let user = User {
+            _id: None,
+            name: "rarara".to_string(),
+            password: "rarara".to_string(),
+        };
+
+        let a = || async {
+            let name = "rarara";
+            let client = create_client().await;
+
+            // 创建一个collection handler
+            let collection = client.database(DB_NAME).collection::<User>(COLL_NAME);
+            // 待写入的数据
+            let docs = vec![&user];
+
+            // Insert some documents into the "rarara.books" collection.
+            let res1 = verify_user(&client, &user).await.unwrap();
+            collection.insert_many(docs, None).await.expect("msg");
+            let res2 = verify_user(&client, &user).await.unwrap();
+            collection
+                .delete_one(to_document(&user).unwrap(), None)
+                .await
+                .unwrap();
+            let res3 = verify_user(&client, &user).await.unwrap();
+            (res1, res2, res3)
+        };
+        let res = tokio_test::block_on(a());
+        assert_eq!(res, (false, true, false));
     }
 }

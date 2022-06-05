@@ -1,22 +1,32 @@
+use actix_session::Session;
 use actix_web::{
-    get, post,
-    http::{
-        header::{ContentType}, StatusCode,
-    }, HttpRequest, HttpResponse, Responder, web,
+    get,
+    http::{header::ContentType, StatusCode},
+    post, web, HttpRequest, HttpResponse, Responder,
 };
 use mongodb::Client;
 
-use crate::model::{Repo, User};
+use crate::model::{Repo, User, database::{DB_NAME, COLL_NAME}};
 
-const DB_NAME: &str = "myApp";
-const COLL_NAME: &str = "users";
+mod authentication;
+pub use authentication::*;
 
 #[get("/ra")]
-pub async fn index(_req: HttpRequest) -> impl Responder {
+pub async fn index(session: Session, _req: HttpRequest) -> impl Responder {
     let _path = "static/index.html";
-    HttpResponse::build(StatusCode::OK)
-        .content_type(ContentType::plaintext())
-        .body(include_str!("../static/index.html"))
+    // RequestSession trait is used for session access
+    let mut counter = 1;
+    if let Some(count) = session.get::<i32>("counter").unwrap() {
+        // log::info!("SESSION value: {}", count);
+        counter = count + 1;
+        session.insert("counter", counter).unwrap();
+        HttpResponse::build(StatusCode::OK)
+            .content_type(ContentType::plaintext())
+            .body(include_str!("../static/index.html"))
+    } else {
+        session.insert("counter", counter).unwrap();
+        HttpResponse::build(StatusCode::OK).body("new")
+    }
 }
 
 #[get("/")]

@@ -16,6 +16,8 @@ tokio = "1.18.2"
 tokio-stream = " 0.1.8"
 futures = "0.3.21"
 actix-cors = "0.6.1"
+actix-identity = "0.4.0"
+actix-session = { version = "0.6.2", features = ["redis-rs-session"] }
 
 [dev-dependencies]
 tokio-test = "0.4.2"
