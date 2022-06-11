@@ -13,7 +13,7 @@ pub const COLL_NAME: &str = "users";
 #[derive(Debug)]
 pub enum DatabaseError {
     Mongo(mongodb::error::Error),
-    Bson(mongodb::bson::ser::Error)
+    Bson(mongodb::bson::ser::Error),
 }
 
 pub async fn create_client() -> Client {
@@ -70,34 +70,50 @@ pub async fn create_item(db: Database, collection: &str, items: Vec<Document>) {
         .expect("failed to insert");
 }
 
-pub async fn verify_user(client: &Client, user: &User) -> Result<bool, DatabaseError> {
+pub async fn verify_user(client: &Client, user: &User) -> Result<bool, Box<dyn std::error::Error>> {
     let db = client.database(DB_NAME).collection::<User>(COLL_NAME);
     let docu = match to_document(user) {
         Ok(s) => s,
-        Err(e) => return Err(DatabaseError::Bson(e)),
+        Err(e) => return Err(Box::new(e)),
     };
-    let res = match db
-        .find(docu, None)
-        .await
-        {
-            Ok(s) => s.count().await,
-            Err(e) => return Err(DatabaseError::Mongo(e)),
-        };
+    let res = match db.find(docu, None).await {
+        Ok(s) => s.count().await,
+        Err(e) => return Err(Box::new(e)),
+    };
     Ok(res > 0)
 }
 
-pub async fn add_user(client: &Client, user: &User) -> Result<(), mongodb::error::Error> {
+pub async fn add_user(client: &Client, user: &User) -> Result<(), Box<dyn std::error::Error>> {
     let db = client.database(DB_NAME).collection::<User>(COLL_NAME);
-    let res = db.insert_one(user, None).await;
-    match res {
-        Ok(_) => Ok(()),
-        Err(w) => Err(w),
+
+    // 将发送来的user转换为查询用的document
+    let docu = match to_document(user) {
+        Ok(s) => s,
+        Err(e) => return Err(Box::new(e)),
+    };
+
+    // 查询user数据库中有没有当前用户的信息，并返回查到的数量
+    // 注意这里需要引入futures::stream::StreamExt才能使用count()函数
+    let res = match db.find(docu, None).await {
+        Ok(s) => s.count().await,
+        Err(e) => return Err(Box::new(e)),
+    };
+
+    // 如果没有就新增这个用户
+    if res == 0 {
+        let res = db.insert_one(user, None).await;
+        match res {
+            Ok(_) => Ok(()),
+            Err(e) => Err(Box::new(e)),
+        }
+    } else {
+        Err("nothing")?
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use futures::stream::{StreamExt, TryStreamExt};
+    use futures::stream::TryStreamExt;
     use mongodb::bson::{doc, Document};
 
     // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
@@ -236,7 +252,7 @@ mod tests {
         };
 
         let a = || async {
-            let name = "rarara";
+            // let name = "rarara";
             let client = create_client().await;
 
             // 创建一个collection handler

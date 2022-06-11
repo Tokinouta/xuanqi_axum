@@ -1,10 +1,6 @@
-use actix_identity::Identity;
 use actix_session::Session;
 use actix_web::{
-    error::Error,
-    get,
-    http::{header::ContentType, StatusCode},
-    post, web, HttpRequest, HttpResponse, Responder, Result,
+    post, web, HttpResponse, Result,
 };
 use mongodb::Client;
 use serde::{Deserialize, Serialize};

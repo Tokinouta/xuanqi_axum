@@ -33,6 +33,7 @@ pub struct Repo {
 }
 
 impl Repo {
+    #[allow(dead_code)]
     fn name(&self) -> String {
         self.name.as_str().clone().to_string()
     }
