@@ -25,7 +25,7 @@ bitflags! {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Repo {
-    _id: u64,
+    _id: Option<ObjectId>,
     name: String,
     owner: String,
     public_status: PublicStatus,
@@ -41,7 +41,7 @@ impl Repo {
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Item {
-    _id: u64,
+    _id: Option<ObjectId>,
     repo: String,
     proposer: String,
     authority: Authority,
