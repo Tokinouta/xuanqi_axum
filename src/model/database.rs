@@ -8,7 +8,9 @@ use super::User;
 use futures::stream::StreamExt;
 
 pub const DB_NAME: &str = "myApp";
-pub const COLL_NAME: &str = "users";
+pub const USERS_COLL: &str = "users";
+pub const REPOS_COLL: &str = "repos";
+pub const ITEMS_COLL: &str = "items";
 
 #[derive(Debug)]
 pub enum DatabaseError {
@@ -71,7 +73,7 @@ pub async fn create_item(db: Database, collection: &str, items: Vec<Document>) {
 }
 
 pub async fn verify_user(client: &Client, user: &User) -> Result<bool, Box<dyn std::error::Error>> {
-    let db = client.database(DB_NAME).collection::<User>(COLL_NAME);
+    let db = client.database(DB_NAME).collection::<User>(USERS_COLL);
     let docu = match to_document(user) {
         Ok(s) => s,
         Err(e) => return Err(Box::new(e)),
@@ -84,7 +86,7 @@ pub async fn verify_user(client: &Client, user: &User) -> Result<bool, Box<dyn s
 }
 
 pub async fn add_user(client: &Client, user: &User) -> Result<(), Box<dyn std::error::Error>> {
-    let db = client.database(DB_NAME).collection::<User>(COLL_NAME);
+    let db = client.database(DB_NAME).collection::<User>(USERS_COLL);
 
     // 将发送来的user转换为查询用的document
     let docu = match to_document(user) {
@@ -173,7 +175,7 @@ mod tests {
     fn test_customized_add() {
         // 生成测试数据
         let repo = Repo {
-            _id: 0 as u64,
+            _id: None,
             name: "rarara".to_string(),
             owner: String::from("ra"),
             public_status: PublicStatus::Private,
@@ -181,7 +183,7 @@ mod tests {
         };
 
         let item = Item {
-            _id: 1 as u64,
+            _id: None,
             repo: repo.name(),
             proposer: String::from("ra"),
             authority: Authority::USER_READ
@@ -197,7 +199,7 @@ mod tests {
             description_word_vector: vec!["[<厕所>]+[<小房间>]*0.3".to_string()],
             word_vector: vec![0.0, 0.0, 0.0],
             content: Some(Box::new(Item {
-                _id: 2 as u64,
+                _id: None,
                 repo: repo.name(),
                 proposer: String::from("ra"),
                 authority: Authority::USER_READ | Authority::OTHER_READ,
@@ -212,9 +214,9 @@ mod tests {
         };
 
         let a = || async {
-            let name = "rarara";
+            let name = "6692dc25-b144-459b-9a1d-53ad7490683c";
             let client = create_client().await;
-            let db = create_database(&client, name).await.unwrap();
+            let db = client.database(name);
 
             // 创建一个collection用于存储数据
             let collection = db.collection::<Item>("books");
@@ -256,7 +258,7 @@ mod tests {
             let client = create_client().await;
 
             // 创建一个collection handler
-            let collection = client.database(DB_NAME).collection::<User>(COLL_NAME);
+            let collection = client.database(DB_NAME).collection::<User>(USERS_COLL);
             // 待写入的数据
             let docs = vec![&user];
 
