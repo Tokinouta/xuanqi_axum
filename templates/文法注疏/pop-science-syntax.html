@@ -1,0 +1,242 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="/static/文法注疏/favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .NOBORDER {
+      box-shadow: none;
+      padding: 0px 10px 0px 0px;
+    }
+
+    .vertical_center {
+      margin-top: 25px;
+      transform: translateY(-50%);
+    }  
+    /* ↑navbar需要 */
+
+    h3 {color: #0097e8;}
+    h5 {color: #0097e8;}
+    p {color: #003b93;}
+    .bg-info {background-color: rgb(43, 190, 254)!important;}
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ↓标题栏。 -->
+    <div style="border-bottom: 5px solid #0097e8;">
+      <b-navbar toggleable="lg" type="light" variant="info" class="NOBORDER">
+        <b-navbar-brand href="/syntax/" class="NOBORDER"><img src="/static/文法注疏/topleftVision.svg" class="d-inline-block align-top"
+            height="50px" style="filter: drop-shadow(1px 1px 8px #004293);"/></b-navbar-brand>
+
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav style="padding: 0px 10px 0px 10px;">
+
+          <!-- Right aligned nav items -->
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item href="/syntax/about">关于</b-nav-item>
+            <b-nav-item href="/syntax/pop-science-syntax">句法分析科普</b-nav-item>
+
+            <b-nav-item-dropdown text="使用说明" right>
+              <b-dropdown-item href="/syntax/usage">本网站能用来干啥</b-dropdown-item>
+              <b-dropdown-item href="/syntax/method">使用方法</b-dropdown-item>
+              <b-dropdown-item href="/syntax/fee">费用</b-dropdown-item>
+              <b-dropdown-item href="/syntax/notes">注意事项</b-dropdown-item>
+            </b-nav-item-dropdown>
+
+            <b-nav-item-dropdown right>
+              <!-- Using 'button-content' slot -->
+              <template #button-content>
+                <em>
+                  <span v-if="! isLoggedIn">登录/注册</span>
+                  <span v-if="isLoggedIn">已登录 | 我的账户</span>
+                  <svg viewBox="785 321 40 40" width="19px" height="19px" class="align-text-bottom">
+                    <g id="Canvas_1" stroke="none" stroke-opacity="1" fill="none" stroke-dasharray="none"
+                      fill-opacity="1">
+                      <title>Canvas 1</title>
+                      <g id="Canvas_1_Layer_1">
+                        <title>Layer 1</title>
+                        <g id="Graphic_2">
+                          <title>Account Circle</title>
+                          <path
+                            d="M 805 321 C 793.96 321 785 329.96 785 341 C 785 352.04 793.96 361 805 361 C 816.04 361 825 352.04 825 341 C 825 329.96 816.04 321 805 321 Z M 805 327 C 808.32 327 811 329.68 811 333 C 811 336.32 808.32 339 805 339 C 801.68 339 799 336.32 799 333 C 799 329.68 801.68 327 805 327 Z M 805 355.4 C 800 355.4 795.58 352.84 793 348.96 C 793.06 344.98 801 342.8 805 342.8 C 808.98 342.8 816.94 344.98 817 348.96 C 814.42 352.84 810 355.4 805 355.4 Z"
+                            fill="#346" />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </em>
+              </template>
+              <b-dropdown-item v-if="isLoggedIn" href="/syntax/account-info">基本信息</b-dropdown-item>
+              <b-dropdown-item v-if="isLoggedIn" @click="logout">退出登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-login')">登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-signup')">注册新用户</b-dropdown-item>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
+    </div>
+
+
+    <div class="row" style="padding: 16px 0 0;">
+      <div class="col-md-8 order-md-2 col-xl-6" style="background-color:#fff;">
+        <div style="padding: 15px;">
+        <!-- 中间栏。 -->
+        <br><br>
+        <h3>💡句法分析科普</h3><br>
+        <b-list-group style="color: #003b93; border-color: #0097e8;">
+          <b-list-group-item><h5>"句法结构"的定义</h5>句法就是语法。虽然给出精确定义很困难，但大体可以将句法结构理解为"用文本表述意思的一种规范协议/约定"。<br><br>上面的解释仍然很抽象。其实，大部分句法规则很简单，它们规范的是"文本以何种顺序组合"与"形成特定意思"之间的对应关系。例如，中文规定主谓宾顺序，就是要求短语需以主语-谓语-宾语顺序出现，以此表示谓语由主语发起、作用于宾语。如果将顺序倒过来，那么表述的意思将会完全不同。<br><br>当然，也有少部分句法规则较为复杂，如英语中复杂的<strong>从句</strong>以"wh词"开头可向句中其它短语添加多种修饰；以及<strong>代词</strong>"它/it/あれ"以省略形式表示此前提到/可推理得出的文本。无论是<strong>从句</strong>、还是<strong>代词</strong>，都符合本节第一段所提出的"用文本表述意思的一种规范协议/约定"的定义。</b-list-group-item>
+          <b-list-group-item><h5>为何 句法结构 通常为树状结构？</h5>数千年的实践探索，不断归纳演化……语言的规则经历一代代先辈的打磨，早已经非常符合思维的规律。<br><br>的确，主流语言的句法分析结果，通常展现出树状形式——亦即，将文本按照原文顺序排序，那么单个句法结构短语必定在文本中占据连续的一段（而不是分开的几段），且这个句法结构的子结构必然不重叠地覆盖这一段文本。事实上，这一规律已经得到句法分析工程师们的默认，句法分析神经网络内在的结构正是基于这个数学规律而设计出来的。<br><br>语法为何符合树状结构的规律？因为这种规律非常适合完成语言的本质功能——即方便人与人之间沟通、方便理解语言要传达的意思。每个短语在文本中占据连续的位置、子短语依据树状结构共同结合成为一个母短语结构，这种规律方便人们阅读单个短语时无需跨过文本来回比对、也让意思的组合变得简便（只需将子短语按规律放在一起即可）。因此，常见的语言的语法规则通常最后都会演变成为具有树状结构规律。<br><br>但是，其实我们完全可以设计一种新的语言，让句法结构无法通过树状结构表示。例如强行规定主语和宾语中单词穿插出现……或是要求所有形容词必须按顺序出现在句子末端……当然，这种强行设计的语法完全不符合人们沟通的思维习惯（因此不会在实际生活中采用），但是句法结构的确不一定必须是树状的，常规语种中共同采用的树状结构仅仅是为了符合人们的表达习惯。【其实现实语言中，也存在非树状的语法结构，如带括号解释的语句。括号所包含的内容常常无法构成与前后短语相连的树状结构。】</b-list-group-item>
+          <b-list-group-item><h5>为何句法结构信息可以加快阅读速度</h5>笔者在使用句法分析服务的过程中，常常发现阅读句法分析的结果十分省力，阅读速度似乎比直接阅读普通文本更快。<br><br>笔者猜测这是几个原因叠加的结果：<br><br>（1）首先是句法分析结果的展现方式是每句话一行，而且字大行稀，非常容易让人集中注意力。<br><br>（2）句法分析服务让机器人代替人脑完成了词语/短语分割、以及结构分解的任务。当人脑阅读纯文本时，这些任务都需要在人脑内部进行；但是如果阅读机器分析好的结果，那么人脑就会根据结构化展示的视觉信号自然而然的更快分析，从而达到省力的效果。<br><br>推荐读者也来试一试分词促进阅读速度的效果哟~ 对于长难句很多的文本（如法条/合同/招股书/研报），采用机器人帮您分析句法结构是个不错的选择！
+          </b-list-group-item>
+          <b-list-group-item><h5>目前句法结构分析算法的原理，及其效果</h5>这部分内容很深奥，也不属于作者的专业知识范畴，因此算法原理我恕难讲解。我只知道曾经语法结构分析需要用CNN（卷积神经网络）完成，但现在的PCFG算法则是采取了并非深度学习、而是完全可解释的规则算法进行句法分析。<br><br>无论是PCFG算法、还是CNN算法，其内部都假设句法结构为树状结构。CNN逐级生成母短语包含子短语的mask，而PCFG算法则根据概率论找到最大似然的那一种语法树结构。PCFG算法生成的效果很好，而且推理阶段不需要深度学习，所需的计算量较低。</b-list-group-item>
+        </b-list-group>
+        </div>
+      </div>
+      <div class="col-md-2 order-md-0 col-xl-3" style="background-color:ffffff;">
+        广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+      </div>
+      <div class="col-md-2 order-md-10 col-xl-3" style="background-color:ffffff;">
+        广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+      </div>
+    </div>
+    <!-- ↓注册modal。 -->
+    <b-modal id="bv-modal-signup" hide-footer>
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          注册<code>新用户</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎来到文法注疏~~~</h3>
+          <span style="color: #0097e8;">本网站支持用户名密码注册登录。<br>用户名密码注册需保存妥善密码，网站不提供找回，密码丢失账户余额将无法追回。</span>
+          <br><b-form-input v-model="signup_username" type="username" placeholder="输入独一无二的 用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+          <b-form-input v-model="signup_pwdconfirm" type="password" placeholder="再次确认 密码"></b-form-input>
+        </div>
+        <b-button class="mt-3" block @click="signup">注册</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-signup')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+    <!-- ↓登录modal。 -->
+    <b-modal id="bv-modal-login" hide-footer>
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          <code>用户登录</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎登录文法注疏~~~</h3>
+          <br><b-form-input v-model="signup_username" type="username" placeholder="输入用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+        </div>
+        <b-button class="mt-3" block @click="login">登录</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-login')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+  </div>
+  <div style="padding: 20px;">
+    京ICP备 2333333号。
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js" integrity="sha256-JLmknTdUZeZZ267LP9qB+/DT7tvxOOKctSKeUC2KT6E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+    integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+    integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jssha@2.3.1/src/sha256.js" integrity="sha256-NyuvLfsvfCfE+ceV6/W19H+qVp3M8c9FzAgj72CW39w=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    isLoading = false
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isLoggedIn: {[{is_Logged_In}]},
+        busy_connecting_backend: false,
+        query_txt: '',
+        signup_username: '',
+        signup_password: '',
+        signup_pwdconfirm: '',
+        others_search: []
+      },
+      mounted() {},
+      methods: {
+        signup: function () {
+          if (this.signup_username.length < 2) {window.alert("用户名长度不得小于2位，请重新输入！"); return;}
+          if (this.signup_password.length < 5) {window.alert("密码长度不得小于5位，请重新输入！"); return;}
+          if (this.signup_password != this.signup_pwdconfirm) {window.alert("两次密码输入不一致，请检查输入！"); return;}
+          this.busy_connecting_backend = true
+          console.log("sign up.", this.signup_username, this.signup_password, this.signup_pwdconfirm);
+          var hashObj = new jsSHA("SHA-256", "TEXT", {numRounds: 1});
+          hashObj.update(this.signup_username+this.signup_password+"salter2333");
+          var hash = hashObj.getHash("HEX");
+          console.log('generated login auth:', hash);
+          axios.post('/syntax/sign-up',{
+            username: this.signup_username,
+            auth: hash,
+          }).then(function (response) {
+            // console.log(response);
+            // console.log(response.data);
+            signup_state = response.data;
+            app.busy_connecting_backend = false;
+            if (signup_state == 'conflict_username') {window.alert("您的用户名已被他人占用，请重新输入！\n（推荐使用微信登录避免用户名冲突）"); return;}
+            app.$bvModal.hide('bv-modal-signup');
+            window.alert("已注册成功！\n请等待自动登录"); 
+            app.login();
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        login: function () {
+          if (this.signup_username.length < 2) {window.alert("用户名长度不得小于2位，请重新输入！"); return;}
+          if (this.signup_password.length < 5) {window.alert("密码长度不得小于5位，请重新输入！"); return;}
+          console.log("log in.");
+          var hashObj = new jsSHA("SHA-256", "TEXT", {numRounds: 1});
+          hashObj.update(this.signup_username+this.signup_password+"salter2333");
+          var hash = hashObj.getHash("HEX");
+          console.log('generated login auth:', hash, 'connecting to backend...');
+          this.busy_connecting_backend = true;
+          axios.post('/syntax/log-in',{
+            username: this.signup_username,
+            auth: hash,
+          }).then(function (response) {
+            // console.log(response);
+            // console.log(response.data);
+            login_state = response.data;
+            app.busy_connecting_backend = false;
+            if (login_state != 'ok') {
+              if (login_state == 'already_logged_in') {window.alert("当前用户已经登录。出现此提示应为前端错误，请您刷新网页。");return;}
+              if (login_state == 'nosignup') {window.alert("当前用户尚未注册。请您先注册哟~");return;}
+              window.alert("登录失败，应是用户名或密码错误。请检查输入~\n未注册需先注册。");return;
+            }
+            app.$bvModal.hide('bv-modal-login');
+            app.isLoggedIn = true;
+            window.alert("登录成功！"); 
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        logout: function () {
+          console.log("log out.");
+          axios.post('/syntax/log-out',{}).then(function (response) {
+            app.isLoggedIn = false;
+            window.alert("退出登录成功！"); 
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+      }
+    })
+  </script>
+</body>
+
+</html>

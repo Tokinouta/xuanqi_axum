@@ -1,0 +1,1320 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>文法注疏-第二大脑</title>
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon-大集合！（搭建桌面用）/喵帕斯/apple-touch-icon7.png">
+  <link rel="shortcut icon" href="/static/文法注疏/favicon.ico">
+  <meta name="viewport" content="width=device-width; initial-scale=0.8; maximum-scale=0.8; user-scalable=0;">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+      /* background-color: #f1feff; */
+      background-image: linear-gradient(rgb(243, 255, 254), rgb(225, 247, 255));
+    }
+
+    .NOBORDER {
+      box-shadow: none;
+      padding: 0px 10px 0px 0px;
+    }
+
+    .vertical_center {
+      margin-top: 25px;
+      transform: translateY(-50%);
+    }
+
+    /* ↑navbar需要 */
+    .input_box {
+      border: none;
+      margin: 10px;
+      border-radius: 8px;
+      background-color: #bbf5ff;
+      color: #005963;
+    }
+
+    ::placeholder {
+      font-weight: bold;
+      color: #12c2cf;
+      opacity: 1;
+    }
+
+    .carousel-indicators li {
+      background-color: #0097e8;
+    }
+
+    .carousel-indicators li :active {
+      opacity: 0.67;
+    }
+
+    .carousel-control-next-icon {
+      background-color: #137af7;
+      border-radius: 5px;
+    }
+
+    .carousel-control-prev-icon {
+      background-color: #137af7;
+      border-radius: 5px;
+    }
+
+    #searchButton:hover {
+      border-radius: 25px;
+      box-shadow: 1px 1px 10px rgb(0, 103, 228);
+    }
+
+    #searchButton:active {
+      border-radius: 25px;
+      box-shadow: 1px 1px 10px rgb(155, 150, 0);
+    }
+
+    .wordpanel {
+      font: 20px solid;
+      font-family: "Gill Sans", sans-serif;
+      font-weight: normal;
+      color: #F74F9E;
+      line-height: 1.56;
+    }
+
+    .wordpaneltitle {
+      font-weight: bold;
+      font-size: 25px !important;
+      color:#fa9f00 !important;
+    }
+
+    wordstub {
+      font: 20px solid;
+      font-family: "Gill Sans", sans-serif;
+      color: #020020;
+      line-height: 40px;
+      letter-spacing: 1px;
+      padding: 5px 2px;
+    }
+
+    wordstub:hover {
+      background-color: cyan;
+      text-shadow: 1px 0 0 #F74F9E, 0 0.6px 0 #F74F9E, 1px 0.6px 0 #F74F9E;
+      color: #F74F9E;
+      border-radius: 8px;
+    }
+
+    wordstub:active {
+      background-color: transparent;
+      margin: 0;
+      color: black;
+      text-shadow: 1px 0 0 #000, 0 0.6px 0 #000, 1px 0.6px 0 #000;
+      opacity: 1;
+      transition: 0s;
+    }
+
+    .word-container {
+      font-family: "Gill Sans", sans-serif;
+      display: inline-block;
+      border-radius: 17px;
+    }
+    .word-container-container {
+      font-family: "Gill Sans", sans-serif;
+      display: inline-block;
+      border-radius: 17px;
+    }
+    .word-container:active {
+      background-color: rgb(0, 255, 251);
+      color: black;
+    }
+    .bg-info {background-color: rgb(43, 190, 254)!important;}
+    hr {border-top: 3px solid rgb(80, 255, 203)}
+    .form-control {border-top: 3px solid rgb(120, 235, 255)}
+    .card-body {padding: 15px;}
+    .btn-info {background-color:#1780b8;border-color:#137af7;}
+
+
+    .c-scrollbox {
+      box-shadow: 0px 6px 9px rgb(109, 216, 218);
+    }
+    .c-scrollbox-noshadow {display: block;}
+
+    gr_span {vertical-align: top;display: inline-block;text-align: left; -moz-user-select:none;-webkit-user-select:none;	-ms-user-select:none;	user-select:none;}
+    .sentence_gr_span {display: block;border-right-color: rgb(244, 234, 234) !important;padding: 10px 4px 0px;}
+    .sentence_direct_component_gr_span {margin-bottom: 10px;}
+    .grammar_block {transform: translateY(-2px);display: inline-block;border-radius: 4px;margin: 0px 3px;padding: 0px 2px 3px;border-bottom: 4px solid;border-top: 2px solid;border-left: 2px solid;border-right: 2px solid;}
+    .grammar_block:hover {transform: translateY(-4px);transition-duration: 0.3s;box-shadow: 0px 0px 9px gainsboro;background-color: white;}
+    .TheFocusedItem:active {outline: 6px solid red;transform: translateY(-3px);}
+    .TheFocusedIHL {outline: 6px solid red !important;}
+    
+    .核心关系 {border-color: transparent transparent rgb(234, 217, 226) transparent;}
+    .主语 {border-color: transparent transparent rgb(148, 214, 255) transparent;}
+    .宾语 {border-color: transparent transparent rgb(248, 217, 149) transparent;}
+    .间接宾语 {border-color: transparent transparent rgb(248, 171, 149) transparent;}
+    .前置宾语 {border-color: transparent transparent rgb(149, 242, 248) transparent;}
+    .形容词定语 {border-color: transparent transparent rgb(177, 248, 149) transparent;}
+    .副词状语 {border-color: transparent transparent rgb(189, 149, 248) transparent;}
+    .程度补语 {border-color: transparent transparent rgb(248, 235, 149) transparent;}
+    .并列句 {border-color: transparent transparent rgb(248, 149, 149) transparent;}
+    .介词 {border-color: transparent transparent rgb(149, 157, 248) transparent;}
+    .左附加词 {border-color: transparent transparent rgb(238, 149, 248) transparent;}
+    .右附加词 {border-color: transparent transparent rgb(149, 248, 149) transparent;}
+    .标点符号 {border-color: transparent transparent rgb(140, 126, 142) transparent;}
+    .谓语 {border-color: transparent transparent rgb(251, 117, 117) transparent;}
+
+    .NounPhrase {border-color: transparent transparent rgb(135, 159, 233) transparent;}
+    .VerbPhrase {border-color: transparent transparent rgb(213, 104, 144) transparent;}
+    .AdjectivePhrase {border-color: transparent transparent rgb(134, 232, 165) transparent;}
+    .PrepositionalPhrase {border-color: transparent transparent rgb(161, 123, 221) transparent;}
+    .AdverbPhrase {border-color: transparent transparent rgb(197, 130, 225) transparent;}
+    .Pronoun {border-color: transparent transparent rgb(149, 194, 248) transparent;}
+    .Determiner {border-color: transparent transparent rgb(149, 248, 242) transparent;}
+    .WhDeterminer {border-color: transparent transparent rgb(107, 228, 232) transparent;}
+    .Noun {border-color: transparent transparent rgb(145, 213, 255) transparent;}
+    .WhNounPhrase {border-color: transparent transparent rgb(110, 183, 251) transparent;}
+    .WhAdverbPhrase {border-color: transparent transparent rgb(229, 99, 198) transparent;}
+    .WhAdverb {border-color: transparent transparent rgb(230, 159, 250) transparent;}
+    .Conjunction {border-color: transparent transparent rgb(140, 126, 142) transparent;}
+    .ProperNoun {border-color: transparent transparent rgb(125, 128, 147) transparent;}
+    .QuantifierPhrase {border-color: transparent transparent rgb(154, 103, 161) transparent;}
+    .Numeral {border-color: transparent transparent rgb(123, 161, 112) transparent;}
+    .Parenthetical {border-color: transparent transparent rgb(255, 170, 90) transparent;}
+    .WhPronoun {border-color: transparent transparent rgb(117, 251, 224) transparent;}
+    .WhPrepositionalPhrase {border-color: transparent transparent rgb(117, 173, 251) transparent;}
+    .Particle {border-color: transparent transparent rgb(234, 223, 103) transparent;}
+    .PossessiveModifier {border-color: transparent transparent rgb(170, 189, 193) transparent;}
+    .未知语法结构 {border-color: transparent transparent rgb(96, 96, 96) transparent;}
+
+    .核心关系:hover {box-shadow: 0px 3px 9px rgba(88, 62, 85, 0.45);}
+    .主语:hover {box-shadow: 0px 3px 9px rgba(52, 142, 220, 0.45);}
+    .宾语:hover {box-shadow: 0px 3px 9px rgba(225, 170, 75, 0.45);}
+    .间接宾语:hover {box-shadow: 0px 3px 9px rgba(225, 97, 75, 0.45);}
+    .前置宾语:hover {box-shadow: 0px 3px 9px rgba(75, 225, 200, 0.45);}
+    .形容词定语:hover {box-shadow: 0px 3px 9px rgba(115, 225, 75, 0.45);}
+    .副词状语:hover {box-shadow: 0px 3px 9px rgba(182, 75, 225, 0.45);}
+    .程度补语:hover {box-shadow: 0px 3px 9px rgba(225, 177, 75, 0.45);}
+    .并列句:hover {box-shadow: 0px 3px 9px rgba(225, 75, 75, 0.45);}
+    .介词:hover {box-shadow: 0px 3px 9px rgba(75, 82, 225, 0.45);}
+    .左附加词:hover {box-shadow: 0px 3px 9px rgba(225, 75, 212, 0.45);}
+    .右附加词:hover {box-shadow: 0px 3px 9px rgba(75, 225, 137, 0.45);}
+    .标点符号:hover {box-shadow: 0px 3px 9px rgba(83, 70, 82, 0.45);}
+    .谓语:hover {box-shadow: 0px 3px 9px rgba(241, 22, 22, 0.45);}
+
+    .NounPhrase:hover {box-shadow: 0px 3px 9px rgb(135, 159, 233, 0.6);}
+    .VerbPhrase:hover {box-shadow: 0px 3px 9px rgb(213, 104, 144, 0.6);}
+    .AdjectivePhrase:hover {box-shadow: 0px 3px 9px rgb(134, 232, 165, 0.6);}
+    .PrepositionalPhrase:hover {box-shadow: 0px 3px 9px rgb(161, 123, 221, 0.6);}
+    .AdverbPhrase:hover {box-shadow: 0px 3px 9px rgb(197, 130, 225, 0.6);}
+    .Pronoun:hover {box-shadow: 0px 3px 9px rgb(149, 194, 248, 0.6);}
+    .Determiner:hover {box-shadow: 0px 3px 9px rgb(149, 248, 242, 0.6);}
+    .WhDeterminer:hover {box-shadow: 0px 3px 9px rgb(107, 228, 232, 0.6);}
+    .Noun:hover {box-shadow: 0px 3px 9px rgb(145, 213, 255, 0.6);}
+    .WhNounPhrase:hover {box-shadow: 0px 3px 9px rgb(110, 183, 251, 0.6);}
+    .WhAdverbPhrase:hover {box-shadow: 0px 3px 9px rgb(229, 99, 198, 0.6);}
+    .WhAdverb:hover {box-shadow: 0px 3px 9px rgba(198, 101, 224, 0.6);}
+    .Conjunction:hover {box-shadow: 0px 3px 9px rgba(134, 53, 145, 0.6);}
+    .ProperNoun:hover {box-shadow: 0px 3px 9px rgb(125, 128, 147, 0.6);}
+    .QuantifierPhrase:hover {box-shadow: 0px 3px 9px rgb(154, 103, 161, 0.6);}
+    .Numeral:hover {box-shadow: 0px 3px 9px rgb(123, 161, 112, 0.6);}
+    .Parenthetical:hover {box-shadow: 0px 3px 9px rgba(255, 165, 81, 0.6);}
+    .WhPronoun:hover {box-shadow: 0px 3px 9px rgb(117, 251, 224, 0.6);}
+    .WhPrepositionalPhrase:hover {box-shadow: 0px 3px 9px rgb(117, 173, 251, 0.6);}
+    .Particle:hover {box-shadow: 0px 3px 9px rgba(220, 220, 68, 0.6);}
+    .PossessiveModifier:hover {box-shadow: 0px 3px 9px rgb(170, 189, 193, 0.6);}
+    .未知语法结构:hover {box-shadow: 0px 3px 9px rgb(96, 96, 96, 0.6);}
+
+    .gm_role {color: black;font-weight: bold;font-size: 12px;margin-bottom: 1px;white-space: pre-wrap; -moz-user-select:text !important;-webkit-user-select:text !important;	-ms-user-select:text !important;	user-select:text !important;}
+    .root_txt {background-color: gold;font: bold 25px/32px sans-serif; padding: 4px 5px;border-radius: 7px; -moz-user-select:text !important;-webkit-user-select:text !important;	-ms-user-select:text !important;	user-select:text !important;}
+    root_txt_wrapper {margin: 2px;margin-top: 6px;display: inline-block;}
+
+    .核心关系_gm_role {color: rgb(177, 127, 153);}
+    .主语_gm_role {color: rgb(6, 96, 153);}
+    .宾语_gm_role {color: rgb(139, 96, 5);}
+    .间接宾语_gm_role {color: rgb(150, 38, 6);}
+    .前置宾语_gm_role {color: rgb(4, 129, 138);}
+    .形容词定语_gm_role {color: rgb(41, 139, 3);}
+    .副词状语_gm_role {color: rgb(55, 4, 130);}
+    .程度补语_gm_role {color: rgb(130, 113, 3);}
+    .并列句_gm_role {color: rgb(144, 3, 3);}
+    .介词_gm_role {color: rgb(4, 14, 130);}
+    .左附加词_gm_role {color: rgb(121, 4, 134);}
+    .右附加词_gm_role {color: rgb(3, 130, 3);}
+    .标点符号_gm_role {color: rgb(92, 76, 94);}
+    .谓语_gm_role {color: rgb(132, 3, 3);}
+
+    .NounPhrase_gm_role {color: rgb(8, 38, 131);}
+    .VerbPhrase_gm_role {color: rgb(124, 4, 48);}
+    .AdjectivePhrase_gm_role {color: rgb(7, 133, 47);}
+    .PrepositionalPhrase_gm_role {color: rgb(56, 9, 131);}
+    .AdverbPhrase_gm_role {color: rgb(96, 7, 134);}
+    .Pronoun_gm_role {color: rgb(8, 61, 126);}
+    .Determiner_gm_role {color: rgb(9, 134, 126);}
+    .WhDeterminer_gm_role {color: rgb(7, 125, 129);}
+    .Noun_gm_role {color: rgb(4, 82, 131);}
+    .WhNounPhrase_gm_role {color: rgb(8, 71, 131);}
+    .WhAdverbPhrase_gm_role {color: rgb(150, 7, 117);}
+    .WhAdverb_gm_role {color: rgb(103, 6, 129);}
+    .Conjunction_gm_role {color: rgb(109, 6, 122);}
+    .ProperNoun_gm_role {color: rgb(10, 28, 146);}
+    .QuantifierPhrase_gm_role {color: rgb(139, 7, 156);}
+    .Numeral_gm_role {color: rgb(38, 146, 8);}
+    .Parenthetical_gm_role {color: rgb(139, 69, 3);}
+    .WhPronoun_gm_role {color: rgb(5, 145, 117);}
+    .WhPrepositionalPhrase_gm_role {color: rgb(4, 57, 131);}
+    .Particle_gm_role {color: rgb(162, 149, 6);}
+    .PossessiveModifier_gm_role {color: rgb(6, 114, 135);}
+    .未知语法结构_gm_role {color: rgb(68, 67, 67);}
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ↓标题栏。 -->
+    <div style="border-bottom: 5px solid #0097e8;">
+      <b-navbar toggleable="lg" type="light" variant="info" class="NOBORDER">
+        <b-navbar-brand href="/syntax/" class="NOBORDER"><img src="/static/文法注疏/topleftVision.svg" class="d-inline-block align-top"
+            height="50px" style="filter: drop-shadow(1px 1px 8px #004293);"/></b-navbar-brand>
+
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav style="padding: 0px 10px 0px 10px;">
+
+          <!-- Right aligned nav items -->
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item href="/syntax/about">关于</b-nav-item>
+            <b-nav-item href="/syntax/pop-science-syntax">句法分析科普</b-nav-item>
+
+            <b-nav-item-dropdown text="使用说明" right>
+              <b-dropdown-item href="/syntax/usage">本网站能用来干啥</b-dropdown-item>
+              <b-dropdown-item href="/syntax/method">使用方法</b-dropdown-item>
+              <b-dropdown-item href="/syntax/fee">费用</b-dropdown-item>
+              <b-dropdown-item href="/syntax/notes">注意事项</b-dropdown-item>
+            </b-nav-item-dropdown>
+
+            <b-nav-item-dropdown right>
+              <!-- Using 'button-content' slot -->
+              <template #button-content>
+                <em>
+                  <span v-if="! isLoggedIn">登录/注册</span>
+                  <span v-if="isLoggedIn">已登录 | 我的账户</span>
+                  <svg viewBox="785 321 40 40" width="19px" height="19px" class="align-text-bottom">
+                    <g id="Canvas_1" stroke="none" stroke-opacity="1" fill="none" stroke-dasharray="none"
+                      fill-opacity="1">
+                      <title>Canvas 1</title>
+                      <g id="Canvas_1_Layer_1">
+                        <title>Layer 1</title>
+                        <g id="Graphic_2">
+                          <title>Account Circle</title>
+                          <path
+                            d="M 805 321 C 793.96 321 785 329.96 785 341 C 785 352.04 793.96 361 805 361 C 816.04 361 825 352.04 825 341 C 825 329.96 816.04 321 805 321 Z M 805 327 C 808.32 327 811 329.68 811 333 C 811 336.32 808.32 339 805 339 C 801.68 339 799 336.32 799 333 C 799 329.68 801.68 327 805 327 Z M 805 355.4 C 800 355.4 795.58 352.84 793 348.96 C 793.06 344.98 801 342.8 805 342.8 C 808.98 342.8 816.94 344.98 817 348.96 C 814.42 352.84 810 355.4 805 355.4 Z"
+                            fill="#346" />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </em>
+              </template>
+              <b-dropdown-item v-if="isLoggedIn" href="/syntax/account-info">基本信息</b-dropdown-item>
+              <b-dropdown-item v-if="isLoggedIn" @click="logout">退出登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-login')">登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-signup')">注册新用户</b-dropdown-item>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
+    </div>
+
+    <div v-if="! show_search_result_mode">
+      <!-- 这部分是初始界面。搜索后的界面是不同的 -->
+      <div class="row" style="padding: 16px 0 0;">
+        <div class="col-md-8 order-md-2 col-xl-6">
+          <!-- 最核心的。搜索功能、展示demo都在这里。 -->
+          <center><span style="color: #0097e8;font-size: large;">
+              <h1 style="color: #0072b0;font-family: Georgia, serif;" class="mt-5">文 法 注 疏</h3>
+                <h4>&nbsp;&nbsp;&nbsp;这是一个语法结构分析网站！<br><em
+                    style="color: #0097e8;font-family: Georgia, serif;">www.zh-word.ink</em></h4><br
+                  style="line-height: 10pt;">↓在此处输入要分析的句子【支持中英日三种语言】↓
+            </span></center>
+          <!-- 搜索框 -->
+          <b-overlay :show="isQueryingBackend">
+          <div style="padding: 10px;">
+            <span class="input_box" style="display: inline-block;width: calc(100% - 20px);">
+              <span>
+                <textarea rows="9" cols="33" autofocus id="mainsearchbox" v-model="query_txt" placeholder="在此输入要进行句法分析的段落" class="input_box"
+                  style="width: calc(100% - 20px);resize:none;" @focus="entershoulddefault=true" @blur="entershoulddefault=false">
+                </textarea>
+              </span>
+              <div>
+                <b-button-group style="width: 100%;">
+                  <b-button variant="success" @click="search('orig')">原文语种分析</b-button>
+                  <b-button variant="info" @click="search('zh')">译至中文分析</b-button>
+                  <b-button variant="warning" @click="search('en')">译至英文分析</b-button>
+                  <b-button variant="danger" @click="search('jp')">译至日文分析</b-button>
+                  <b-dropdown id="dropdown-dropup" dropup text="其他语种分析" variant="secondary">
+                    <b-dropdown-item disabled>韩语（尚未加入）</b-dropdown-item>
+                    <b-dropdown-item disabled>法语（尚未加入）</b-dropdown-item>
+                    <b-dropdown-item disabled>西班牙语（尚未加入）</b-dropdown-item>
+                    <b-dropdown-item disabled>德语（尚未加入）</b-dropdown-item>
+                  </b-dropdown>
+                </b-button-group>
+              </div>
+            </span>
+          </div>
+          </b-overlay>
+          <br><br>
+          <!-- note一下收费规则&使用方法。 -->
+          <div class="m-4">
+            <center>
+              <p style="color: #0e626c;">
+                <span style="font: bold 22pt sans-serif;">本网站使用方法：</span><br>
+                请在输入框中输入想要进行语法分析的句子。<br>
+                对句子进行语法分析有四种模式：<br>
+              </p>
+              <b-list-group style="color: #0e626c; border-color: #00d1e8;text-align: left;">
+                <b-list-group-item style="background-color:#eaf2fc;"><h5>按原文语种分析</h5>快捷键：回车键(需将光标移出输入框，不然只会输入换行) 或 shift+ctrl+S 或 alt+ctrl+S 或 command+ctrl+S 或 f1</b-list-group-item>
+                <b-list-group-item style="background-color:#eaf2fc;"><h5>翻译至中文后分析</h5>快捷键：shift+回车键 或 shift+ctrl+C 或 alt+ctrl+C 或 command+ctrl+C 或 f2</b-list-group-item>
+                <b-list-group-item style="background-color:#eaf2fc;"><h5>翻译至英文后分析</h5>快捷键：shift+ctrl+E 或 alt+ctrl+E 或 command+ctrl+E 或 f3</b-list-group-item>
+                <b-list-group-item style="background-color:#eaf2fc;"><h5>翻译至日文后分析</h5>快捷键：shift+ctrl+J 或 alt+ctrl+J 或 command+ctrl+J 或 f4</b-list-group-item>
+              </b-list-group>
+                <p style="color: #0e626c;">
+                在分析结果展示界面，您将可以清晰看到句子的语法结构可视化，并且还可以点击英文/日文词语查看释义。<br>
+                该网站提供的服务对于阅读理解、外语学习有较大帮助。<br><br>
+                <span style="font: bold 22pt sans-serif;">本网站收费规则：</span><br>
+                每周每个ip可以享用1次免费试用的查询机会，长度限制150汉字/700英文字符/500日文字符。<br><br>
+                免费查询次数用完后需登录充值方可继续使用。每150汉字/700英文字符/500日文字符，消耗0.2元额度。<br>大量充值有优惠，充值10元送2元额度，充值100元送50元额度。<br><br>
+                本站不提供不限次数的包年包月永久套餐。收费次数以后端实际接收的计算请求为准。由于用户网络不稳定导致的结果丢失，本网站概不负责。
+                【注：目前本网站仍处于公测阶段，不收费。等网站使用量超过一定水平后，再考虑收费~ 当前每月分析字符数：{{{MonthlyUsage}}} of 150汉字/700英文字符/500日文字符】
+              </p>
+            </center>
+          </div>
+        </div>
+        <div class="col-md-2 order-md-0 col-xl-3">
+          广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+        </div>
+        <div class="col-md-2 order-md-10 col-xl-3">
+          广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+        </div>
+      </div>
+
+    </div>
+
+    <div v-if="show_search_result_mode">
+      <div class="row" style="padding: 16px 0 0;">
+        <div class="col-md-9 col-xl-7">
+          <!-- 搜索框 -->
+          <b-overlay :show="isQueryingBackend">
+          <div style="padding: 10px;">
+            <p class="ml-2" style="color: #0097e8;font-size: large;margin-bottom:0;">↓在此处输入要分析的句子【支持中英日三种语言】↓</p>
+            <span class="input_box" style="display: inline-block;width: calc(100% - 20px);">
+              <span>
+                <textarea rows="9" cols="33" autofocus id="mainsearchbox" v-model="query_txt" placeholder="在此输入要进行句法分析的段落" class="input_box"
+                  style="width: calc(100% - 20px);resize:none;" @focus="entershoulddefault=true" @blur="entershoulddefault=false">
+                </textarea>
+              </span>
+              <div>
+                <b-button-group style="width: 100%;">
+                  <b-button variant="success" @click="search('orig')">原文语种分析</b-button>
+                  <b-button variant="info" @click="search('zh')">译至中文分析</b-button>
+                  <b-button variant="warning" @click="search('en')">译至英文分析</b-button>
+                  <b-button variant="danger" @click="search('jp')">译至日文分析</b-button>
+                  <b-dropdown id="dropdown-dropup" dropup text="其他语种分析" variant="secondary">
+                    <b-dropdown-item disabled>韩语（尚未加入）</b-dropdown-item>
+                    <b-dropdown-item disabled>法语（尚未加入）</b-dropdown-item>
+                    <b-dropdown-item disabled>西班牙语（尚未加入）</b-dropdown-item>
+                    <b-dropdown-item disabled>德语（尚未加入）</b-dropdown-item>
+                  </b-dropdown>
+                </b-button-group>
+              </div>
+            </span>
+          </div>
+
+          </b-overlay>
+        </div>
+      </div>
+      <!-- 展示搜索结果and点赞 -->
+      <!-- ↓1.焦点行 -->
+      <b-row><div class="col-md-10 col-xl-8" style="margin: 30px 30px; font-weight: 700;" id="resultScrollMark">
+        <span style="font-size: 33px;font-family: serif;">
+          🔻语法结构分析结果
+          <b-button pill variant="info" @click="switchDisplayMode">🖥切换单页显示模式</b-button>
+          <b-button pill variant="info" @click="switchDisplayMode2">🖥切换横向滚动模式</b-button>
+        </span>
+      </div></b-row>
+      <!-- ↓语法结构展示。 -->
+      <b-sidebar id="sidebar-1" title="选中词语释义" right shadow v-model="showSidebar">
+        <div class="px-3 py-2" style="white-space: pre-wrap;font-family: Georgia, serif;"><h2 style="font-weight: bold;">{{clicktgtword}}</h2>{{wordExplanation}}</div>
+      </b-sidebar>
+      <div class="c-scrollbox" style="overflow:hidden; white-space: nowrap;background-color: white;">
+        <div v-for="sentence,i in analyse_result_zh" style="display:flex;">
+          <div class="c-scrollbox-noshadow" style="padding-top: 60px;padding-left: 16px;padding-right: 16px; overflow:scroll; white-space: nowrap;">
+<gr_span class="sentence_gr_span" v-if="(typeof sentence === 'string' || sentence instanceof String)"><root_txt_wrapper><span class="root_txt">{{sentence}}</span></root_txt_wrapper></gr_span>
+<gr_span class="sentence_gr_span" v-else-if="(typeof sentence[0] === 'string' || sentence[0] instanceof String)">
+<div><gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(sentence[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(sentence[0])?'20px':'25px'}">{{sentence[0]}}</root_txt_wrapper></gr_span></div>
+</gr_span>
+<gr_span class="sentence_gr_span" v-else>
+<div><gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block sentence_gr_span gr_holder" :class="classOfObject(sentence[1])">
+<gr_span v-for="item0,i in sentence[0]">
+<!-- lv0 -->
+
+<gr_span  v-if="(typeof item0 === 'string' || item0 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item0}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item0[0] === 'string' || item0[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item0[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item0[0])?'20px':'25px'}">{{item0[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item0[1])">
+<gr_span v-for="item1,i in item0[0]">
+<!-- lv1 -->
+
+<gr_span v-if="(typeof item1 === 'string' || item1 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item1}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item1[0] === 'string' || item1[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item1[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item1[0])?'20px':'25px'}">{{item1[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item1[1])">
+<gr_span v-for="item2,i in item1[0]">
+<!-- lv2 -->
+
+<gr_span v-if="(typeof item2 === 'string' || item2 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item2}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item2[0] === 'string' || item2[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item2[1])"><root_txt_wrapper id="clickwordfocus"><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item2[0])?'20px':'25px'}">{{item2[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item2[1])">
+<gr_span v-for="item3,i in item2[0]">
+<!-- lv3 -->
+
+<gr_span v-if="(typeof item3 === 'string' || item3 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item3}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item3[0] === 'string' || item3[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item3[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item3[0])?'20px':'25px'}">{{item3[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item3[1])">
+<gr_span v-for="item4,i in item3[0]">
+<!-- lv4 -->
+
+<gr_span v-if="(typeof item4 === 'string' || item4 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item4}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item4[0] === 'string' || item4[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item4[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item4[0])?'20px':'25px'}">{{item4[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item4[1])">
+<gr_span v-for="item5,i in item4[0]">
+<!-- lv5 -->
+
+<gr_span v-if="(typeof item5 === 'string' || item5 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item5}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item5[0] === 'string' || item5[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item5[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item5[0])?'20px':'25px'}">{{item5[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item5[1])">
+<gr_span v-for="item6,i in item5[0]">
+<!-- lv6 -->
+
+<gr_span v-if="(typeof item6 === 'string' || item6 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item6}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item6[0] === 'string' || item6[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item6[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item6[0])?'20px':'25px'}">{{item6[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item6[1])">
+<gr_span v-for="item7,i in item6[0]">
+<!-- lv7 -->
+
+<gr_span v-if="(typeof item7 === 'string' || item7 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item7}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item7[0] === 'string' || item7[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item7[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item7[0])?'20px':'25px'}">{{item7[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item7[1])">
+<gr_span v-for="item8,i in item7[0]">
+<!-- lv8 -->
+
+<gr_span v-if="(typeof item8 === 'string' || item8 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item8}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item8[0] === 'string' || item8[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item8[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item8[0])?'20px':'25px'}">{{item8[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item8[1])">
+<gr_span v-for="item9,i in item8[0]">
+<!-- lv9 -->
+
+<gr_span v-if="(typeof item9 === 'string' || item9 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item9}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item9[0] === 'string' || item9[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item9[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item9[0])?'20px':'25px'}">{{item9[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item9[1])">
+<gr_span v-for="item10,i in item9[0]">
+<!-- lv10 -->
+
+<gr_span v-if="(typeof item10 === 'string' || item10 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item10}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item10[0] === 'string' || item10[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item10[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item10[0])?'20px':'25px'}">{{item10[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item10[1])">
+<gr_span v-for="item11,i in item10[0]">
+<!-- lv11 -->
+
+<gr_span v-if="(typeof item11 === 'string' || item11 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item11}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item11[0] === 'string' || item11[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item11[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item11[0])?'20px':'25px'}">{{item11[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item11[1])">
+<gr_span v-for="item12,i in item11[0]">
+<!-- lv12 -->
+
+<gr_span v-if="(typeof item12 === 'string' || item12 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item12}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item12[0] === 'string' || item12[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item12[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item12[0])?'20px':'25px'}">{{item12[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item12[1])">
+<gr_span v-for="item13,i in item12[0]">
+<!-- lv13 -->
+
+<gr_span v-if="(typeof item13 === 'string' || item13 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item13}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item13[0] === 'string' || item13[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item13[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item13[0])?'20px':'25px'}">{{item13[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item13[1])">
+<gr_span v-for="item14,i in item13[0]">
+<!-- lv14 -->
+
+<gr_span v-if="(typeof item14 === 'string' || item14 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item14}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item14[0] === 'string' || item14[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item14[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item14[0])?'20px':'25px'}">{{item14[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item14[1])">
+<gr_span v-for="item15,i in item14[0]">
+<!-- lv15 -->
+
+<gr_span v-if="(typeof item15 === 'string' || item15 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item15}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item15[0] === 'string' || item15[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item15[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item15[0])?'20px':'25px'}">{{item15[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item15[1])">
+<gr_span v-for="item16,i in item15[0]">
+<!-- lv16 -->
+
+<gr_span v-if="(typeof item16 === 'string' || item16 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item16}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item16[0] === 'string' || item16[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item16[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item16[0])?'20px':'25px'}">{{item16[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item16[1])">
+<gr_span v-for="item17,i in item16[0]">
+<!-- lv17 -->
+
+<gr_span v-if="(typeof item17 === 'string' || item17 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item17}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item17[0] === 'string' || item17[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item17[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item17[0])?'20px':'25px'}">{{item17[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item17[1])">
+<gr_span v-for="item18,i in item17[0]">
+<!-- lv18 -->
+
+<gr_span v-if="(typeof item18 === 'string' || item18 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item18}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item18[0] === 'string' || item18[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item18[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item18[0])?'20px':'25px'}">{{item18[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item18[1])">
+<gr_span v-for="item19,i in item18[0]">
+<!-- lv19 -->
+
+<gr_span v-if="(typeof item19 === 'string' || item19 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item19}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item19[0] === 'string' || item19[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item19[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item19[0])?'20px':'25px'}">{{item19[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item19[1])">
+<gr_span v-for="item20,i in item19[0]">
+<!-- lv20 -->
+
+<gr_span v-if="(typeof item20 === 'string' || item20 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item20}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item20[0] === 'string' || item20[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item20[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item20[0])?'20px':'25px'}">{{item20[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item20[1])">
+<gr_span v-for="item21,i in item20[0]">
+<!-- lv21 -->
+
+<gr_span v-if="(typeof item21 === 'string' || item21 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item21}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item21[0] === 'string' || item21[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item21[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item21[0])?'20px':'25px'}">{{item21[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item21[1])">
+<gr_span v-for="item22,i in item21[0]">
+<!-- lv22 -->
+
+<gr_span v-if="(typeof item22 === 'string' || item22 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item22}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item22[0] === 'string' || item22[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item22[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item22[0])?'20px':'25px'}">{{item22[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item22[1])">
+<gr_span v-for="item23,i in item22[0]">
+<!-- lv23 -->
+
+<gr_span v-if="(typeof item23 === 'string' || item23 instanceof String)"><root_txt_wrapper><span class="root_txt">{{item23}}</span></root_txt_wrapper></gr_span>
+<gr_span v-else-if="(typeof item23[0] === 'string' || item23[0] instanceof String)">
+<gr_span @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_wrapper" :class="classOfObject(item23[1])"><root_txt_wrapper><span class="root_txt" :style="{fontSize:/^[\x20-\x7E]*$/.test(item23[0])?'20px':'25px'}">{{item23[0]}}</root_txt_wrapper></gr_span>
+</gr_span>
+<gr_span v-else @click="clickGrammar($event)" @mouseleave="leaveGrammar($event)" @mouseenter="hoverGrammar($event)" class="grammar_block gr_holder" :class="classOfObject(item23[1])">
+<gr_span v-for="item24,i in item23[0]">
+<!-- lv24 -->
+
+<span class="root_txt"><root_txt_wrapper style="font-size: small;">{{item24}}<br>24层！NESTED TOO DEEP!请检查下自己输入的句子到底通不通顺。</root_txt_wrapper></span>
+
+<!-- lv24 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item23[1])" v-if="!(typeof item23 === 'string' || item23 instanceof String)">{{item23[1]}}</center>
+
+<!-- lv23 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item22[1])" v-if="!(typeof item22 === 'string' || item22 instanceof String)">{{item22[1]}}</center>
+
+<!-- lv22 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item21[1])" v-if="!(typeof item21 === 'string' || item21 instanceof String)">{{item21[1]}}</center>
+
+<!-- lv21 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item20[1])" v-if="!(typeof item20 === 'string' || item20 instanceof String)">{{item20[1]}}</center>
+
+<!-- lv20 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item19[1])" v-if="!(typeof item19 === 'string' || item19 instanceof String)">{{item19[1]}}</center>
+
+<!-- lv19 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item18[1])" v-if="!(typeof item18 === 'string' || item18 instanceof String)">{{item18[1]}}</center>
+
+<!-- lv18 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item17[1])" v-if="!(typeof item17 === 'string' || item17 instanceof String)">{{item17[1]}}</center>
+
+<!-- lv17 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item16[1])" v-if="!(typeof item16 === 'string' || item16 instanceof String)">{{item16[1]}}</center>
+
+<!-- lv16 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item15[1])" v-if="!(typeof item15 === 'string' || item15 instanceof String)">{{item15[1]}}</center>
+
+<!-- lv15 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item14[1])" v-if="!(typeof item14 === 'string' || item14 instanceof String)">{{item14[1]}}</center>
+
+<!-- lv14 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item13[1])" v-if="!(typeof item13 === 'string' || item13 instanceof String)">{{item13[1]}}</center>
+
+<!-- lv13 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item12[1])" v-if="!(typeof item12 === 'string' || item12 instanceof String)">{{item12[1]}}</center>
+
+<!-- lv12 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item11[1])" v-if="!(typeof item11 === 'string' || item11 instanceof String)">{{item11[1]}}</center>
+
+<!-- lv11 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item10[1])" v-if="!(typeof item10 === 'string' || item10 instanceof String)">{{item10[1]}}</center>
+
+<!-- lv10 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item9[1])" v-if="!(typeof item9 === 'string' || item9 instanceof String)">{{item9[1]}}</center>
+
+<!-- lv9 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item8[1])" v-if="!(typeof item8 === 'string' || item8 instanceof String)">{{item8[1]}}</center>
+
+<!-- lv8 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item7[1])" v-if="!(typeof item7 === 'string' || item7 instanceof String)">{{item7[1]}}</center>
+
+<!-- lv7 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item6[1])" v-if="!(typeof item6 === 'string' || item6 instanceof String)">{{item6[1]}}</center>
+
+<!-- lv6 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item5[1])" v-if="!(typeof item5 === 'string' || item5 instanceof String)">{{item5[1]}}</center>
+
+<!-- lv5 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item4[1])" v-if="!(typeof item4 === 'string' || item4 instanceof String)">{{item4[1]}}</center>
+
+<!-- lv4 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item3[1])" v-if="!(typeof item3 === 'string' || item3 instanceof String)">{{item3[1]}}</center>
+
+<!-- lv3 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item2[1])" v-if="!(typeof item2 === 'string' || item2 instanceof String)">{{item2[1]}}</center>
+
+<!-- lv2 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item1[1])" v-if="!(typeof item1 === 'string' || item1 instanceof String)">{{item1[1]}}</center>
+
+<!-- lv1 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(item0[1])" v-if="!(typeof item0 === 'string' || item0 instanceof String)">{{item0[1]}}</center>
+
+<!-- lv0 -->
+</gr_span>
+</gr_span>
+<center class="gm_role" :class="GMROLEclass(sentence[1])" v-if="!(typeof sentence === 'string' || sentence instanceof String)">{{sentence[1]}}</center></div>
+</gr_span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ↓注册modal。 -->
+    <b-modal id="bv-modal-signup" hide-footer @show="entershoulddefault = true" @hide="entershoulddefault = false">
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          注册<code>新用户</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎来到文法注疏~~~</h3>
+          <span style="color: #0097e8;">本网站支持用户名密码注册登录。<br>用户名密码注册需保存妥善密码，网站不提供找回，密码丢失账户余额将无法追回。</span>
+          <br>
+          <b-form-input v-model="signup_username" type="username" placeholder="输入独一无二的 用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+          <b-form-input v-model="signup_pwdconfirm" type="password" placeholder="再次确认 密码"></b-form-input>
+        </div>
+        <b-button class="mt-3" block @click="signup">注册</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-signup')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+    <!-- ↓登录modal。 -->
+    <b-modal id="bv-modal-login" hide-footer @show="entershoulddefault = true" @hide="entershoulddefault = false">
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          <code>用户登录</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎登录文法注疏~~~</h3>
+          <br>
+          <b-form-input v-model="signup_username" type="username" placeholder="输入用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+        </div>
+        <b-button class="mt-3" block @click="login">登录</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-login')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+  </div>
+  <div style="padding: 20px;">
+    文法注疏网站&nbsp;&nbsp;&nbsp;&nbsp;www.zh-words.ink&nbsp;&nbsp;&nbsp;&nbsp;京ICP备 2333333号。
+  </div>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
+    integrity="sha256-JLmknTdUZeZZ267LP9qB+/DT7tvxOOKctSKeUC2KT6E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+    integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+    integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jssha@2.3.1/src/sha256.js"
+    integrity="sha256-NyuvLfsvfCfE+ceV6/W19H+qVp3M8c9FzAgj72CW39w=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    isLoading = false
+    carousel_orig_pos = ["", "", ""]
+    function hasDuplicates(arr, appendelem) {s=new Set(arr);s.add(appendelem);return s.size !== arr.length+1;}
+    function get_stratified_content(htmlelem) { // 逻辑：顺着gr_span向下找，忽略center元素，只考虑root_txt_wrapper。
+      var repr = "";
+      for (const child of htmlelem.children) {
+        if (child.nodeName == "GR_SPAN") {
+          express_str = get_stratified_content(child);
+          repr = repr + " " + express_str
+        } else if (child.nodeName == "ROOT_TXT_WRAPPER") {
+          repr = repr + child.innerText;
+        }
+      }
+      return repr.trim();
+    }
+    function trimtextAI(txt) {
+      var i=0;
+      var arr_txttrim=[];
+      var newnames = txt.replace(/ ?[!-~]+ ?/g, function(match){
+        var tmpstr= "[group"+i+"]";
+        i=i+1;
+        arr_txttrim.push(match);
+        return tmpstr}
+        );
+      newnames = newnames.replace(/ /g,"")
+      var finalnames = newnames.replace(/\[group(.+?)\]/g, function(match, p1){
+        var ind=parseInt(p1);
+        return arr_txttrim[ind]}
+        );
+      return finalnames
+    }
+    function copyStringToClipboard (str) {
+      try { // Remove temporary element
+        document.body.removeChild(textarea_copy_el);
+      } catch (error) {console.error(error);}
+      // Create new element
+      textarea_copy_el = document.createElement('textarea');
+      // Set value (string to be copied)
+      textarea_copy_el.value = str;
+      // Set non-editable to avoid focus and move outside of view
+      textarea_copy_el.setAttribute('readonly', '');
+      textarea_copy_el.style.position="absolute"
+      textarea_copy_el.style.left="-9999px"
+      document.body.appendChild(textarea_copy_el);
+      // Select text inside element
+      textarea_copy_el.select();
+      // Copy text to clipboard
+      document.execCommand('copy');
+    }
+    var cumulativeOffset = function (element) {
+      var top = 0, left = 0;
+      do {
+        top += element.offsetTop || 0;
+        left += element.offsetLeft || 0;
+        element = element.offsetParent;
+      } while (element);
+      return {
+        top: top,
+        left: left
+      };
+    };
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isLoggedIn: {[{is_Logged_In}]}, argmodearr:['','orig','zh','en','jp'],
+        analyse_result_zh: [],
+        busy_connecting_backend: false,
+        isQueryingBackend: false,
+        entershoulddefault: false,
+        query_txt: '',
+        signup_username: '',
+        signup_password: '',
+        signup_pwdconfirm: '',
+        others_search: [],
+        show_search_result_mode: false,
+        focused_elem_stack: [],
+        focused_fixed_elem_stack: [],
+        has_focused_fixed_elem_stack: false,
+        showSidebar:false,
+        wordExplanation:"whatever",
+        clicktgtword:"",
+        page_history: 2
+      },
+      mounted() {
+        window.history.pushState({page: 1}, "", "");  // 浏览器返回
+        document.getElementById("mainsearchbox").focus();
+        if(this.args_text&&(this.args_mode<=4)){this.query_txt=this.args_text;this.search(this.argmodearr[this.args_mode])}
+      },
+      methods: {
+        signup: function () {
+          if (this.signup_username.length < 2) { window.alert("用户名长度不得小于2位，请重新输入！"); return; }
+          if (this.signup_password.length < 5) { window.alert("密码长度不得小于5位，请重新输入！"); return; }
+          if (this.signup_password != this.signup_pwdconfirm) { window.alert("两次密码输入不一致，请检查输入！"); return; }
+          this.busy_connecting_backend = true
+          console.log("sign up.", this.signup_username, this.signup_password, this.signup_pwdconfirm);
+          var hashObj = new jsSHA("SHA-256", "TEXT", { numRounds: 1 });
+          hashObj.update(this.signup_username + this.signup_password + "salter2333");
+          var hash = hashObj.getHash("HEX");
+          console.log('generated login auth:', hash);
+          axios.post('/syntax/sign-up', {
+            username: this.signup_username,
+            auth: hash,
+          }).then(function (response) {
+            // console.log(response);
+            // console.log(response.data);
+            signup_state = response.data;
+            app.busy_connecting_backend = false;
+            if (signup_state == 'conflict_username') { window.alert("您的用户名已被他人占用，请重新输入！\n（推荐使用复杂用户名避免用户名冲突）"); return; }
+            app.$bvModal.hide('bv-modal-signup');
+            window.alert("已注册成功！\n请等待自动登录");
+            app.login();
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        login: function () {
+          if (this.signup_username.length < 2) { window.alert("用户名长度不得小于2位，请重新输入！"); return; }
+          if (this.signup_password.length < 5) { window.alert("密码长度不得小于5位，请重新输入！"); return; }
+          console.log("log in.");
+          var hashObj = new jsSHA("SHA-256", "TEXT", { numRounds: 1 });
+          hashObj.update(this.signup_username + this.signup_password + "salter2333");
+          var hash = hashObj.getHash("HEX");
+          console.log('generated login auth:', hash, 'connecting to backend...');
+          this.busy_connecting_backend = true;
+          axios.post('/syntax/log-in', {
+            username: this.signup_username,
+            auth: hash,
+          }).then(function (response) {
+            // console.log(response);
+            // console.log(response.data);
+            login_state = response.data;
+            app.busy_connecting_backend = false;
+            if (login_state != 'ok') {
+              if (login_state == 'already_logged_in') { window.alert("当前用户已经登录。出现此提示应为前端错误，请您刷新网页。"); return; }
+              if (login_state == 'nosignup') { window.alert("当前用户尚未注册。请您先注册哟~"); return; }
+              window.alert("登录失败，应是用户名或密码错误。请检查输入~\n未注册需先注册。"); return;
+            }
+            app.$bvModal.hide('bv-modal-login');
+            app.isLoggedIn = true;
+            window.alert("登录成功！");
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        logout: function () {
+          console.log("log out.");
+          axios.post('/syntax/log-out', {}).then(function (response) {
+            app.isLoggedIn = false;
+            window.alert("退出登录成功！");
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        switchDisplayMode: function () {
+          document.querySelectorAll(".c-scrollbox-noshadow").forEach(e=>{e.style.whiteSpace="normal"})
+        },
+        switchDisplayMode2: function () {
+          document.querySelectorAll(".c-scrollbox-noshadow").forEach(e=>{e.style.whiteSpace="nowrap"})
+        },
+        search: function (mode) {
+          if (isLoading == false) {
+            if (this.query_txt.length==0) {window.alert("您尚未输入，请输入文本后再进行分析！");return;}
+            if (this.query_txt.length>30000) { //防止query过长
+              window.alert("您的输入太长，请每次缩减至30000字符后再进行分析！");return;
+            }
+            isLoading = true;
+            this.isQueryingBackend = true;
+            console.log(this.query_txt);
+            setTimeout(() => { isLoading = false; }, 2000);
+            err=false;
+            if(err){window.alert("您的输入查词公式有误，请检查后再输入！");return;}
+            // console.log(specArr);
+            // console.log(p);
+            // console.log(wordArr);
+            
+            axios.post('/syntax/query', {
+              query: this.query_txt,
+              mode: mode
+            }).then(function (response) {
+              app.analyse_result_zh = [];
+              resptext = response.data;
+              if (resptext == 'capped') {
+                window.alert("您的ip地址本周1次免费额度已用尽~ \n 觉得本网站挺有意思？客官充值支持一下吧~~\n物美价廉，登录即可充值哟~");app.isQueryingBackend = false;return;
+              }
+              if (resptext == 'exhausted') {
+                window.alert("您的账户余额已用尽~ \n 句法分析结果让您如虎添翼？客官充值支持一下吧~~\n物美价廉，充值补充能量哟~");app.isQueryingBackend = false;return;
+              }
+              if (resptext == 'long') {
+                window.alert("您未登录，试用输入的字符串长度超出限制了哟~请缩短输入再试");app.isQueryingBackend = false;return;
+              }
+              if ((typeof resptext === 'string' || resptext instanceof String) && resptext.startsWith('err:')) {
+                window.alert(resptext+"\n 由于查询出错，本次查询仅消耗您0.2倍余额消耗。请您调整查询文本再试。");app.isQueryingBackend = false;return;
+              }
+              app.analyse_result_zh = eval(resptext);
+              app.show_search_result_mode = true;  // 开始展示搜索结果。
+              app.query_txt="";
+              // history.replaceState({page: 2}, "title 3", "?page=3")
+              if (app.page_history==2) {window.history.pushState({page: app.page_history}, "", "");}  // 浏览器返回
+              setTimeout(() => {
+                window.scrollTo(0, cumulativeOffset(document.getElementById("resultScrollMark")).top);
+              }, 200);
+              app.page_history++;
+              app.isQueryingBackend = false;
+            }).catch(function (error) {app.isQueryingBackend = false;console.log(error);})
+
+          } else {
+            console.log("TOO MANY CLICKS!!")  // 防止多重点击！！
+            window.alert("搜索过于频繁!!!仔细等结果2秒啊。")  // 防止多重点击！！
+          }
+        },
+        classOfObject: function (item) {
+          var jp_replacer = /[^\"]*\n(名詞|名詞接尾辞|冠名詞|英語接尾辞|動詞語幹|動詞活用語尾|動詞接尾辞|冠動詞|補助名詞|形容詞語幹|形容詞接尾辞|冠形容詞|接続接尾辞|判定詞|格助詞|引用助詞|連用助詞|連用詞|動詞活用語尾|連体詞|接続詞|独立詞|終助詞|間投詞|括弧|句点|読点|空白|Symbol|Number|助数詞|助助数詞|冠数詞)/gm;
+          item = item.replace(jp_replacer, (match, p1) => {return p1})
+          var theclass = {};
+          switch (item) {
+          case '一句话': case '核心关系':case '整句话':case 'Sentence':case "Sentence\n整句话": theclass.核心关系 = true; break;
+          case '名詞接尾辞':case 'agent':case '发起动作主体 agent\n有意動作を引き起こす主体': case '主语':case '主谓关系': theclass.主语 = true; break;
+          case '冠名詞':case 'object':case '作用对象 object\n動作・変化の影響を受ける対象': case '宾语':case '动宾关系': theclass.宾语 = true; break;
+          case '英語接尾辞':case 'agentnonvoluntary':case '非有意发起动作主体 agentnonvoluntary\n意思性のない主体':case '间接宾语':case '间宾关系': theclass.间接宾语 = true; break;
+          case '名詞':case '動詞語幹':case '有特征对象 aobject\n属性を持つ対象':case 'aobject':case '有特征对象 aobject\n属性を持つ対象':case 'aobject':case '前置宾语':case '前置宾语': theclass.前置宾语 = true; break;
+          case '動詞活用語尾':case 'det':case '定语\ndeterminer':case 'adjectivals':case '形容词 adjectivals\n形容':case '形容词(定语)': case 'Adjective': case 'Adjective\n形容词':case '定中关系': theclass.形容词定语 = true; break;
+          case '動詞接尾辞':case 'adverbials':case '状语 adverbials\n形容(動作)':case 'manner':case '行为方式 manner\n動作・変化のやり方':case '副词(状语)': case 'Adverb': case 'Adverb\n副词':case '状中结构': theclass.副词状语 = true; break;
+          case '冠動詞':case '实施手段 implement\n有意思動作における道具・手段':case 'implement':case '来源 source\n事象の主体または対象の最初の位置':case 'source':case '程度(补语)': case 'Determiner': case 'Determiner\n限定词/量词':case '动补结构': theclass.程度补语 = true; break;
+          case '補助名詞':case '材料 material\n材料または構成要素':case 'material':case '目标 goal\n事象の主体または対象の最後の位置':case 'goal':case '并列句': case 'Clause': case 'Clause\n从句/子句':case '并列关系': theclass.并列句 = true; break;
+          case '形容詞語幹':case 'cc':case '介词\n等位接続詞':case '介词': case 'Preposition': case 'Preposition\n介词':case '介宾关系': theclass.介词 = true; break;
+          case '形容詞接尾辞':case '受益/影响的终端 beneficiary\n利益・不利益の移動先':case 'beneficiary':case '发生地 place\n事象の成立する場所':case 'place':case '左附加词':case '左附加关系': theclass.左附加词 = true; break;
+          case '冠形容詞':case '发生场景 scene\n事象の成立する場面':case 'scene':case '时间 time\n事象の起こる時間':case 'time':case '右附加词':case '右附加关系': theclass.右附加词 = true; break;
+          case '接続接尾辞':case '句読点\npunct':case 'punct':case '标点符号': case 'Punctuation': case 'Punctuation\n标点句读':case '标点符号': theclass.标点符号 = true; break;
+          case '判定詞':case 'core': case '谓语': case 'Verb': case 'Verb\n动词':case '谓语': theclass.谓语 = true; break;
+          case '格助詞':case '时间起始 timefrom\n事象の始まる時間':case 'timefrom':case '时间终点 timeto\n事象の終わる時間':case 'timeto':case "Noun Phrase\n名词短语":case 'NounPhrase': theclass.NounPhrase = true; break;
+          case '引用助詞':case '基础 basis\n比較の基準':case 'basis':case '单元 unit\n単位':case 'unit':case "Verb Phrase\n动词短语":case 'VerbPhrase': theclass.VerbPhrase = true; break;
+          case '連用助詞':case '从到 fromto\n範囲':case 'fromto':case '目的 purpose\n目的':case 'purpose':case "Adjective Phrase\n形容词短语":case 'AdjectivePhrase': theclass.AdjectivePhrase = true; break;
+          case '連用詞':case 'condition':case '条件 condition\n事象・事実の条件関係':case "Prepositional Phrase\n介词短语":case 'PrepositionalPhrase': theclass.PrepositionalPhrase = true; break;
+          case '動詞活用語尾':case 'other':case '其他 other\nその他':case "Adverb Phrase\n副词短语":case 'AdverbPhrase': theclass.AdverbPhrase = true; break;
+          case '連体詞':case '词格表示\ncase':case 'case':case '拟声词/談話要素\ndiscourse':case 'discourse':case "Pronoun\n代词":case 'Pronoun': theclass.Pronoun = true; break;
+          case '接続詞':case '並列構造\nconj':case 'conj':case "Determiner\n量词":case 'Determiner': theclass.Determiner = true; break;
+          case '独立詞':case '常见专有名词\n固有名詞の複合語':case 'name':case "Wh-Determiner\nWh限定词":case 'WhDeterminer': theclass.WhDeterminer = true; break;
+          case '終助詞':case '補文(类似宾语)\nccomp':case 'ccomp':case "Noun\n名词":case 'Noun': theclass.Noun = true; break;
+          case '間投詞':case '否定\nneg':case 'neg':case '名词修饰':case 'nmod':case "Wh-Noun Phrase\nWh名词指代短语":case 'WhNounPhrase': theclass.WhNounPhrase = true; break;
+          case 'chunk核心': case '括弧':case '复合词\ncompound':case 'compound':case '修饰目标\nnsubj':case 'nsubj':case "Wh-Adverb Phrase\nWh副词指代短语":case 'WhAdverbPhrase': theclass.WhAdverbPhrase = true; break;
+          case '句点':case 'nsubjpass':case '被动修饰目标\nnsubjpass':case "Wh-Adverb\nWh副词":case 'WhAdverb': theclass.WhAdverb = true; break;
+          case '読点':case 'advcl':case '副詞節/修饰语\nadvcl':case "Conjunction\n连接词":case 'Conjunction': theclass.Conjunction = true; break;
+          case '空白':case 'appos':case '同格の表現\nappos':case "Proper Noun\n专有名词":case 'ProperNoun': theclass.ProperNoun = true; break;
+          case 'Symbol':case 'nummod':case '数量修饰词\nnum-modifier':case "Quantifier Phrase\n定量短语":case 'QuantifierPhrase': theclass.QuantifierPhrase = true; break;
+          case 'Number':case 'advmod':case '副词修饰\nadvmod':case "Numeral\n数字词":case 'Numeral': theclass.Numeral = true; break;
+          case '助数詞':case 'dobj':case '宾语/动作目标\ndobj':case 'iobj':case '间接宾语/间接动作目标\niobj':case "Parenthetical\n插入语/附带说明":case 'Parenthetical': theclass.Parenthetical = true; break;
+          case '助助数詞':case 'amod':case '形状詞/形容词修饰\namod':case 'csubj':case '短语之修饰目标\ncsubj':case "Wh-Pronoun\nWh限定词/量词":case 'WhPronoun': theclass.WhPronoun = true; break;
+          case '冠数詞':case 'csubjpass':case '短语之被动修饰目标\ncsubjpass':case 'aux':case '助动词/补语\naux':case "Wh-Prepositional Phrase\nWh介词指代短语":case 'WhPrepositionalPhrase': theclass.WhPrepositionalPhrase = true; break;
+          case 'acl':case '連体修飾節/共同修饰语\nacl':case 'cop':case '(联)系词\ncopula':case "Particle\n小品词":case 'Particle': theclass.Particle = true; break;
+          case 'auxpass':case '为形成动词词组构成的助动词词尾「れる/られる」\nauxpass':case 'mark':case '标记词组从属关系\nmark':case "Possessive Modifier\n's表示拥有关系":case 'PossessiveModifier': theclass.PossessiveModifier = true; break;
+          default: theclass.未知语法结构 = true; break;
+          }
+          return theclass;
+        },
+        GMROLEclass: function (item) {
+          var jp_replacer = /[^\"]*\n(名詞|名詞接尾辞|冠名詞|英語接尾辞|動詞語幹|動詞活用語尾|動詞接尾辞|冠動詞|補助名詞|形容詞語幹|形容詞接尾辞|冠形容詞|接続接尾辞|判定詞|格助詞|引用助詞|連用助詞|連用詞|動詞活用語尾|連体詞|接続詞|独立詞|終助詞|間投詞|括弧|句点|読点|空白|Symbol|Number|助数詞|助助数詞|冠数詞)/gm;
+          item = item.replace(jp_replacer, (match, p1) => {return p1})
+          var theclass = {};
+          switch (item) {
+          case '一句话': case '核心关系':case '整句话':case 'Sentence':case "Sentence\n整句话": theclass.核心关系_gm_role = true; break;
+          case '名詞接尾辞':case 'agent':case '发起动作主体 agent\n有意動作を引き起こす主体': case '主语':case '主谓关系': theclass.主语_gm_role = true; break;
+          case '冠名詞':case 'object':case '作用对象 object\n動作・変化の影響を受ける対象': case '宾语':case '动宾关系': theclass.宾语_gm_role = true; break;
+          case '英語接尾辞':case 'agentnonvoluntary':case '非有意发起动作主体 agentnonvoluntary\n意思性のない主体':case '间接宾语':case '间宾关系': theclass.间接宾语_gm_role = true; break;
+          case '名詞':case '動詞語幹':case '有特征对象 aobject\n属性を持つ対象':case 'aobject':case '有特征对象 aobject\n属性を持つ対象':case 'aobject':case '前置宾语':case '前置宾语': theclass.前置宾语_gm_role = true; break;
+          case '動詞活用語尾':case 'det':case '定语\ndeterminer':case 'adjectivals':case '形容词 adjectivals\n形容':case '形容词(定语)': case 'Adjective': case 'Adjective\n形容词':case '定中关系': theclass.形容词定语_gm_role = true; break;
+          case '動詞接尾辞':case 'adverbials':case '状语 adverbials\n形容(動作)':case 'manner':case '行为方式 manner\n動作・変化のやり方':case '副词(状语)': case 'Adverb': case 'Adverb\n副词':case '状中结构': theclass.副词状语_gm_role = true; break;
+          case '冠動詞':case '实施手段 implement\n有意思動作における道具・手段':case 'implement':case '来源 source\n事象の主体または対象の最初の位置':case 'source':case '程度(补语)': case 'Determiner': case 'Determiner\n限定词/量词':case '动补结构': theclass.程度补语_gm_role = true; break;
+          case '補助名詞':case '材料 material\n材料または構成要素':case 'material':case '目标 goal\n事象の主体または対象の最後の位置':case 'goal':case '并列句': case 'Clause': case 'Clause\n从句/子句':case '并列关系': theclass.并列句_gm_role = true; break;
+          case '形容詞語幹':case 'cc':case '介词\n等位接続詞':case '介词': case 'Preposition': case 'Preposition\n介词':case '介宾关系': theclass.介词_gm_role = true; break;
+          case '形容詞接尾辞':case '受益/影响的终端 beneficiary\n利益・不利益の移動先':case 'beneficiary':case '发生地 place\n事象の成立する場所':case 'place':case '左附加词':case '左附加关系': theclass.左附加词_gm_role = true; break;
+          case '冠形容詞':case '发生场景 scene\n事象の成立する場面':case 'scene':case '时间 time\n事象の起こる時間':case 'time':case '右附加词':case '右附加关系': theclass.右附加词_gm_role = true; break;
+          case '接続接尾辞':case '句読点\npunct':case 'punct':case '标点符号': case 'Punctuation': case 'Punctuation\n标点句读':case '标点符号': theclass.标点符号_gm_role = true; break;
+          case '判定詞':case 'core': case '谓语': case 'Verb': case 'Verb\n动词':case '谓语': theclass.谓语_gm_role = true; break;
+          case '格助詞':case '时间起始 timefrom\n事象の始まる時間':case 'timefrom':case '时间终点 timeto\n事象の終わる時間':case 'timeto':case "Noun Phrase\n名词短语":case 'NounPhrase': theclass.NounPhrase_gm_role = true; break;
+          case '引用助詞':case '基础 basis\n比較の基準':case 'basis':case '单元 unit\n単位':case 'unit':case "Verb Phrase\n动词短语":case 'VerbPhrase': theclass.VerbPhrase_gm_role = true; break;
+          case '連用助詞':case '从到 fromto\n範囲':case 'fromto':case '目的 purpose\n目的':case 'purpose':case "Adjective Phrase\n形容词短语":case 'AdjectivePhrase': theclass.AdjectivePhrase_gm_role = true; break;
+          case '連用詞':case 'condition':case '条件 condition\n事象・事実の条件関係':case "Prepositional Phrase\n介词短语":case 'PrepositionalPhrase': theclass.PrepositionalPhrase_gm_role = true; break;
+          case '動詞活用語尾':case 'other':case '其他 other\nその他':case "Adverb Phrase\n副词短语":case 'AdverbPhrase': theclass.AdverbPhrase_gm_role = true; break;
+          case '連体詞':case '词格表示\ncase':case 'case':case '拟声词/談話要素\ndiscourse':case 'discourse':case "Pronoun\n代词":case 'Pronoun': theclass.Pronoun_gm_role = true; break;
+          case '接続詞':case '並列構造\nconj':case 'conj':case "Determiner\n量词":case 'Determiner': theclass.Determiner_gm_role = true; break;
+          case '独立詞':case '常见专有名词\n固有名詞の複合語':case 'name':case "Wh-Determiner\nWh限定词":case 'WhDeterminer': theclass.WhDeterminer_gm_role = true; break;
+          case '終助詞':case '補文(类似宾语)\nccomp':case 'ccomp':case "Noun\n名词":case 'Noun': theclass.Noun_gm_role = true; break;
+          case '間投詞':case '否定\nneg':case 'neg':case '名词修饰':case 'nmod':case "Wh-Noun Phrase\nWh名词指代短语":case 'WhNounPhrase': theclass.WhNounPhrase_gm_role = true; break;
+          case 'chunk核心': case '括弧':case '复合词\ncompound':case 'compound':case '修饰目标\nnsubj':case 'nsubj':case "Wh-Adverb Phrase\nWh副词指代短语":case 'WhAdverbPhrase': theclass.WhAdverbPhrase_gm_role = true; break;
+          case '句点':case 'nsubjpass':case '被动修饰目标\nnsubjpass':case "Wh-Adverb\nWh副词":case 'WhAdverb': theclass.WhAdverb_gm_role = true; break;
+          case '読点':case 'advcl':case '副詞節/修饰语\nadvcl':case "Conjunction\n连接词":case 'Conjunction': theclass.Conjunction_gm_role = true; break;
+          case '空白':case 'appos':case '同格の表現\nappos':case "Proper Noun\n专有名词":case 'ProperNoun': theclass.ProperNoun_gm_role = true; break;
+          case 'Symbol':case 'nummod':case '数量修饰词\nnum-modifier':case "Quantifier Phrase\n定量短语":case 'QuantifierPhrase': theclass.QuantifierPhrase_gm_role = true; break;
+          case 'Number':case 'advmod':case '副词修饰\nadvmod':case "Numeral\n数字词":case 'Numeral': theclass.Numeral_gm_role = true; break;
+          case '助数詞':case 'dobj':case '宾语/动作目标\ndobj':case 'iobj':case '间接宾语/间接动作目标\niobj':case "Parenthetical\n插入语/附带说明":case 'Parenthetical': theclass.Parenthetical_gm_role = true; break;
+          case '助助数詞':case 'amod':case '形状詞/形容词修饰\namod':case 'csubj':case '短语之修饰目标\ncsubj':case "Wh-Pronoun\nWh限定词/量词":case 'WhPronoun': theclass.WhPronoun_gm_role = true; break;
+          case '冠数詞':case 'csubjpass':case '短语之被动修饰目标\ncsubjpass':case 'aux':case '助动词/补语\naux':case "Wh-Prepositional Phrase\nWh介词指代短语":case 'WhPrepositionalPhrase': theclass.WhPrepositionalPhrase_gm_role = true; break;
+          case 'acl':case '連体修飾節/共同修饰语\nacl':case 'cop':case '(联)系词\ncopula':case "Particle\n小品词":case 'Particle': theclass.Particle_gm_role = true; break;
+          case 'auxpass':case '为形成动词词组构成的助动词词尾「れる/られる」\nauxpass':case 'mark':case '标记词组从属关系\nmark':case "Possessive Modifier\n's表示拥有关系":case 'PossessiveModifier': theclass.PossessiveModifier_gm_role = true; break;
+          default: theclass.未知语法结构_gm_role = true; break;
+          }
+          return theclass;
+        },
+        hoverGrammar: function (event) {
+          tmpstack = []; curelem=event.target;
+          if(curelem.classList.contains("gr_wrapper")){curelem=curelem.parentElement}
+          while (curelem.parentElement.parentElement.classList.contains("gr_holder")) {
+            curelem = curelem.parentElement.parentElement;
+            tmpcolor=window.getComputedStyle(curelem).getPropertyValue("border-bottom-color");
+            tmpstack.push({e:curelem, c:tmpcolor})
+          }
+          tmpstack.reverse();
+          if(this.focused_elem_stack.length > tmpstack.length){return}
+          try {
+            this.focused_elem_stack.forEach(element => {
+              element.e.style.borderBottom = "4px solid "+element.c; element.e.style.borderTop = "2px solid transparent"; element.e.style.borderLeft = "2px solid transparent"; element.e.style.borderRight = "2px solid transparent";
+              element.e.className = element.e.className.replace(' TheFocusedItem','')
+              element = element.e;
+              element.style.boxShadow = "";
+            });
+          } catch (error) {}
+          this.focused_elem_stack = tmpstack;
+          // ↑重算focus_elem_stack。
+          this.focused_elem_stack.forEach(element => {
+            element.e.style.borderBottom = "4px solid "+element.c; element.e.style.borderTop = "2px solid transparent"; element.e.style.borderLeft = "2px solid transparent"; element.e.style.borderRight = "2px solid transparent";
+            element.e.style.boxShadow = "";
+            element.e.className = element.e.className.replace(' TheFocusedItem','')
+          });
+          tmpcolor=window.getComputedStyle(event.target).getPropertyValue("border-bottom-color");
+          this.focused_elem_stack.push({e:event.target, c:tmpcolor});
+          event.target.style.borderBottom = "4px solid "+tmpcolor; event.target.style.borderTop = "2px solid "+tmpcolor; event.target.style.borderLeft = "2px solid "+tmpcolor; event.target.style.borderRight = "2px solid "+tmpcolor;
+          event.target.style.boxShadow = "0px 0px 30px "+tmpcolor;
+          event.target.className = event.target.className + ' TheFocusedItem';
+          return;
+        },
+        leaveGrammar: function (event) {
+          var element = this.focused_elem_stack.pop();
+          if(element){
+            element.e.style.borderBottom = "4px solid "+element.c; element.e.style.borderTop = "2px solid transparent"; element.e.style.borderLeft = "2px solid transparent"; element.e.style.borderRight = "2px solid transparent";
+            element.e.className = element.e.className.replace(' TheFocusedItem','')
+            element = element.e;
+            element.style.boxShadow = "";
+          }
+          var tmpe = this.focused_elem_stack.pop();
+          if(tmpe){
+          this.focused_elem_stack.push(tmpe);
+          tmpcolor = tmpe.c;
+          tmpe = tmpe.e;
+          tmpe.style.borderBottom = "4px solid "+tmpcolor; tmpe.style.borderTop = "2px solid "+tmpcolor; tmpe.style.borderLeft = "2px solid "+tmpcolor; tmpe.style.borderRight = "2px solid "+tmpcolor;
+          tmpe.style.boxShadow = "0px 0px 30px "+tmpcolor;
+          tmpe.className = tmpe.className + ' TheFocusedItem';}
+          event.stopPropagation();
+          return;
+        },
+        clickGrammar: function (event) {
+          event.stopPropagation();
+          if (true) {
+            // cancel.
+            this.showSidebar=false;
+            this.focused_fixed_elem_stack.forEach(element => {
+              element.e.style.transform = ''; element.e.style.backgroundColor = '';
+              element.e.className = element.e.className.replace(' TheFocusedIHL','');
+            });
+            this.has_focused_fixed_elem_stack = false;
+          this.$bvToast.toast(`可以通过再次点击语法结构进行高亮。`, {
+              title: '已取消标记高亮！',
+              autoHideDelay: 1200,
+              appendToast: true,
+              variant: "danger",
+              solid: true,
+              toaster: 'b-toaster-bottom-right'
+            })
+            //return;  首先取消选中
+
+            this.has_focused_fixed_elem_stack = true;
+            this.focused_fixed_elem_stack = this.focused_elem_stack.concat();
+            var tgt = this.focused_fixed_elem_stack.pop(); this.focused_fixed_elem_stack.push(tgt);
+            copyStringToClipboard(trimtextAI(get_stratified_content(tgt.e)));  // 复制其文本内容
+            if (tgt.e.querySelector("gr_span")){this.showSidebar=false} else 
+            {
+              if (/^[。：！？\"\'\.\,\?\!…\(\)（）『』「」{}\[\]\~\@\-\+\*\/]$/.test(tgt.e.innerText)) {}
+              else {
+                tgtwordreal=tgt.e.parentElement.parentElement.querySelector(".gm_role");
+                if(tgtwordreal&&/^.*\n.*\n.*\n.*/.test(tgtwordreal.innerText)){ // jpn
+                  this.showSidebar=true;
+                  proparr = tgtwordreal.innerText.match(/.*?\n|.*?$/g);
+                  var explainStr = '片假名 Katakana： '+proparr[0]+'英文对照： '+proparr[1]+'词语原型： '+proparr[2]+'语法作用： '+proparr[4]+'\n语法特性： '+proparr[3];
+                  词语原型=proparr[2].replace(/\n/g,"");
+                  this.clicktgtword=词语原型;
+                  this.wordExplanation=explainStr;
+                  console.log(词语原型);
+                } else { // eng
+                  if(tgtwordreal.innerText=="谓语"){this.showSidebar=false}
+                  else{
+                    proparr = tgtwordreal.innerText.match(/.*?\n|.*?$/g);
+                    this.showSidebar=true;
+                    var explainStr = '词性[英]： '+proparr[0]+'词性： '+proparr[1];
+                    词语原型=tgt.e.innerText.replace(/\n/g,"");
+                    this.clicktgtword=词语原型;
+                    this.wordExplanation=explainStr;
+                    console.log(词语原型);
+                  }
+                }
+              }
+            }
+            // console.log(tgt.e);
+            tgt.e.className = tgt.e.className + ' TheFocusedIHL';tgt.e.style.backgroundColor = 'white';
+            this.focused_fixed_elem_stack.forEach(element => {
+              element.e.style.transform = 'translateY(-4px)';
+            });
+            this.$bvToast.toast(`可以通过再次点击任意语法结构取消高亮。\n \n \t \n \t \t【若高亮元素出现问题，请将鼠标移出语法元素，再重新移入】`, {
+              title: '已将该语法结构标记高亮！',
+              autoHideDelay: 1500,
+              appendToast: true,
+              variant: "info",
+              solid: true,
+              toaster: 'b-toaster-bottom-right'
+            })
+            return;
+          }
+        },
+      }
+    })
+    reload_upload_focus_flip = true;
+    window.addEventListener("beforeunload", function(event) { if(reload_upload_focus_flip) {reload_upload_focus_flip=false;} });
+    document.addEventListener("keydown", function(event) {
+      switch (event.keyCode) {
+          case 9:if(event.altKey == true){event.preventDefault();document.getElementById("mainsearchbox").focus();}return; // option或alt+tab, focus搜索框。
+          case 112:app.search('orig');return;
+          case 113:app.search('zh');return;
+          case 114:app.search('en');return;
+          case 115:app.search('jp');return;
+      }
+      if (event.keyCode === 13 && event.shiftKey == false && (!app.entershoulddefault)) {
+        event.preventDefault();
+        app.search('orig');
+        return;
+      }
+      if (event.keyCode === 13 && event.shiftKey == true) {
+        event.preventDefault();
+        app.search('zh');
+        return;
+      }
+      if ((event.ctrlKey == true && event.metaKey == true) || (event.ctrlKey == true && event.altKey == true) || (event.ctrlKey == true && event.shiftKey == true)) {
+        event.preventDefault();
+        switch (event.keyCode) {
+          case 83:app.search('orig');break;
+          case 67:app.search('zh');break;
+          case 69:app.search('en');break;
+          case 74:app.search('jp');break;
+        }
+        return;
+      }
+      if (event.keyCode === 27){ // esc键
+        // 按esc键，cancel语法高亮.
+        app.showSidebar=false;
+        app.focused_fixed_elem_stack.forEach(element => {
+          element.e.style.transform = ''; element.e.style.backgroundColor = '';
+          element.e.className = element.e.className.replace(' TheFocusedIHL','');
+        });
+        app.has_focused_fixed_elem_stack = false;
+        app.$bvToast.toast(`可以通过再次点击语法结构进行高亮。`, {
+          title: '已取消标记高亮！',
+          autoHideDelay: 1200,
+          appendToast: true,
+          variant: "danger",
+          solid: true,
+          toaster: 'b-toaster-bottom-right'
+        })
+        return;
+      }
+    });
+    window.onpopstate = function(event) {
+      console.log(event);
+      if (event.state == null) {history.back()}
+      if (event.state.page == 2) {app.show_search_result_mode=true;} else {
+        app.show_search_result_mode=false;
+        if(reload_upload_focus_flip) {reload_upload_focus_flip=false;}
+        app.$bvToast.toast(`本网站回退功能并不完善，如果多次语法分析，会导致之前的查询结果丢失，无法通过历史浏览记录复原。 因此请注意保存结果！          您上一次分析的结果可以通过点击前进按钮恢复。`, {
+            title: '⚠️请注意保存结果！',
+            autoHideDelay: 10000,
+            appendToast: true,
+            variant: "danger",
+            solid: true,
+            toaster: 'b-toaster-bottom-right'
+          })
+      }
+    }
+
+  </script>
+</body>
+
+</html>

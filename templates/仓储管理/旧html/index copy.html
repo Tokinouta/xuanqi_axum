@@ -1,0 +1,2203 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="/static/仓储管理/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=0.8, user-scalable=0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+  <style>
+    html,
+    body {/* zoom: 100%; */
+      max-width: 100%;
+      overflow-x: hidden;
+      font-size: 13px;
+    }
+
+    .NOBORDER {
+      box-shadow: none;
+      padding: 0px 10px 0px 0px;
+    }
+
+    .vertical_center {
+      margin-top: 25px;
+      transform: translateY(-50%);
+    }
+
+    /* ↑navbar需要 */
+    .input_box {
+      border: none;
+      border-radius: 300px;
+      background-color: #ffd231;
+      color: #a83b00;
+    }
+
+    ::placeholder {
+      font-weight: bold;
+      color: #cf8212;
+      opacity: 1;
+    }
+    .modal-dialog {max-width: calc(80% - 20px);}
+    textarea {font-family: 'Sarasa Term SC', 'Menlo'}
+    #searchButton:hover {
+      border-radius: 25px;
+      box-shadow: 1px 1px 10px rgb(228, 80, 0);
+    }
+
+    #searchButton:active {
+      border-radius: 25px;
+      box-shadow: 1px 1px 10px rgb(155, 0, 155);
+    }
+
+    .bg-info {background-color: rgb(43, 190, 254)!important;}
+    hr {border-top: 3px solid rgb(80, 255, 203)}
+    .form-control {border-top: 3px solid rgb(120, 235, 255)}
+    .card-body {padding: 15px;}
+    .btn-info {background-color:#1780b8;border-color:#137af7;}
+    .btn-outline-info {padding: 0px 4px !important;}
+
+    .bdispl {
+      margin: 0 0 0 26px;
+      padding: 2px 12px 8px 12px;
+      border: 1px solid transparent;
+      border-top: 2px solid #e9f4f7;
+      border-left: 6px solid #86b7c4;
+      border-radius: 6px;
+    }
+    .bbtmbtn {margin: 0 0 0 26px;}
+    .nopad {padding: 0;margin: 0 5px 5px;}
+    .nomargin {margin: 0 !important;}
+    .TheFocusedItem {
+      background: linear-gradient(#e8fdff, #ffffff, #ffffff);
+      border-top: 2px solid #81c9f8;
+      border-left: 6px solid #81c9f8;
+    }
+    .TheFocusedItem:active {
+      border-top: 2px solid #3888f1;
+      border-left: 6px solid #3888f1;
+    }
+    name {font: bold 22px/1.5 "Georgia", sans-serif;margin-right: 20px;}
+    datemark {font: bold 22px/1.5 "Sarasa Term SC", 'Menlo', sans-serif;color: #d99903;}
+    descr {margin-top: 4px;color: rgb(81, 59, 45);font: 400 13px/1.5 "Sarasa Term SC", 'Menlo', "Georgia", sans-serif;white-space: pre-wrap;display: -webkit-box;-webkit-box-orient: vertical; overflow: hidden;-webkit-line-clamp: none;}
+    descrNote {margin-top: 4px;color: rgb(150, 188, 219);font: 500 12px/1.5 "Sarasa Term SC", 'Menlo', "Georgia", sans-serif;}
+    deadLine {margin-top: 0px;color: rgb(9, 83, 145);font: 500 14px/1.5 "Sarasa Term SC", 'Menlo', "Georgia", sans-serif;}
+    .linesX {display: -webkit-box;-webkit-box-orient: vertical; overflow: hidden;-webkit-line-clamp: 4;}
+    type {padding: 0px 5px;display: inline-block; font: bold 13px/1.5 "Georgia", sans-serif;color: rgb(0, 35, 139);border-radius: 5px;}
+    type:hover {background-color: #cbc9ff;}
+    type:active {background-color: #fffbc9;}
+    type2 {padding: 0.5px 11px;display: inline-block; font: bold 11px/1.2 "Georgia", sans-serif;color: rgba(37, 41, 87, 0.778);border-radius: 5px;}
+    type2:hover {background-color: #fff1c9;}
+    .btn-info {padding: 2px;} 
+    #dropdown-form-sentence__BV_toggle_ {padding: 0;}
+    .pathnode {display: inline-block;margin: 2px;padding: 2px;border: 2px solid rgb(255, 188, 181);border-radius: 5px;font: bold 10px/1.2 "Georgia", sans-serif;color: rgb(32, 50, 67);}
+    .searchres:hover {background: linear-gradient(#d9f9fc, #f8fcff, #ffffff);border-radius: 5px;}
+    .TXTsearchres {background-color: rgb(255, 239, 211);border-radius: 5px;border-top: 2px solid #ffe7bc !important;border-left: 6px solid #c4b586 !important;}
+    .TXTsearchres:hover {background: linear-gradient(#ffd231, #fee8c2, #ffefd3);}
+    .upperDirInfo {background-color: rgb(255, 248, 211);border-radius: 5px;border-top: 2px solid #ffcdbc !important;border-left: 6px solid #de7054 !important;}
+    .upperDirInfo:hover {background: linear-gradient(#ffe431, #feefc2, #fff4d3);}
+    #resultScrollMark {background-color: red;color: white;font: bold 2em "Georgia", serif;padding: 12px;border-radius: 10px;}
+    par {white-space: pre-wrap;display: block;margin-top: 3px;border: 3px solid rgb(255, 169, 165);border-bottom: none;border-radius: 10px;line-height: 19pt;font-size: 18px;padding: 9px;}
+    .focuspar {background-color: #ffd231;color: #a83b00;}
+
+    .thumbimgSpan {display:inline-block;background-color: white;box-shadow: 0px 2px 15px -2px #cee2dc;border-radius:10px;padding:5px;margin: 5px;}
+    .thumbimage {max-width:120px;max-height:120px;object-fit: contain;}
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 管理备份边栏 -->
+    <b-sidebar id="sidebar-2" title="🧰备份恢复边栏" right shadow v-model="showBackupSidebar" width="460px" backdrop-variant="warning" z-index="1041" backdrop>
+      <div class="px-3 py-2" style="white-space: pre-wrap;font-family: Georgia, serif;">
+        <b-button variant="warning" @click="createNewBackup()">当前新建备份，↓输入名称</b-button>
+        <b-form-input v-model="newBackupName" type="text" placeholder="输入备份名称~"></b-form-input>
+        <div v-for="backup in backupList">
+          <par>{{backup}}<br>
+            <b-button variant="warning" @click="restoreBackup(backup)">恢复这个备份</b-button>
+            <b-button variant="warning" @click="removeBackup(backup)">删除这个备份</b-button>
+          </par>
+        </div>
+      </div>
+    </b-sidebar>
+    <!-- 管理库的总边栏 -->
+    <b-sidebar id="sidebar-1" title="🛍仓库管理边栏" left shadow v-model="showSidebar" width="460px" backdrop-variant="transparent" backdrop>
+      <div class="px-3 py-2" style="white-space: pre-wrap;font-family: Georgia, serif;">
+        <b-button class="mt-1" variant="warning" @click="rebuildNGT">重建ngt搜索&保存</b-button> <b-button class="mt-1" variant="warning" @click="prepareBackupSidebar()">管理备份</b-button><br
+        ><b-button class="mt-1" variant="warning" @click="rebuildNGTReloadVec">重建ngt搜索(强行重置全部词向量数据)</b-button><br
+        ><b-button class="mt-1" variant="outline-danger" @click="clearTemp()">清理当前temp上传文件夹</b-button>
+        <p>当前用户：<name>{{signup_username}}</name></p><p>当前所在仓库：{{CurWarehouse}}</p>
+        <div v-for="wh, ind in warehouses">
+          <par :class="{'focuspar':wh==CurWarehouse}" style="height: 64px">{{wh}}<b-button variant="warning" @click="warehouseFocus(ind)" style="height: 40px;float: right;">选择</b-button></par>
+          <b-button variant="info" class="nopad" @click="copyStringToClipboard(window.location.href.split('/').slice(0,4).join('/')+'/'+wh)"> ⛓🏮复制链接！🎉💌 </b-button>
+          <b-button variant="warning" class="nopad" @click="renameWarehouse(ind)" v-if="wh!='事件管理ToDo'"> 改名 </b-button>
+          <b-button variant="danger" class="nopad" @click="rmWarehouse(ind)" v-if="wh!='事件管理ToDo'"> 删除 </b-button>
+          <b-button variant="primary" class="nopad" @click="moveUpWarehouse(ind)"> 上浮 </b-button>
+          <b-button variant="success" class="nopad" @click="moveDownWarehouse(ind)"> 下移 </b-button><br><br>
+        </div>
+        <b-button variant="dark" @click="addWarehouse">添加新的库</b-button>
+      </div>
+    </b-sidebar>
+    <!-- ↓标题栏。 -->
+    <div style="color: white;border-bottom: 5px solid #0097e8;position: relative;top:90px">
+      <b-navbar toggleable="lg" type="light" variant="info" class="NOBORDER">
+        <b-navbar-brand href="/storageManager" class="NOBORDER"><a href="/storageManager" class="navbar-brand NOBORDER ml-2" style="font-weight: bold; font-size: 20pt; color: white;">🏵记忆宫殿</a></b-navbar-brand>
+        搜索结果数:<b-form-input v-model="resnumber" type="number" placeholder="200" style="width: 80px;display: inline-block;"></b-form-input>&nbsp;
+        console:<b-form-input id="cmdcommand" v-model="consoleCmd" style="width: 200px;display: inline-block;"></b-form-input>&nbsp;
+        <b-button variant="warning" @click="showSidebar = !showSidebar">🛍边栏管理仓库/重建ngt/备份</b-button>&nbsp;
+
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav style="padding: 0px 10px 0px 10px;">
+
+          <!-- Right aligned nav items -->
+          <b-navbar-nav class="ml-auto">
+
+            <b-nav-item-dropdown right>
+              <!-- Using 'button-content' slot -->
+              <template #button-content>
+                <em>
+                  <span v-if="! isLoggedIn">登录</span>
+                  <span v-if="isLoggedIn">已登录 |</span>
+                  <svg viewBox="785 321 40 40" width="19px" height="19px" class="align-text-bottom">
+                    <g id="Canvas_1" stroke="none" stroke-opacity="1" fill="none" stroke-dasharray="none"
+                      fill-opacity="1">
+                      <title>Canvas 1</title>
+                      <g id="Canvas_1_Layer_1">
+                        <title>Layer 1</title>
+                        <g id="Graphic_2">
+                          <title>Account Circle</title>
+                          <path
+                            d="M 805 321 C 793.96 321 785 329.96 785 341 C 785 352.04 793.96 361 805 361 C 816.04 361 825 352.04 825 341 C 825 329.96 816.04 321 805 321 Z M 805 327 C 808.32 327 811 329.68 811 333 C 811 336.32 808.32 339 805 339 C 801.68 339 799 336.32 799 333 C 799 329.68 801.68 327 805 327 Z M 805 355.4 C 800 355.4 795.58 352.84 793 348.96 C 793.06 344.98 801 342.8 805 342.8 C 808.98 342.8 816.94 344.98 817 348.96 C 814.42 352.84 810 355.4 805 355.4 Z"
+                            fill="#146" />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </em>
+              </template>
+              <b-dropdown-item v-if="isLoggedIn" @click="logout">退出登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-login')">登录</b-dropdown-item>
+              <b-dropdown-item>本月使用数量：{{monthlyusage}}</b-dropdown-item>
+              <b-dropdown-item>文件空间使用量：{{spaceusage}}</b-dropdown-item>
+              <b-dropdown-item>系统剩余空间：{{spaceleft}}</b-dropdown-item>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
+    </div>
+
+
+    <div class="row" style="width:70%; position: fixed;top:0;z-index: 133;">
+      <div class="col-md-12 col-xl-10">
+        <!-- 搜索框 -->
+        <b-overlay :show="isQueryingBackend">
+        <div style="padding: 10px; background-color: #f6d53029;border-radius: 14px;">
+          <!-- ↓输入公式helper。 -->
+          <span>
+            <b-dropdown id="dropdown-dropup" text="公式" variant="warning" class="m-2"
+              style="transform: translateY(-19.2px);z-index:1039;">
+              <b-dropdown-item v-b-modal.modal-notes>【查看使用说明】</b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item @click="simpleExample">▶简单的计算公式模板</b-dropdown-item>
+            </b-dropdown>
+          </span>
+          <span class="input_box" style="display: inline-block;height: 50px;width: calc(100% - 110px);">
+            <span>
+              <input autofocus onfocus="app.entershoulddefault = false" onblur="app.entershoulddefault = true" id="mainsearchbox" v-model="query_txt" placeholder="在此输入要查询的物品(或点击公式，输入复杂查询条件)" class="input_box vertical_center"
+                style="width: calc(100% - 84px);margin-left: 9px;line-height: 33px;">
+              </b-form-input>
+            </span>
+            <span>
+              <img id="searchButton" src="/static/仓储管理/searchbutton.svg" v-on:click="searchSubtree([])"
+              style="height: 41px; float: right;margin-right: 4px;" class="vertical_center">
+            </span>
+          </span>
+        </div>
+        </b-overlay>
+      </div>
+    </div>
+    <div style="display: inline-block;height: 80px;"></div>
+    <!-- ↓1.焦点行 -->
+    <b-row><div style="margin: 24px 30px; font-weight: 700;">
+      <span style="font-size: 25px;font-family: serif;">
+        <span style="background-image: linear-gradient(to right, #1261B2, #1276B2, #12c2c3, #12c2c3, #12c2c3);border-radius: 14px;padding: 6px;color: white;">{{CurWarehouse}}</span> 🗃项目名单
+        <b-button pill variant="warning" @click="show_search_result_mode = false">🖥浏览模式</b-button>
+        <b-button pill variant="warning" @click="show_search_result_mode = true">🔍搜索模式</b-button>
+        <span v-if="show_search_result_mode">（当前处于搜索模式）<br><em style="font-size: 16px;color: #1780b8;">
+        搜索结果可能重复，这是由于存在词向量多对一搜索。</em>
+        <b-button pill variant="outline-info" @click="show_search_result_mode = 2">只显示原文搜索</b-button>
+        <b-button pill variant="outline-info" @click="show_search_result_mode = 3">只显示词向量搜索</b-button>
+        </span><span v-if="! show_search_result_mode">（当前处于浏览模式）</span><br><span style="font-family: 'Sarasa Term SC';">
+        <b-button v-if="isTimeManagement" variant="warning" @click="additems([])"> ⏰添加新事件 </b-button>
+        <b-dropdown v-if="isTimeManagement && finishedTimeAsc" text="📅日历View" variant="warning">
+          <b-dropdown-form>
+            <b-calendar locale="zh" selected-variant="danger" nav-button-variant="warning" :date-info-fn="dateClass"></b-calendar>
+            <div class="mt-2"><center style="font-weight: 500;">当天事件：
+              <span class="table-success" style="display: inline-block;padding: 0px 4px;border-radius: 4px;"> 1 </span>
+              <span class="table-primary" style="display: inline-block;padding: 0px 4px;border-radius: 4px;"> 2 </span>
+              <span class="table-warning" style="display: inline-block;padding: 0px 4px;border-radius: 4px;"> 3 </span>
+              <span class="table-danger" style="display: inline-block;padding: 0px 4px;border-radius: 4px;">4+</span>
+            </center></div>
+        </b-dropdown>
+        <datemark v-if="isTimeManagement">今天是 {{GetTodayStr()}}</datemark>
+        </span>
+      </span>
+    </div>
+    </b-row>
+    <!-- 如果不是根目录，在此展示上层信息。 -->
+    <div v-if="upperDirInfo" class="upperDirInfo bdispl">
+      <span style="float: right;">
+        <b-button variant="info" @click="upperDirInfo.ind=[];app.edittgtitem=app.upperDirInfo;app.$bvModal.show('edittargetmodal');"> 📟编辑信息 </b-button>
+        <b-button variant="warning" @click="changeDir('../')"> 🌮返回上层 </b-button>
+        <b-button variant="warning" @click="changeDir('root')"> 🎄返回本仓库顶端🍟 </b-button>
+      </span>
+      <name>🌴根节点信息：</name>名称：<name>{{upperDirInfo.名称}}</name>类型：<type>{{upperDirInfo.type}}</type>----储存位置：<type>{{baseInd}}</type><br>
+      <span v-if="upperDirInfo.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="upperDirInfo.ind=[];app.edittgtitem=app.upperDirInfo;app.$bvModal.show('edittargetmodal');editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+      <span v-if="upperDirInfo.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="upperDirInfo.ind=[];app.edittgtitem=app.upperDirInfo;app.$bvModal.show('edittargetmodal');editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+      <descrNote style="float: right">「创建时间：{{upperDirInfo.setup}} | 最近更改：{{upperDirInfo.modify}}」</descrNote>
+      <descr @dblclick="Vue.set(upperDirInfo, 'expandDesc', !upperDirInfo.expandDesc)" v-bind:class="{'linesX':!upperDirInfo.expandDesc}">描述： {{upperDirInfo.描述}}</descr>
+      <div v-for="tmpdesc in upperDirInfo.词向量描述">词向量描述：{{tmpdesc}}</div>
+      <div v-for="tmpdesc in upperDirInfo.句向量描述">句向量描述：{{tmpdesc}}</div>
+      <span v-if="upperDirInfo.files && upperDirInfo.files.length != 0">
+        <div v-for="fileinfo, i in upperDirInfo.files">
+          <span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+          <type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2><type2>{{fileinfo[2]}}</type2></type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div>
+      </span>
+    </div>
+
+
+    <!-- 搜索结果展示区 -->
+    <div v-if="!show_search_result_mode" style="margin: 6px;">
+<!-- zone! -->
+
+<div v-for="parentitem_1, i_1 in fullitems">
+<div class="ml-2" v-if="isTimeManagement"><datemark v-if="i_1==0 || parentitem_1.截止日期 != fullitems[i_1-1].截止日期">{{GetDateDescription(parentitem_1)}}</datemark></div>
+<!-- 上面的日期显示，也只有isTimeManagement的第一层有，其他都没有。 -->
+<div class="bdispl parentitem_1" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="if(!isTimeManagement){dragenterF($event, parentitem_1)}" @dragleave="if(!isTimeManagement){dragleaveF($event, parentitem_1)}" @dragover.prevent>
+  <span style="float: right">
+  <span v-if="parentitem_1.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_1.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_1.ind)"> 📌cd </b-button>
+  <b-button variant="info" @click="deleteitems(parentitem_1.ind)"> 🗑删除 </b-button>
+  <b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_1)" @dragend="dropF($event, parentitem_1)" v-bind:disabled="isTimeManagement"> 🔀拖拽排序 </b-button>
+  <!-- 只有isTimeManagement的第一层的拖拽被禁了……其它库的其它层都没关系。 -->
+  <b-button variant="info" @click="edittarget(parentitem_1.ind)"> 📟编辑信息 </b-button>
+  <b-button v-if="! parentitem_1.内容" variant="info" @click="getitems(parentitem_1.ind)"> 🔰展开下一级</b-button>
+  <b-button v-if="parentitem_1.内容" variant="info" @click="delete parentitem_1.内容;$forceUpdate()"> 💠收起下一级</b-button>
+  <br><descrNote style="float: right">「创建时间：{{parentitem_1.setup}} | 最近更改：{{parentitem_1.modify}}」</descrNote>
+</span>
+<span v-if="isTimeManagement && parentitem_1.type=='事件Event'">
+  <span @click="timeMgmtClick(parentitem_1.ind)" style="border-color: #ff0064;background-color: #ff0099; display: inline-block; width: 16px; height: 16px; border-radius: 4px;text-align: center;vertical-align: 6px;"><span style="background-color: #ffffff; display: inline-block; width: 8px; height: 2px;vertical-align: middle;margin-top: 7px;"></span></span>
+  <span @click="edittarget(parentitem_1.ind)"><b-form-checkbox size="lg" v-model="parentitem_1.已完成" disabled name="checkbox-1" value="已完成" unchecked-value="未完成" style="display: inline;"></b-form-checkbox></span>
+<deadLine>🔆{{parentitem_1.截止日期}} {{weekDayMap[new Date(parentitem_1.截止日期).getDay()]}} {{parentitem_1.截止时间}}</deadLine><br></span>
+名称：<name>{{parentitem_1.名称}}</name>类型：<type>{{parentitem_1.type}}</type>
+<br><span v-if="parentitem_1.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_1.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_1.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_1.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_1.files && parentitem_1.files.length != 0"><br><div v-for="fileinfo, i in parentitem_1.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_1, 'expandDesc', !parentitem_1.expandDesc)" v-bind:class="{'linesX':!parentitem_1.expandDesc}">描述：{{parentitem_1.描述}}</descr>
+<div v-if="parentitem_1.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_2" v-for="parentitem_2 in parentitem_1.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_2)" @dragleave="dragleaveF($event, parentitem_2)" @dragover.prevent>
+<span style="float: right;">
+<span v-if="parentitem_2.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+<b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_2.ind)"> 🥊搜索子树 </b-button>
+<b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_2.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_2.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_2)" @dragend="dropF($event, parentitem_2)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_2.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_2.内容" variant="info" @click="getitems(parentitem_2.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_2.内容" variant="info" @click="delete parentitem_2.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_2.setup}} | 最近更改：{{parentitem_2.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_2.名称}}</name>类型：<type>{{parentitem_2.type}}</type>
+<br><span v-if="parentitem_2.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_2.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_2.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_2.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_2.files && parentitem_2.files.length != 0"><br><div v-for="fileinfo, i in parentitem_2.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="parentitem_2.expandDesc=(!parentitem_2.expandDesc);app.$forceUpdate()" v-bind:class="{'linesX':!parentitem_2.expandDesc}">描述：{{parentitem_2.描述}}</descr>
+<div v-if="parentitem_2.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_3" v-for="parentitem_3 in parentitem_2.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_3)" @dragleave="dragleaveF($event, parentitem_3)" @dragover.prevent>
+<span style="float: right;">
+<span v-if="parentitem_3.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+<b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_3.ind)"> 🥊搜索子树 </b-button>
+<b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_3.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_3.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_3)" @dragend="dropF($event, parentitem_3)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_3.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_3.内容" variant="info" @click="getitems(parentitem_3.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_3.内容" variant="info" @click="delete parentitem_3.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_3.setup}} | 最近更改：{{parentitem_3.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_3.名称}}</name>类型：<type>{{parentitem_3.type}}</type>
+<br><span v-if="parentitem_3.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_3.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_3.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_3.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_3.files && parentitem_3.files.length != 0"><br><div v-for="fileinfo, i in parentitem_3.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_3, 'expandDesc', !parentitem_3.expandDesc)" v-bind:class="{'linesX':!parentitem_3.expandDesc}">描述：{{parentitem_3.描述}}</descr>
+<div v-if="parentitem_3.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_4" v-for="parentitem_4 in parentitem_3.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_4)" @dragleave="dragleaveF($event, parentitem_4)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_4.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_4.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_4.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_4.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_4)" @dragend="dropF($event, parentitem_4)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_4.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_4.内容" variant="info" @click="getitems(parentitem_4.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_4.内容" variant="info" @click="delete parentitem_4.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_4.setup}} | 最近更改：{{parentitem_4.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_4.名称}}</name>类型：<type>{{parentitem_4.type}}</type>
+<br><span v-if="parentitem_4.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_4.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_4.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_4.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_4.files && parentitem_4.files.length != 0"><br><div v-for="fileinfo, i in parentitem_4.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_4, 'expandDesc', !parentitem_4.expandDesc)" v-bind:class="{'linesX':!parentitem_4.expandDesc}">描述：{{parentitem_4.描述}}</descr>
+<div v-if="parentitem_4.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_5" v-for="parentitem_5 in parentitem_4.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_5)" @dragleave="dragleaveF($event, parentitem_5)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_5.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_5.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_5.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_5.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_5)" @dragend="dropF($event, parentitem_5)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_5.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_5.内容" variant="info" @click="getitems(parentitem_5.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_5.内容" variant="info" @click="delete parentitem_5.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_5.setup}} | 最近更改：{{parentitem_5.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_5.名称}}</name>类型：<type>{{parentitem_5.type}}</type>
+<br><span v-if="parentitem_5.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_5.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_5.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_5.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_5.files && parentitem_5.files.length != 0"><br><div v-for="fileinfo, i in parentitem_5.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_5, 'expandDesc', !parentitem_5.expandDesc)" v-bind:class="{'linesX':!parentitem_5.expandDesc}">描述：{{parentitem_5.描述}}</descr>
+<div v-if="parentitem_5.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_6" v-for="parentitem_6 in parentitem_5.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_6)" @dragleave="dragleaveF($event, parentitem_6)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_6.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_6.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_6.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_6.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_6)" @dragend="dropF($event, parentitem_6)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_6.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_6.内容" variant="info" @click="getitems(parentitem_6.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_6.内容" variant="info" @click="delete parentitem_6.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_6.setup}} | 最近更改：{{parentitem_6.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_6.名称}}</name>类型：<type>{{parentitem_6.type}}</type>
+<br><span v-if="parentitem_6.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_6.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_6.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_6.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_6.files && parentitem_6.files.length != 0"><br><div v-for="fileinfo, i in parentitem_6.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_6, 'expandDesc', !parentitem_6.expandDesc)" v-bind:class="{'linesX':!parentitem_6.expandDesc}">描述：{{parentitem_6.描述}}</descr>
+<div v-if="parentitem_6.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_7" v-for="parentitem_7 in parentitem_6.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_7)" @dragleave="dragleaveF($event, parentitem_7)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_7.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_7.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_7.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_7.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_7)" @dragend="dropF($event, parentitem_7)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_7.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_7.内容" variant="info" @click="getitems(parentitem_7.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_7.内容" variant="info" @click="delete parentitem_7.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_7.setup}} | 最近更改：{{parentitem_7.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_7.名称}}</name>类型：<type>{{parentitem_7.type}}</type>
+<br><span v-if="parentitem_7.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_7.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_7.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_7.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_7.files && parentitem_7.files.length != 0"><br><div v-for="fileinfo, i in parentitem_7.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_7, 'expandDesc', !parentitem_7.expandDesc)" v-bind:class="{'linesX':!parentitem_7.expandDesc}">描述：{{parentitem_7.描述}}</descr>
+<div v-if="parentitem_7.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_8" v-for="parentitem_8 in parentitem_7.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_8)" @dragleave="dragleaveF($event, parentitem_8)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_8.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_8.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_8.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_8.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_8)" @dragend="dropF($event, parentitem_8)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_8.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_8.内容" variant="info" @click="getitems(parentitem_8.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_8.内容" variant="info" @click="delete parentitem_8.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_8.setup}} | 最近更改：{{parentitem_8.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_8.名称}}</name>类型：<type>{{parentitem_8.type}}</type>
+<br><span v-if="parentitem_8.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_8.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_8.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_8.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_8.files && parentitem_8.files.length != 0"><br><div v-for="fileinfo, i in parentitem_8.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_8, 'expandDesc', !parentitem_8.expandDesc)" v-bind:class="{'linesX':!parentitem_8.expandDesc}">描述：{{parentitem_8.描述}}</descr>
+<div v-if="parentitem_8.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_9" v-for="parentitem_9 in parentitem_8.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_9)" @dragleave="dragleaveF($event, parentitem_9)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_9.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_9.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_9.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_9.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_9)" @dragend="dropF($event, parentitem_9)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_9.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_9.内容" variant="info" @click="getitems(parentitem_9.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_9.内容" variant="info" @click="delete parentitem_9.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_9.setup}} | 最近更改：{{parentitem_9.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_9.名称}}</name>类型：<type>{{parentitem_9.type}}</type>
+<br><span v-if="parentitem_9.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_9.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_9.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_9.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_9.files && parentitem_9.files.length != 0"><br><div v-for="fileinfo, i in parentitem_9.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_9, 'expandDesc', !parentitem_9.expandDesc)" v-bind:class="{'linesX':!parentitem_9.expandDesc}">描述：{{parentitem_9.描述}}</descr>
+<div v-if="parentitem_9.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_a" v-for="parentitem_a in parentitem_9.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_a)" @dragleave="dragleaveF($event, parentitem_a)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_a.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_a.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_a.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_a.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_a)" @dragend="dropF($event, parentitem_a)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_a.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_a.内容" variant="info" @click="getitems(parentitem_a.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_a.内容" variant="info" @click="delete parentitem_a.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_a.setup}} | 最近更改：{{parentitem_a.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_a.名称}}</name>类型：<type>{{parentitem_a.type}}</type>
+<br><span v-if="parentitem_a.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_a.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_a.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_a.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_a.files && parentitem_a.files.length != 0"><br><div v-for="fileinfo, i in parentitem_a.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_a, 'expandDesc', !parentitem_a.expandDesc)" v-bind:class="{'linesX':!parentitem_a.expandDesc}">描述：{{parentitem_a.描述}}</descr>
+<div v-if="parentitem_a.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_b" v-for="parentitem_b in parentitem_a.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_b)" @dragleave="dragleaveF($event, parentitem_b)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_b.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_b.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_b.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_b.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_b)" @dragend="dropF($event, parentitem_b)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_b.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_b.内容" variant="info" @click="getitems(parentitem_b.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_b.内容" variant="info" @click="delete parentitem_b.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_b.setup}} | 最近更改：{{parentitem_b.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_b.名称}}</name>类型：<type>{{parentitem_b.type}}</type>
+<br><span v-if="parentitem_b.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_b.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_b.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_b.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_b.files && parentitem_b.files.length != 0"><br><div v-for="fileinfo, i in parentitem_b.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_b, 'expandDesc', !parentitem_b.expandDesc)" v-bind:class="{'linesX':!parentitem_b.expandDesc}">描述：{{parentitem_b.描述}}</descr>
+<div v-if="parentitem_b.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_c" v-for="parentitem_c in parentitem_b.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_c)" @dragleave="dragleaveF($event, parentitem_c)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_c.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_c.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_c.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_c.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_c)" @dragend="dropF($event, parentitem_c)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_c.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_c.内容" variant="info" @click="getitems(parentitem_c.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_c.内容" variant="info" @click="delete parentitem_c.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_c.setup}} | 最近更改：{{parentitem_c.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_c.名称}}</name>类型：<type>{{parentitem_c.type}}</type>
+<br><span v-if="parentitem_c.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_c.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_c.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_c.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_c.files && parentitem_c.files.length != 0"><br><div v-for="fileinfo, i in parentitem_c.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_c, 'expandDesc', !parentitem_c.expandDesc)" v-bind:class="{'linesX':!parentitem_c.expandDesc}">描述：{{parentitem_c.描述}}</descr>
+<div v-if="parentitem_c.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_d" v-for="parentitem_d in parentitem_c.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_d)" @dragleave="dragleaveF($event, parentitem_d)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_d.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_d.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_d.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_d.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_d)" @dragend="dropF($event, parentitem_d)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_d.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_d.内容" variant="info" @click="getitems(parentitem_d.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_d.内容" variant="info" @click="delete parentitem_d.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_d.setup}} | 最近更改：{{parentitem_d.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_d.名称}}</name>类型：<type>{{parentitem_d.type}}</type>
+<br><span v-if="parentitem_d.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_d.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_d.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_d.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_d.files && parentitem_d.files.length != 0"><br><div v-for="fileinfo, i in parentitem_d.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_d, 'expandDesc', !parentitem_d.expandDesc)" v-bind:class="{'linesX':!parentitem_d.expandDesc}">描述：{{parentitem_d.描述}}</descr>
+<div v-if="parentitem_d.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_e" v-for="parentitem_e in parentitem_d.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_e)" @dragleave="dragleaveF($event, parentitem_e)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_e.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_e.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_e.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_e.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_e)" @dragend="dropF($event, parentitem_e)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_e.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_e.内容" variant="info" @click="getitems(parentitem_e.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_e.内容" variant="info" @click="delete parentitem_e.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_e.setup}} | 最近更改：{{parentitem_e.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_e.名称}}</name>类型：<type>{{parentitem_e.type}}</type>
+<br><span v-if="parentitem_e.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_e.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_e.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_e.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_e.files && parentitem_e.files.length != 0"><br><div v-for="fileinfo, i in parentitem_e.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_e, 'expandDesc', !parentitem_e.expandDesc)" v-bind:class="{'linesX':!parentitem_e.expandDesc}">描述：{{parentitem_e.描述}}</descr>
+<div v-if="parentitem_e.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_f" v-for="parentitem_f in parentitem_e.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_f)" @dragleave="dragleaveF($event, parentitem_f)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_f.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_f.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_f.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_f.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_f)" @dragend="dropF($event, parentitem_f)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_f.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_f.内容" variant="info" @click="getitems(parentitem_f.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_f.内容" variant="info" @click="delete parentitem_f.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_f.setup}} | 最近更改：{{parentitem_f.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_f.名称}}</name>类型：<type>{{parentitem_f.type}}</type>
+<br><span v-if="parentitem_f.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_f.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_f.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_f.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_f.files && parentitem_f.files.length != 0"><br><div v-for="fileinfo, i in parentitem_f.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_f, 'expandDesc', !parentitem_f.expandDesc)" v-bind:class="{'linesX':!parentitem_f.expandDesc}">描述：{{parentitem_f.描述}}</descr>
+<div v-if="parentitem_f.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_g" v-for="parentitem_g in parentitem_f.内容" droppable="true" @mouseenter="bdisplhover" @mouseleave="bdisplleave" @dragenter="dragenterF($event, parentitem_g)" @dragleave="dragleaveF($event, parentitem_g)" @dragover.prevent>
+<span style="float: right;">
+  <span v-if="parentitem_g.isfocus" id="resultScrollMark">搜索结果标记|resultScrollMark</span>
+  <b-button variant="warning" class="nopad" @click="searchSubtree(parentitem_g.ind)"> 🥊搜索子树 </b-button>
+  <b-button variant="warning" class="nopad nomargin" @click="changeDir(parentitem_g.ind)"> 📌cd </b-button>
+<b-button variant="info" @click="deleteitems(parentitem_g.ind)"> 🗑删除 </b-button>
+<b-button variant="info" draggable="true" @dragstart="dragstartF($event, parentitem_g)" @dragend="dropF($event, parentitem_g)"> 🔀拖拽排序 </b-button>
+<b-button variant="info" @click="edittarget(parentitem_g.ind)"> 📟编辑信息 </b-button>
+<b-button v-if="! parentitem_g.内容" variant="info" @click="getitems(parentitem_g.ind)"> 🔰展开下一级</b-button>
+<b-button v-if="parentitem_g.内容" variant="info" @click="delete parentitem_g.内容;$forceUpdate()"> 💠收起下一级</b-button>
+<br><descrNote style="float: right">「创建时间：{{parentitem_g.setup}} | 最近更改：{{parentitem_g.modify}}」</descrNote>
+</span>
+名称：<name>{{parentitem_g.名称}}</name>类型：<type>{{parentitem_g.type}}</type>
+<br><span v-if="parentitem_g.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="edittarget(parentitem_g.ind);editRTF()"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+<span v-if="parentitem_g.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="edittarget(parentitem_g.ind);editProgram()"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+<span v-if="parentitem_g.files && parentitem_g.files.length != 0"><br><div v-for="fileinfo, i in parentitem_g.files">
+<span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+<type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div></span>
+<descr @dblclick="Vue.set(parentitem_g, 'expandDesc', !parentitem_g.expandDesc)" v-bind:class="{'linesX':!parentitem_g.expandDesc}">描述：{{parentitem_g.描述}}</descr>
+<div v-if="parentitem_g.内容" style="margin-top: 8px;">
+
+<!-- level separator -->
+<div class="bdispl parentitem_h" v-for="parentitem_h, i in parentitem_g.内容" @mouseenter="bdisplhover" @mouseleave="bdisplleave">
+<name>您这层级嵌套的也太深了。。目前程序尚不支持如此深的嵌套，如确有需要，请联系程序员郭紫辰~(解决方案：可以强行手动多写几层，也可改写js使文档加载后自动生成代码document.write。)</name>{{parentitem_h}} -|{}|- {{i}}</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_g)" @dragleave="dragleaveFLast($event, parentitem_g)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_g.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_f)" @dragleave="dragleaveFLast($event, parentitem_f)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_f.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_e)" @dragleave="dragleaveFLast($event, parentitem_e)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_e.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_d)" @dragleave="dragleaveFLast($event, parentitem_d)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_d.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+  
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_c)" @dragleave="dragleaveFLast($event, parentitem_c)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_c.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_b)" @dragleave="dragleaveFLast($event, parentitem_b)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_b.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_a)" @dragleave="dragleaveFLast($event, parentitem_a)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_a.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_9)" @dragleave="dragleaveFLast($event, parentitem_9)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_9.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_8)" @dragleave="dragleaveFLast($event, parentitem_8)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_8.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_7)" @dragleave="dragleaveFLast($event, parentitem_7)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_7.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_6)" @dragleave="dragleaveFLast($event, parentitem_6)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_6.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_5)" @dragleave="dragleaveFLast($event, parentitem_5)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_5.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_4)" @dragleave="dragleaveFLast($event, parentitem_4)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_4.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_3)" @dragleave="dragleaveFLast($event, parentitem_3)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_3.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_2)" @dragleave="dragleaveFLast($event, parentitem_2)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_2.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, parentitem_1)" @dragleave="dragleaveFLast($event, parentitem_1)" @dragover.prevent><b-button variant="info" @click="additems(parentitem_1.ind)"> ╋在这一层添加新记录 </b-button></div>
+<!-- level separator -->
+
+</div>
+</div>
+</div>
+<span v-if="!isTimeManagement">
+  <!-- isTimeManagement的第一层不允许拖拽进入。 -->
+<div class="bbtmbtn" @dragenter="dragenterFLast($event, fullitems)" @dragleave="dragleaveFLast($event, fullitems)" @dragover.prevent><b-button variant="info" @click="additems([])"> ╋在这一层添加新记录 </b-button></div>
+</span>
+<span v-if="isTimeManagement"><div class="bbtmbtn"><b-button variant="info" @click="additems([])"> ╋在这一层添加新记录 </b-button></div></span>
+
+<!-- zone! -->
+    </div>
+<div id="dragCursor" style="width: 100%;display: none;"><div style="border:1px solid black;width: 100%;height:12px;border-width: 0 3px 1.5px 3px;border-radius: 0 0 10px 10px;"></div>
+<div style="border:1px solid black;width: 100%;height:12px;border-width: 1.5px 3px 0 3px;border-radius: 10px 10px 0 0;"></div></div>
+<div id="dragCursorMark"></div>
+
+    <div v-if="show_search_result_mode" style="margin: 6px;">
+    <div v-for="item in search_result">
+      <div v-if="show_search_result_mode == true || ((show_search_result_mode!=2 && !item.txtmatch) || (show_search_result_mode!=3 && item.txtmatch))" class="searchres bdispl" :class="{'TXTsearchres':item.txtmatch}">
+      <span style="float: right;">
+        <b-button variant="info" @click="recursivelyGetItems(item.item.ind)"> 🚚浏览模式找到这个item </b-button>
+        <b-button variant="warning" v-if="!item.showdetail" @click="item.showdetail=true;$forceUpdate()"> 🚧查看详细信息 </b-button>
+        <b-button variant="danger" v-if="item.showdetail" @click="item.showdetail=false;$forceUpdate()"> 🚧收起详细信息 </b-button>
+      </span>
+      名称：<name>{{item.item.名称}}</name>类型：<type>{{item.item.type}}</type>----词向量序号：<type>{{item.mainkey}}</type>----句向量序号：<type>{{item.句向量mainkey}}</type>----储存位置：<type>{{item.item.ind}}</type><br>
+      <descrNote style="float: right">「创建时间：{{item.item.setup}} | 最近更改：{{item.item.modify}}」</descrNote>
+      <div v-for="mwordinfo in item.matchword"><type2 style="width: 160px;font-family:Cambria, Cochin, Georgia, serif;">{{mwordinfo[0]}}</type2><type2>{{mwordinfo[1]}}</type2></div>
+      <descr v-if="!item.showdetail" @dblclick="Vue.set(item.item, 'expandDesc', !item.item.expandDesc)" v-bind:class="{'linesX':!item.item.expandDesc}"><p style="font-weight: bold;color: #0097e8;">⇑↑⇧↑⇑ &emsp; Match Word &emsp; ||  描述： </p>{{item.item.描述}}</descr>
+      <descr v-if="item.showdetail"><p style="font-weight: bold;color: #0097e8;">⇑↑⇧↑⇑ &emsp; Match Word &emsp; ||  描述：↓</p><br>{{item.item.描述}}</descr>
+      <span v-if="item.showdetail"><div v-for="tmpdesc in item.item.词向量描述">词向量描述：{{tmpdesc}}</div></span>
+      <span v-if="item.showdetail"><div v-for="tmpdesc in item.item.句向量描述">句向量描述：{{tmpdesc}}</div></span>
+      <br><span v-if="item.item.rtf!=undefined"><b-button variant="warning" style="font-weight: bold;" @click="setTimeout(() => {app.edittarget(item.item.ind);app.editRTF()}, 1000*recursivelyGetItems(item.item.ind)+1000);"> 🍧编辑本条的RTF富格式文档 </b-button></span>
+      <span v-if="item.item.program!=undefined"><b-button variant="danger" style="font-weight: bold;" @click="setTimeout(() => {app.edittarget(item.item.ind);app.editProgram()}, 1000*recursivelyGetItems(item.item.ind)+1000);"> 🕌编辑本条的代码片段/小程序 </b-button></span>
+      <span v-if="item.item.files && item.item.files.length != 0">
+        <br>【———— ↓ 📮📂📋文件内容 ↓————】<br>
+        <div v-for="fileinfo, i in item.item.files">
+          <span class="thumbimgSpan" v-if="fileinfo[3]=='thumbnail'"><img class="thumbimage" @click="previewImg(fileinfo)" v-bind:src="encodeURI('/storageManager/get-file?dlname='+fileinfo[0]+'&path='+fileinfo[2])"></img></span>
+          <type @dblclick="getfile(fileinfo)">文件{{i}}：{{fileinfo[0]}} | <type2>{{fileinfo[2]}}</type2><descr>&emsp;&emsp;文件描述：{{fileinfo[1]}}</descr></type></div>
+      </span>
+      位置路径<span v-for="node in item.path">➡️<span class="pathnode"><type>{{node.名称}}</type>, {{node.type}}, |{{node.ind}}<br>{{node.描述}}</span></span>
+      </div>
+    </div>
+      <span v-if="search_result.length == 0">无搜索结果</span>
+    </div>
+
+
+    <!-- ↓登录modal。 -->
+    <b-modal id="bv-modal-login" hide-footer @show="entershoulddefault = true" @hide="entershoulddefault = false">
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          <code>用户登录</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎登录~~~</h3>
+          <br>
+          <b-form-input v-model="signup_username" type="username" placeholder="输入用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+        </div>
+        <b-button class="mt-3" block @click="login">登录</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-login')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+    <!-- ↓使用方法modal。 -->
+    <b-modal id="modal-notes" ok-only scrollable title="【查看使用方法】" @show="entershoulddefault = true" @hide="entershoulddefault = false">
+      <h5>【关于展示】</h5>
+      展示界面中默认描述是省略限制为4行的，但您可以双击显示全部内容。此外，还支持您上传词条物品的一条或多条缩略图，以便信息展示。(缩略图只能由其余图像文件生成)<br><br>
+      <h5>【搜索规则】</h5>
+      搜索时默认为全文搜索、后附公式搜索结构，如果您不输入有效的公式，那么公式搜索结果将不存在，仅返回全文搜索结果。子树搜索结果不包含子树根节点。若结果不足，子树会逐层默认扩大搜索范围200倍，但仍有可能失败，如确有需求请增大查询数量。<br><br>
+      <h5>【当您发现子树搜索时结果不全，请重新构建NGT数据结构（点击按钮~）】</h5>
+      重构NGT结构也可能增加搜索效率（ignorable）。<br><br>
+      <h5>【公式规则】</h5>
+      公式搜索时用[&#60;&#62;]包裹词语。<br>
+      可输入数学计算公式+-*/()及数字。<br>
+      例如，可以搜索"[&#60;消毒液&#62;]+[&#60;洗手液&#62;]"<br>
+      句向量查询默认在搜索串长度超过4、且不包含[&#60;&#62;]括号时触发。若您想要触发句向量查询，可以在句子两端放入【】强制触发：例如【这句话就会被当成句向量搜索。】<br><br>
+      <h5>【console及快捷键】</h5>
+      console可以帮您快速定位至想去的库，例如在console中输入"家庭物品管理"，按F1键执行命令，即可导航至家庭物品管理库。<br>
+      按F1键可以执行console命令，按F2键可以快速定位光标至console处。<br>
+      按F3键可以将光标定位到搜索栏处。<br><br>
+      <h5>【文件功能】</h5>
+      双击文件进行下载。编辑界面上传。上传界面直接粘贴的话可以粘贴图片。<br>
+      服务器端已设计支持多个文件储存路径，以扩大文件的储存空间。当您剩余空间小于50GB时，服务器端日志会发出警示，请届时尽快增加硬盘数量并配置。<br><br>
+      <h5>【富文本RTF编辑、小程序功能】</h5>
+      若想要加入 RTF 或 小程序 内容，需要首先在编辑信息栏点击添加属性。添加后即可编辑，或删除。添加后在搜索结果中也会展示对应链接。小程序有多种模式，可支持[任意代码高亮 or 图灵完备VueApp]。对于template，可使用\{\{\}\}来escape{{"\{\{\}\}"}}<br><br>
+      <h5>【关于信息同步】</h5>
+      当您退出编辑modal时，我们会将您的数据保存。所以如果您不想保存当前数据，请即刷新页面，不要退出编辑modal。<br><br>
+      <h5>【复制到库or元素的链接】</h5>
+      到库的链接可以从仓库管理边栏获取；到元素的链接可从编辑界面获取。编辑界面获取的元素连接有2种，一种是比较稳定的按照标题索引；另一种是按照位置索引。标题索引可以自动定位，但不能随意更改标题。<br><br>
+      <h5>【复制元素功能】</h5>
+      编辑界面右上栏有三个按钮，点第一个，在要复制的元素处点复制获取链接代码；在（可跨用户）的目标位置处打开编辑界面，仍点第一个按钮，再点粘贴即可。<br><br>
+      <h5>【关于备份】</h5>
+      程序会对用户数据进行备份。<br>
+      保存的备份包括最近的14天的备份、最近26周的备份、以及之前全部半年度的备份（technically是最近500年的每半年备份）。<br>
+      恢复备份：点击边栏仓库、点击管理备份，在备份列表中选择一个进行备份恢复即可。<br>
+      目前程序功能并不完备，备份会导致中途添加文件断开链接（重构reloadVec可删除全部断开的链接，且删除未链接的文件），因此请谨慎操作少备份。<br><br>
+      灵魂之眼！记忆宫殿！术数玄机！念力之源！（疯~
+    </b-modal>
+    <!-- ↓编辑modal。 -->
+    <b-modal id="edittargetmodal" ignore-enforce-focus-selector=".btn button .ke-input-text, .ke-textarea, .ke-code-type, select, input, textarea" hide-footer size='xl' @hide="saveedittgt" @show="entershoulddefault = true;" @hide="entershoulddefault = false">
+      <template #modal-header>
+        <span style="font-size: 16px;font-weight: bold;">编辑信息（退出编辑界面后会自动保存）</span>
+        <span style="float: right;"><b-button variant="outline-info" @click="copyPasteMgmt()">🥎复制粘贴</b-button>
+        <b-button variant="outline-info" @click="copyItemLink('ind')">🔗🎣</b-button>
+        <b-button variant="info" @click="copyItemLink('stable')">🔗复制稳定链接</b-button></span>
+      </template>
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <div class="d-block">
+          <h5>名称：</h5>
+          <b-form-input v-model="edittgtitem.名称" type="text" placeholder="输入名称~"></b-form-input>
+          <span v-if="allowTypeSelection"><br><h5>类型：</h5>
+            <b-form-select class="mb-3" v-model="edittgtitem.type" :options="['default','事件Event','物品','房屋','房间',{label: '容器/位置/桌子/柜子/其它容器',options: ['容器','位置','桌子','柜子','其它容器'] },'文本/idea/snippet']"></b-form-select>
+          </span>
+          <div v-if="edittgtitem.type=='物品'" class="mb-3"><br><h5>数量（仅物品有这一特征，必填）：</h5>
+            <b-form-input v-model="edittgtitem.数量" type="number" placeholder="1"></b-form-input>
+          </div>
+          <div v-if="edittgtitem.type=='事件Event'" class="mb-5 mt-1"><br><h5>事件信息——截止日期（必填）：</h5>
+            <b-row>
+              <b-col cols="6"><b-form-datepicker v-model="edittgtitem.截止日期" locale="zh" placeholder="选择日期" selected-variant="danger" nav-button-variant="warning"></b-form-datepicker></b-col>
+              <b-col cols="6"><b-form-timepicker v-model="edittgtitem.截止时间" locale="zh" placeholder="选择时间" @context="edittgtitem.截止时间=edittgtitem.截止时间.slice(0,5)"></b-form-timepicker></b-col>
+            </b-row>
+            <b-row class="mb-3">
+              <b-col cols="6"><b-form-input v-model="edittgtitem.截止日期" locale="zh" placeholder="选择日期"></b-form-input></b-col>
+              <b-col cols="6"><b-form-input v-model="edittgtitem.截止时间" locale="zh" placeholder="选择时间"
+                @input="(e)=>{console.log(e);tmpstr=e; str1=''; if([...tmpstr.matchAll(/[0-9]/g)].length>4){tmpstr=tmpstr.split('').pop()}; 
+                for ( let i of tmpstr.matchAll(/[0-9]/g)){str1 += i[0]}; edittgtitem.截止时间=str1.slice(0,2).padStart(2,'-')+':'+str1.slice(2,4).padStart(2,'-');}"
+              ></b-form-input></b-col>
+            </b-row>
+            <b-row class="mb-3">
+              <b-col cols="6"><h5>重复间隔（0为不重复）：</h5></b-col>
+              <b-col cols="3"><b-form-input v-model="edittgtitem.重复数" type="number"></b-form-input></b-col>
+              <b-col cols="3"><b-form-select v-model="edittgtitem.重复间隔" :options="['日','周','月','季度','年','小时']"></b-form-select></b-col>
+            </b-row>
+            <span style="font-size: 20px;font-weight: bold;">完成状态：</span><b-form-checkbox size="lg" v-model="edittgtitem.已完成" name="checkbox-1" value="已完成" unchecked-value="未完成" style="display: inline;">{{edittgtitem.已完成}}</b-form-checkbox>
+          </div>
+          <h5>描述（or 一段话/备注）：
+            <span v-if="edittgtitem.rtf==undefined">
+            <b-button class="nopad" style="font-weight: bold;" variant="warning" @click="Vue.set(edittgtitem,'rtf','')">&emsp;启用富文本RTF内容&emsp;</b-button>
+            </span><span v-if="edittgtitem.rtf!=undefined">
+              <b-button class="nopad" style="font-weight: bold;" variant="warning" @click="editRTF">&emsp;编辑富文本RTF内容&emsp;</b-button>
+              <b-button class="nopad" style="font-weight: bold;" variant="outline-danger" @click="if(window.confirm('确定删除RTF？不可撤销')){Vue.delete(edittgtitem,'rtf')}">删除RTF</b-button>
+            </span> |
+            <span v-if="edittgtitem.program==undefined">
+            <b-button class="nopad" style="font-weight: bold;" variant="danger" @click="Vue.set(edittgtitem,'program',['clip',`with open('file.path', 'r', encoding='utf-8') as f: str = f.read(); f.close()`,'','Language-Python'])">&emsp;启用小程序/代码&emsp;</b-button>
+            </span><span v-if="edittgtitem.program!=undefined">
+              <b-button class="nopad" style="font-weight: bold;" variant="danger" @click="editProgram">&emsp;编辑小程序/代码&emsp;</b-button>
+              <b-button class="nopad" style="font-weight: bold;" variant="outline-danger" @click="if(window.confirm('确定删除小程序/代码？不可撤销')){Vue.delete(edittgtitem,'program')}">删除小程序</b-button>
+            </span>
+          </h5>
+          <b-form-textarea v-model="edittgtitem.描述" size="sm" placeholder="描述/备注（可以是一段话）" rows="8"></b-form-textarea>
+          <!-- <b-form-input v-model="edittgtitem.描述" type="text" placeholder="输入描述（可以是一句话）"></b-form-input> -->
+          <br><h5>词向量描述：</h5>
+          <div id="edittgtitem词向量描述">
+            <div v-for="descitem in edittgtitem.词向量描述">
+              <b-form-input v-model="descitem" type="text" placeholder="输入词向量描述~"></b-form-input>
+            </div>
+          </div>
+          <b-button class="nopad" variant="warning" @click="edittgtitem.词向量描述.push('')">↑增加词向量条目</b-button><b-button class="nopad" variant="danger" @click="edittgtitem.词向量描述.pop()">↑删除最后一条词向量条目</b-button>
+          <br><br><h5>句向量描述：</h5>
+          <div id="edittgtitem句向量描述">
+            <div v-for="descitem in edittgtitem.句向量描述">
+              <b-form-textarea v-model="descitem" size="sm" placeholder="输入句向量描述~" rows="1"></b-form-textarea>
+            </div>
+          </div>
+          <b-button class="nopad" variant="warning" @click="edittgtitem.句向量描述.push('')">↑增加句向量条目</b-button><b-button class="nopad" variant="danger" @click="edittgtitem.句向量描述.pop()">↑删除最后一条句向量条目</b-button>
+          <b-dropdown id="dropdown-form-sentence" text="批量插入句向量" ref="dropdown" style="height: 24px;line-height: 24px;" variant="outline-info">
+            <b-dropdown-form>
+              <b-form-textarea v-model="batchSentences" rows="8" size="sm" style="width: 500px;" placeholder="请输入一些句子，不必换行，自动检测。"></b-form-textarea >
+              <b-button variant="primary" size="sm" @click="addBatchSentences">确认添加</b-button>
+            </b-dropdown-form>
+          </b-dropdown>
+          <br><br><h5>文件：</h5>
+          <div id="edittgtitemfiles">
+            <div v-for="fileinfo, i in edittgtitem.files" style="margin-top: 9px;"><span style="font-weight: bold;font-family:'Sarasa Term SC', 'Menlo', serif;color: #137af7;">文件 {{i}} 信息：</span>
+              <b-form-radio-group button-variant="outline-info" v-model="fileinfo[3]"
+              :options="[{ text: '附件(点击后下载)', value: 'attachment' },{ text: '点击后浏览器打开', value: 'preview' },{ text: '缩略图', value: 'thumbnail', disabled: fileinfo[3]!='thumbnail' }]" buttons></b-form-radio-group>
+              <span style="float: right;">
+                <b-button class="nopad" variant="danger" @click="tgtitemDeleteFile(i)"> &nbsp;←删除&nbsp; </b-button>
+                <b-button class="nopad" variant="outline-warning" @click="generateThumbnail(fileinfo)"> &nbsp;生成缩略图&nbsp; </b-button>
+                <b-button class="nopad" variant="primary" v-if="i!=0" @click="edittgtitem.files[i]=edittgtitem.files.splice(i-1,1,edittgtitem.files[i])[0]"> &nbsp;↑上浮&nbsp; </b-button>
+                <b-button class="nopad" variant="success" v-if="i!=(edittgtitem.files.length-1)" @click="edittgtitem.files[i]=edittgtitem.files.splice(i+1,1,edittgtitem.files[i])[0]"> &nbsp;↓下移&nbsp; </b-button>
+              </span>
+              <br>
+              <b-form-input class="filefname" v-model="fileinfo[0]" type="text" placeholder="输入fname，文件名称~"></b-form-input>
+              <b-form-textarea class="filefdescr" v-model="fileinfo[1]" size="sm" placeholder="描述/备注（可以是一段话）" rows="1"></b-form-textarea>
+            </div>
+          </div>
+          <b-button class="nopad" variant="warning" @click="initEditFileInfo">↑增加文件</b-button>
+        </div>
+      </b-overlay>
+    </b-modal>
+    <!-- ↓文件上传页面modal。 -->
+    <b-modal id="editFileInfo" title="文件上传" no-close-on-backdrop hide-footer @hide="cancelEditFileInfoIfUploaded">
+
+<div class="d-block">
+  <b-overlay :show="busy_connecting_backend" rounded="sm">
+    <h5>选择文件(或直接ctrl+v粘贴)：</h5>
+    <form role="form" class="form" onsubmit="return false;" enctype="multipart/form-data">
+      <div class="form-group">
+        <input id="uploadFilePortal" type="file"/>
+      </div>
+      <button id="uploadSubmit" type="button" class="btn btn-primary" @click="uploadFile(false)">Upload!</button>
+    </form>
+  </b-overlay>
+  <b-progress v-if='uploadPercentCompleted<1' id="FileUploadProgressBar" :value="uploadPercentCompleted" :max="1" show-progress animated></b-progress>
+  <b-progress v-if='uploadPercentCompleted==1' id="FileUploadProgressBar" :value="uploadPercentCompleted" :max="1" variant='success'></b-progress>
+  <br><span v-if="fileUploaded"><h5>文件信息：</h5>
+    输入fname，文件名称：<br>
+    <b-form-input v-model="edittgtfile[0]" type="text" placeholder="输入fname，文件名称~"></b-form-input>
+    输入fdescr，文件描述：<br>
+    <b-form-textarea v-model="edittgtfile[1]" size="sm" placeholder="输入fdescr，文件描述~" rows="8"></b-form-textarea>
+    请选择该文件的类别属性：
+    <b-form-radio-group button-variant="outline-warning" v-model="edittgtfile[3]" :options="[{ text: '附件(点击后下载)', value: 'attachment' },{ text: '点击后浏览器打开', value: 'preview' },{ text: '缩略图', value: 'thumbnail', disabled: true }]" buttons></b-form-radio-group>
+    <b-button variant="warning" @click="saveEditFileInfo" class="mt-2">✅ 确认添加至仓库</b-button>
+  </span>
+  </div>
+      
+    </b-modal>
+    <!-- 预览缩略图modal -->
+    <b-modal id="previewImgModal" title="缩略图预览" size='lg'>
+      <center><img id="prevImg" v-bind:src="previewImgURL" style="max-width:calc(100% - 10px);max-height:calc(100% - 10px);object-fit: contain;"></img></center>
+    </b-modal>
+    <!-- RTF modal ，关于 ignore-enforce-focus-selector see 文档。-->
+    <b-modal id="RTFModal" ignore-enforce-focus-selector=".ke-input-text, .ke-textarea, .ke-code-type, select, input, textarea" title="富文本编辑器 RTFModal (关闭modal即保存)" size='xl' @shown="editRTFShown" @hide="saveRTF">
+      <editor id="editor_id" height="500px" width="700px" pluginsPath="/editor/plugins/"></editor>
+    </b-modal>
+    <b-modal id="ConfirmModal" hide-footer hide-header no-close-on-esc ignore-enforce-focus-selector="textarea" @show="ConfirmResult='default'" @hide="if(ConfirmResult=='default'){ConfirmResult==true};app.ConfirmPromiseResolve('foo');">{{ConfirmText}}<br>
+      <b-button variant="danger" @click="ConfirmResult=false;app.$bvModal.hide('ConfirmModal');">&emsp;&emsp;取消&emsp;&emsp;</b-button>
+      <b-button variant="success" @click="ConfirmResult=true;app.$bvModal.hide('ConfirmModal');">&emsp;&emsp;确认&emsp;&emsp;</b-button>
+    </b-modal>
+    <!-- Program modal -->
+    <b-modal id="ProgramModal" title="小程序[图灵完备VueApp]/任意代码高亮 ProgramModal" size='xl' @shown="editProgramShown" @hide="saveProgram">
+      <h5>选择类型：</h5>
+      <b-form-radio-group button-variant="outline-danger" v-model="tmpProgType"
+      :options="[{text:'任意代码片段',value:'clip'},{ text:'简单模板',value:'template'},{text:'Bootstrap Vue JS App',value:'bvapp'},{text:'Any HTML+JS App',value:'htmljs'}]" buttons @change="changeProgType"></b-form-radio-group>
+      <span v-if="tmpProgType=='clip'"><b-dropdown id="dropdown-form" v-bind:text="tmpProgLang.slice(9)" ref="dropdown" class="m-2">
+        <b-dropdown-form style="width: 330px;">
+  
+          <b-form-group label="手动输入语种" label-for="dropdown-form-lang">
+            <b-form-input id="dropdown-form-lang" placeholder="" v-model="tmpProgLangUserInput"></b-form-input>
+          </b-form-group>
+          <b-button variant="primary" @click="tmpProgLang='Language-'+tmpProgLangUserInput">Apply</b-button>
+        </b-dropdown-form>
+        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-item-button @click="tmpProgText=tmpProgTextRealtime;tmpProgLang='Language-Python'">Python</b-dropdown-item-button>
+        <b-dropdown-item-button @click="tmpProgText=tmpProgTextRealtime;tmpProgLang='Language-HTML'">HTML</b-dropdown-item-button>
+        <b-dropdown-item-button @click="tmpProgText=tmpProgTextRealtime;tmpProgLang='Language-Mathematica'">Mathematica</b-dropdown-item-button>
+        <b-dropdown-item-button @click="tmpProgText=tmpProgTextRealtime;tmpProgLang='Language-bash'">bash</b-dropdown-item-button>
+        <b-dropdown-item-button @click="tmpProgText=tmpProgTextRealtime;tmpProgLang='Language-AppleScript'">AppleScript</b-dropdown-item-button>
+        <b-dropdown-item-button @click="tmpProgText=tmpProgTextRealtime;tmpProgLang='Language-VBA'">VBA</b-dropdown-item-button>
+        <b-dropdown-item-button @click="tmpProgText=tmpProgTextRealtime;tmpProgLang='Language-javascript'">javascript</b-dropdown-item-button>
+        <b-dropdown-item-button @click="tmpProgText=tmpProgTextRealtime;tmpProgLang='Language-css'">css</b-dropdown-item-button>
+      </b-dropdown></span>
+      <div v-if="tmpProgType=='clip'">
+        <pre v-highlightjs="tmpProgText">
+          <code contenteditable="true" v-bind:class="tmpProgLang" id="P1_ProgramClipCode" @input="app.tmpProgTextRealtime=getProgText('#P1_ProgramClipCode')"></code>
+        </pre>
+        <b-button class="nopad" variant="warning" @click="app.tmpProgText=app.tmpProgTextRealtime">↑高亮代码</b-button>
+      </div>
+
+      <div v-if="tmpProgType=='template'">
+        <b-row>
+          <b-col>
+            <type><br>HTML:</type>
+            <pre v-highlightjs="tmpProgText">
+              <code contenteditable="true" class="Language-html" id="P2_html" @input="app.tmpProgTextRealtime=getProgText('#P2_html');app.renderProg()"></code>
+            </pre><type>js:</type><pre v-highlightjs="tmpProgText2">
+              <code contenteditable="true" class="Language-javascript" id="P2_js" @input="app.tmpProgText2Realtime=getProgText('#P2_js');app.renderProg()"></code>
+            </pre>
+          </b-col>
+          <b-col>
+            <type><br>呈现的页面:</type>
+            <iframe id='ProgIframeView' style='width:100%; border: none;'></iframe>
+          </b-col>
+        </b-row>
+        <b-button class="nopad" variant="warning" @click="app.tmpProgText=app.tmpProgTextRealtime;app.tmpProgText2=app.tmpProgText2Realtime">↑高亮代码</b-button>
+      </div>
+
+      <div v-if="tmpProgType=='bvapp'">
+        <b-row>
+          <b-col>
+            <type><br>HTML:</type>
+            <pre v-highlightjs="tmpProgText">
+              <code contenteditable="true" class="Language-html" id="P3_html" @input="app.tmpProgTextRealtime=getProgText('#P3_html');app.renderProg()"></code>
+            </pre><type>js:</type><pre v-highlightjs="tmpProgText2">
+              <code contenteditable="true" class="Language-javascript" id="P3_js" @input="app.tmpProgText2Realtime=getProgText('#P3_js');app.renderProg()"></code>
+            </pre>
+          </b-col>
+          <b-col>
+            <type><br>呈现的页面:</type>
+            <iframe id='ProgIframeView' style='width:100%; border: none;'></iframe>
+          </b-col>
+        </b-row>
+        <b-button class="nopad" variant="warning" @click="app.tmpProgText=app.tmpProgTextRealtime;app.tmpProgText2=app.tmpProgText2Realtime">↑高亮代码</b-button>
+      </div>
+      
+      <div v-if="tmpProgType=='htmljs'">
+        <b-row>
+          <b-col>
+            <type><br>HTML:</type>
+            <pre v-highlightjs="tmpProgText">
+              <code contenteditable="true" class="Language-html" id="P4_ProgramCode" @input="app.tmpProgTextRealtime=getProgText('#P4_ProgramCode');app.renderProg()"></code>
+            </pre>
+          </b-col>
+          <b-col>
+            <type><br>呈现的页面:</type>
+            <iframe id='ProgIframeView' style='width:100%; border: none;'></iframe>
+          </b-col>
+        </b-row>
+        <b-button class="nopad" variant="warning" @click="app.tmpProgText=app.tmpProgTextRealtime">↑高亮代码</b-button>
+      </div>
+    </b-modal>
+    <!-- copyPasteModal -->
+    <b-modal id="copyPasteModal" ignore-enforce-focus-selector="textarea" hide-footer title="复制粘贴管理">
+      <b-button variant="danger" @click="genCopyLink">&emsp;&emsp;复制本项目&emsp;&emsp;</b-button>复制链接
+      <br>↓粘贴链接
+      <b-form-input v-model="copyPaste1"></b-form-input>
+      <b-button variant="success" @click="submitPasteLink">&emsp;&emsp;粘贴至本层&emsp;&emsp;</b-button>
+    </b-modal>
+  </div>
+
+</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
+  integrity="sha256-JLmknTdUZeZZ267LP9qB+/DT7tvxOOKctSKeUC2KT6E=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+  integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+  integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jssha@2.3.1/src/sha256.js"
+  integrity="sha256-NyuvLfsvfCfE+ceV6/W19H+qVp3M8c9FzAgj72CW39w=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+daysMap = new Map()
+editor = null; // RTF编辑器
+isLoading = false; cancelUploadFunc = undefined; app={entershoulddefault:false};
+前缀str = `<html lang='zh'>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+  integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+  integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+<style>*{font-family:'Sarasa Term SC'}body{white-space:pre-wrap}</style>
+</head>
+<body><div id="app"><!-- vue instance -->`;
+
+中缀str = `<!-- vue instance end --></div></body>
+<sc`+`ript src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+  integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></sc`+`ript>
+<sc`+`ript src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+  integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></sc`+`ript>
+<sc`+`ript>`;
+
+后缀str = `</sc`+`ript>
+</html>`;
+
+上次刷新的时间 = new Date('1995-12-17T03:24:00');
+本次input的时间 = new Date('1995-12-17T03:24:00');
+
+var getProgText = function (selector) {
+  var el = document.querySelector(selector);
+  var childs = el.childNodes;
+  for(var i = childs.length - 1; i >= 0; i--) {
+    if(childs[i].tagName=="BR"){el.removeChild(childs[i]);}
+  }
+  return el.innerText
+};
+var cumulativeOffset = function (element) {
+  var top = 0, left = 0;
+  do {
+    top += element.offsetTop || 0;
+    left += element.offsetLeft || 0;
+    element = element.offsetParent;
+  } while (element);
+  return {
+    top: top,
+    left: left
+  };
+};
+function copyStringToClipboard (str) {
+  try { // Remove temporary element
+    document.body.removeChild(textarea_copy_el);
+  } catch (error) {console.error(error);}
+  // Create new element
+  textarea_copy_el = document.createElement('textarea');
+  // Set value (string to be copied)
+  textarea_copy_el.value = str;
+  // Set non-editable to avoid focus and move outside of view
+  textarea_copy_el.setAttribute('readonly', '');
+  textarea_copy_el.style.position="absolute"
+  textarea_copy_el.style.left="-9999px"
+  document.body.appendChild(textarea_copy_el);
+  // Select text inside element
+  textarea_copy_el.select();
+  // Copy text to clipboard
+  document.execCommand('copy');
+}
+var app = new Vue({
+  el: '#app',
+  data: {
+    isLoggedIn: {[{is_Logged_In}]}, weekDayMap:["周日","周一","周二","周三","周四","周五","周六"], allowTypeSelection:true, finishedTimeAsc:false,
+    fullitems: [],
+    warehouses: [""],
+    search_result: [],
+    busy_connecting_backend: false,
+    isQueryingBackend: false,
+    entershoulddefault: false, 
+    ConfirmText:'', ConfirmResult:null, ConfirmPromiseResolve:null,
+    page_history: 1,
+    query_txt: '',
+    resnumber: 888,
+    edittgtitem: {type:"default",名称:"垃圾堆",描述:"垃圾堆",数量:1,内容:[]},
+    edittgtfile: ['','','','attachment'], fileUploaded: false, uploadPercentCompleted: 0,
+    focused_elem_stack: [],
+    show_search_result_mode: false,
+    currentDraggedElem:null,
+    currentDragTarget:null,
+    consoleCmd:"",
+    backupList:[], newBackupName:"",
+    showSidebar:false,showBackupSidebar:false,
+    previewImgURL:"",
+    loadedJsLibs:{hljs:false,kindeditor:false}, tmpProgType:"clip", tmpProgText:"", tmpProgTextRealtime:"", tmpProgText2:"", tmpProgText2Realtime:"", 
+    tmpProgLang:"Language-python", tmpProgLangUserInput:"go",
+    editorText: '',
+    batchSentences: '', copyPaste1:''
+  },
+  mounted() {
+    window.history.pushState({page: 1}, "", "");
+    if(this.CurWarehouse.slice(0,11)=='初始化URLBase-'){this.CurWarehouse=this.CurWarehouse.slice(11);this.getitems([]);} //如果有URL预设，那就要这一家仓库的。
+    else{this.CurWarehouse='当前focus数据结构';this.getitems([]);}
+    this.getwarehouses();
+  },
+  methods: {
+    dragstartF: function (e, item) {
+      document.getElementById("dragCursor").style.display='block';
+      this.currentDraggedElem = item;
+    },
+    dragenterF: function (e, item) {
+      e.stopPropagation();
+      curelem=e.target;
+      while ( (!curelem.classList.contains("bdispl") )&&(!curelem.classList.contains("bbtmbtn") )) {
+        curelem = curelem.parentElement;
+      }
+      var cur = document.getElementById("dragCursor");
+      curelem.parentElement.insertBefore(cur, curelem);
+      this.currentDragTarget=item.ind.concat();
+    },
+    dragleaveF: function (e, item) {
+    },
+    dragenterFLast: function (e, parentitem) {
+      e.stopPropagation();
+      curelem=e.target;
+      while ( (!curelem.classList.contains("bdispl") )&&(!curelem.classList.contains("bbtmbtn") )) {
+        curelem = curelem.parentElement;
+      }
+      var cur = document.getElementById("dragCursor");
+      curelem.parentElement.insertBefore(cur, curelem);
+      if(!parentitem.ind){this.currentDragTarget=[this.fullitems.length].concat()}
+      else{this.currentDragTarget=parentitem.ind.concat().concat([parentitem.内容.length]);}
+    },
+    dragleaveFLast: function (e, parentitem) {
+    },
+    dropF: function (e, item) {
+      var cur = document.getElementById("dragCursor");
+      document.getElementById("dragCursorMark").parentElement.insertBefore(cur, document.getElementById("dragCursorMark"));
+      cur.style.display='none'; // 删除光标。
+      // 拖拽的最终位置，应当在dragenter时搞定，此处直接使用。
+      // 此外，dragenter也需要判断是否拖入了自己的子树，防止这种情况发生。
+      console.log(item.ind) // source
+      // console.log(this.currentDraggedElem)
+      console.log(this.currentDragTarget) // target
+      // 对于source没有任何限制。
+      // 但需要判断target是否为非法值；以及，移动之后需要清除前端的子树、reload source和target的各层，以防indice与后端冲突。
+      if(this.currentDragTarget.length>=item.ind.length){
+        issub = true;
+        for (let i = 0; i < item.ind.length; i++) {
+          if(this.currentDragTarget[i]!=item.ind[i]){issub = false}
+        }
+        if(issub&&this.currentDragTarget.length>item.ind.length){window.alert("不能将物体移动到其内部的子节点中！当前移动操作已取消，请重试。");return;}
+        issub = true;
+        for (let i = 0; i < item.ind.length-1; i++) {
+          if(this.currentDragTarget[i]!=item.ind[i]){issub = false}
+        }
+        if(issub&&this.currentDragTarget[item.ind.length-1] > item.ind[item.ind.length-1]){
+          this.currentDragTarget[item.ind.length-1] --;
+        }
+      }
+      console.log("newtarget",this.currentDragTarget)
+      // 目前，展示的东西似乎移动到了正确的位置，但ind仍然不正确。为免复杂的递归代码，此处应向后端传递信息，再从后端重新索取新信息。
+      axios.post('/storageManager/move-items', {src:item.ind,tgt:this.currentDragTarget,warehs:this.CurWarehouse,baseInd:this.baseInd}).then(function (response) {
+        resptext = response.data; resvals = eval(resptext);
+        // 首先移除source。
+        target = app.fullitems;
+        for (const i of item.ind.slice(0,-1)) {
+          target = target[i].内容
+        }
+        被移动物拷贝 = JSON.parse(JSON.stringify(target[item.ind[item.ind.length-1]]));
+        app.$delete(target,item.ind[item.ind.length-1]);
+        // ↑上面的代码没啥意义，↓反正下边也要更新……
+        target = app.fullitems;
+        level = item.ind.slice(0,-1);
+        if(level.length==0){app.fullitems= resvals[0];return}
+        for (const i of level.slice(0,-1)) {
+          target = target[i].内容
+        }
+        target[level[level.length-1]].内容 = resvals[0];
+        // 然后，将拷贝粘贴到新位置。
+        try {
+          target = app.fullitems;for (const i of app.currentDragTarget.slice(0,-1)) {target = target[i].内容};
+          target.splice(app.currentDragTarget[app.currentDragTarget.length-1],0, 被移动物拷贝);
+          //
+          target = app.fullitems;
+          level = app.currentDragTarget.slice(0,-1);
+          if(level.length==0){app.fullitems= resvals[1];return}
+          for (const i of level.slice(0,-1)) {
+            target = target[i].内容
+          }
+          target[level[level.length-1]].内容 = resvals[1];
+        } catch (error) {;} // 这里catch是由于，本段操作确实可能在正常情况下失败，例如将同一树下层级2的节点移到其它层级2的节点之中，此时新位置经过上面的代码已经不存在。
+        app.$forceUpdate();
+      }).catch(function (error) {
+        console.log(error);window.alert("获取后端信息出错，为了保证数据结构不受损害，请刷新页面！！")
+      })
+      app.$forceUpdate();
+    },
+    bdisplhover: function (event) {
+      event.stopPropagation();
+      tmpstack = []; curelem=event.target;
+      while (curelem.parentElement.parentElement.classList.contains("bdispl")) {
+        curelem = curelem.parentElement.parentElement;
+        tmpstack.push(curelem)
+      }
+      tmpstack.reverse();
+      if(this.focused_elem_stack.length > tmpstack.length){return}
+      try {
+        this.focused_elem_stack.forEach(element => {
+          element.className = element.className.replace(' TheFocusedItem','')
+        });
+      } catch (error) {}
+      this.focused_elem_stack = tmpstack;
+      // ↑重算focus_elem_stack。
+      this.focused_elem_stack.forEach(element => {
+        element.className = element.className.replace(' TheFocusedItem','')
+      });
+      this.focused_elem_stack.push(event.target);
+      event.target.className = event.target.className + ' TheFocusedItem';
+      return;
+    },
+    bdisplleave: function (event) {
+      var element = this.focused_elem_stack.pop();
+      if(element){
+        element.className = element.className.replace(' TheFocusedItem','')
+      }
+      var tmpe = this.focused_elem_stack.pop();
+      if(tmpe){
+      this.focused_elem_stack.push(tmpe);
+      tmpe.className = tmpe.className + ' TheFocusedItem';}
+      event.stopPropagation();
+      return;
+    },
+    toggleExpand:  function (item) {item.expandDesc=!(item.expandDesc)},
+    login: function () {
+      if (this.signup_username.length < 2) { window.alert("用户名长度不得小于2位，请重新输入！"); return; }
+      if (this.signup_password.length < 5) { window.alert("密码长度不得小于5位，请重新输入！"); return; }
+      console.log("log in.");
+      var hashObj = new jsSHA("SHA-256", "TEXT", { numRounds: 1 });
+      hashObj.update(this.signup_username + this.signup_password + "salter2333");
+      var hash = hashObj.getHash("HEX");
+      console.log('generated login auth:', hash, 'connecting to backend...');
+      this.busy_connecting_backend = true;
+      axios.post('/storageManager/log-in', {
+        username: this.signup_username,
+        auth: hash,
+      }).then(function (response) {
+        // console.log(response);
+        // console.log(response.data);
+        login_state = response.data;
+        app.busy_connecting_backend = false;
+        if (login_state != 'ok') {
+          if (login_state == 'already_logged_in') { window.alert("当前用户已经登录。出现此提示应为前端错误，请您刷新网页。"); return; }
+          if (login_state == 'nosignup') { window.alert("当前用户尚未注册。请您先注册哟~"); return; }
+          window.alert("登录失败，应是用户名或密码错误。请检查输入~\n未注册需先注册。"); return;
+        }
+        app.$bvModal.hide('bv-modal-login');
+        app.isLoggedIn = true;
+        window.alert("登录成功！");
+      }).catch(function (error) {
+        console.log(error);
+      })
+    },
+    logout: function () {
+      console.log("log out.");
+      axios.post('/storageManager/log-out', {}).then(function (response) {
+        app.isLoggedIn = false;
+        window.alert("退出登录成功！");
+      }).catch(function (error) {
+        console.log(error);
+      })
+    },
+    getitems: function (level) {
+      axios.post('/storageManager/get-items', {level:level,warehs:this.CurWarehouse,baseInd:this.baseInd}).then(function (response) {
+        resptext = response.data;
+        if(level.length==0){app.fullitems= eval(resptext);if(app.isTimeManagement){app.TimeSortAsc();}return}
+        target = app.fullitems;
+        for (const i of level.slice(0,-1)) {
+          target = target[i].内容
+        }
+        target[level[level.length-1]].内容 = eval(resptext);
+        console.log(target);
+        app.$forceUpdate();
+      }).catch(function (error) {
+        console.log(error);window.alert("您可能未登录哟~或获取后端信息出错，为了保证数据结构不受损害，请刷新页面！！")
+      })
+    },
+    prepareBackupSidebar: function () {
+      this.showBackupSidebar=true;
+      axios.post('/storageManager/get-backup-list', {}).then(function (response) {
+        resp=eval(response.data);
+        app.backupList=resp;
+      }).catch(function (error) {
+        console.log(error);window.alert("恢复出错，请尽量不刷新页面、然后重试！！")
+      })
+    },
+    restoreBackup: function (backup) {
+      if(!window.confirm("！！！此操作不可撤销！！！请确认操作。此外，您的操作将解压全部用户的备份、但只更新您的数据，这是程序的bug，如果想要节省恢复成本，需要程序员修改备份逻辑！")){return;}
+      axios.post('/storageManager/restore-backup', {file:backup}).then(function (response) {
+        window.alert("已完成备份，请检查！");
+        app.showBackupSidebar=false;app.showSidebar=false;
+      })
+    },
+    removeBackup: function (backup) {
+      if(!window.confirm("！！！此操作不可撤销！！！请确认操作。")){return;}
+      axios.post('/storageManager/remove-backup', {file:backup}).then(function (response) {
+        window.alert("已删除备份，请检查！");
+        axios.post('/storageManager/get-backup-list', {}).then(function (response) {
+          resp=eval(response.data);app.backupList=resp;
+        })
+      })
+    },
+    createNewBackup: function () {
+      if(!window.confirm("您确定要以【"+this.newBackupName+"】为名称创建备份吗~ （多用户逻辑不完善，请即联系程序员修改）")){return;}
+      axios.post('/storageManager/create-backup', {name:this.newBackupName}).then(function (response) {
+        window.alert("已完成备份，请检查！");
+        app.showBackupSidebar=false;app.showSidebar=false;
+      })
+    },
+    clearTemp: function () {
+      axios.post('/storageManager/clear-temp', {action:"query"}).then(function (response) {
+        resp=eval(response.data);
+      if(!window.confirm("当前temp文件夹中共有"+resp+"个文件。请确认操作。")){return;}
+      axios.post('/storageManager/clear-temp', {action:"clean"}).then(function (response) {
+        window.alert("已清理temp文件夹！");
+      })
+      })
+    },
+    getwarehouses: function (level) {
+      axios.post('/storageManager/get-warehouses', {}).then(function (response) {
+        resp=eval(response.data);
+        app.warehouses=resp.warehouses;
+        if(app.CurWarehouse!='当前focus数据结构'){}
+        else{app.CurWarehouse=resp.CurWarehouse;}
+      })
+    },
+    executeCmdCommand: function () {
+      tgtind = this.warehouses.indexOf(this.consoleCmd);
+      if(tgtind==-1){window.alert("定位库失败，请确认库名称是否正确！");return;}
+      this.warehouseFocus(tgtind)
+    },
+    rmWarehouse: function (ind) {
+      if(!window.confirm("！！！此操作不可撤销！！！请确认操作")){return;}
+      axios.post('/storageManager/remove-warehouse', {ind:ind}).then(function (response) {
+        window.alert("删除成功");app.getwarehouses();
+      })
+    },
+    warehouseFocus: function (ind) {
+      axios.post('/storageManager/focus-warehouse', {ind:ind}).then(function (response) {
+        app.CurWarehouse = app.warehouses[ind];app.showSidebar=false;
+        app.$bvToast.toast("更改 warehouse focus 导航成功！", {title: '导航成功！',
+          autoHideDelay: 3000,appendToast: true,variant: "primary",toaster: 'b-toaster-bottom-right'})
+        app.baseInd=[];app.upperDirInfo=null;
+        app.isTimeManagement = (app.CurWarehouse=='事件管理ToDo');
+        app.getitems([]);app.show_search_result_mode=false;
+      })
+    },
+    addWarehouse: function () {
+      newname = "";
+      while (newname=='' || /[.:/\\ ~><?]/g.test(newname) || this.warehouses.indexOf(newname)!=-1) {
+        newname = prompt("请输入新库的名称（如果重复出现提示框，说明之前输入的包含非法字符）：")
+      }
+      axios.post('/storageManager/add-warehouse', {name:newname}).then(function (response) {
+        window.alert("添加成功");app.getwarehouses();
+      })
+    },
+    renameWarehouse: function (ind) {
+      newname = "";
+      while (newname=='' || /[.:/\\ ~><?]/g.test(newname) || this.warehouses.indexOf(newname)!=-1) {
+        newname = prompt("请输入这个库的新名称（如果重复出现提示框，说明之前输入的包含非法字符，或命名与已有库重复）：")
+      }
+      axios.post('/storageManager/rename-warehouse', {ind:ind,name:newname}).then(function (response) {
+        window.alert("改名成功");app.getwarehouses();
+      })
+    },
+    moveUpWarehouse: function (ind) {axios.post('/storageManager/moveup-warehouse', {ind:ind}).then(function (response) {app.getwarehouses();})},
+    moveDownWarehouse: function (ind) {axios.post('/storageManager/movedown-warehouse', {ind:ind}).then(function (response) {app.getwarehouses();})},
+    recursivelyGetItems: function (level) {
+      this.$bvToast.toast(`请注意不要急于操作。本次导航预计耗时：`+(0.6+level.length*0.2)+"秒。", {
+        title: '⚠️正在导航，请注意不要急于操作！',
+        autoHideDelay: 4000,
+        appendToast: true,
+        variant: "danger",
+        toaster: 'b-toaster-bottom-right'
+      })
+      for (let i = 0; i < level.length; i++) {setTimeout(() => {app.getitems(level.slice(0,i+1))}, i*200) }
+      setTimeout(() => {
+        if(level.length==0){return}
+        target = app.fullitems;
+        for (const i of level.slice(0,-1)) {
+          target = target[i].内容
+        }
+        console.log(target)
+        target[level[level.length-1]].isfocus=true;
+        app.show_search_result_mode = false;
+        app.$forceUpdate();
+        setTimeout(() => {
+          window.scrollTo(0, cumulativeOffset(document.getElementById("resultScrollMark")).top-160);
+          app.$forceUpdate();
+          setTimeout(() => {
+            delete target[level[level.length-1]].isfocus;
+            app.$forceUpdate();
+          }, 1500);
+        }, 200);
+      }, 400+level.length*200);
+      return (0.6+level.length*0.2);
+    },
+    deleteitems: function (level) {
+      if(!window.confirm("！warning！\n请确认删除操作，因为删除操作将会移除该项所包含的所有内容，包括文件、rtf、代码等等。是否确认删除该项？？？")){return}
+      axios.post('/storageManager/delete-items', {level:level,warehs:this.CurWarehouse,baseInd:this.baseInd}).then(function (response) {
+        resptext = response.data;
+        if(level.length==0){app.fullitems=[];return}
+        target = app.fullitems;
+        for (const i of level.slice(0,-1)) {
+          target = target[i].内容
+        }
+        app.$delete(target,level[level.length-1]);app.$forceUpdate();
+        if(level.length==1){targetnewind=eval(resptext);for (let index = 0; index < targetnewind.length; index++) { app.fullitems[index].ind = targetnewind[index].ind; }return}
+        target = app.fullitems;
+        for (const i of level.slice(0,-1)) {
+          target = target[i].内容
+        }
+        targetnewind = eval(resptext);
+        for (let index = 0; index < targetnewind.length; index++) { target[index].ind = targetnewind[index].ind; }
+        app.$bvToast.toast(`已删除~`, {title: '此操作不可撤回，若想撤销需要重新输入相关信息。', autoHideDelay: 2500, appendToast: true, variant: "danger", solid: true, toaster: 'b-toaster-bottom-right'})
+      }).catch(function (error) {
+        console.log(error);
+      })
+    },
+    additems: function (level) {
+      target = app.fullitems;for (const i of level) {target = target[i].内容};
+      // target = target[level[level.length-1]];
+      defaultstuff = {ind:level.concat([target.length]),type:"default",名称:"新建物品[默认值]",描述:"请输入该物品的描述！",词向量描述:["[<新物品>]"],句向量描述:[],数量:1,内容:[],files:[]};
+      target.push(defaultstuff);
+      axios.post('/storageManager/add-items', {level:level,stuff:defaultstuff,warehs:this.CurWarehouse,baseInd:this.baseInd}).then(function (response) {
+        app.$bvToast.toast(`已添加新物品~请编辑物品属性哟。`, {title: '已添加新物品~', autoHideDelay: 2500, appendToast: true, variant: "info", solid: true, toaster: 'b-toaster-bottom-right'});
+        var x = new Date();
+        currentTimeZoneOffsetInHours = - x.getTimezoneOffset() / 60;
+        var day = new Date(); day.setHours(day.getHours() + currentTimeZoneOffsetInHours); var str = day.toISOString();
+        app.edittgtitem.modify = app.edittgtitem.setup = str.slice(0,10)+' '+str.slice(11,19);
+        app.edittarget(defaultstuff.ind)
+      }).catch(function (error) {console.log(error);})
+      delete defaultstuff.内容
+    },
+    edittarget: function (level) {
+      console.log("edittarget",level)
+      if(level.length==0){this.edittgtitem=this.fullitems;return}
+      target = app.fullitems;
+      for (const i of level.slice(0,-1)) {
+        target = target[i].内容
+      }
+      this.edittgtitem=target[level[level.length-1]];
+      var it = this.edittgtitem;
+      var x = new Date();
+      currentTimeZoneOffsetInHours = - x.getTimezoneOffset() / 60;
+      var day = new Date(); day.setHours(day.getHours() + currentTimeZoneOffsetInHours); var str = day.toISOString();
+      this.allowTypeSelection=true;
+      if(this.isTimeManagement){if(level.length<=1){Vue.set(it,"type","事件Event");this.allowTypeSelection=false}}
+      if(!it.截止日期){Vue.set(it,"截止日期",str.slice(0,10))};
+      if(!it.截止时间){Vue.set(it,"截止时间",'17:00')};
+      if(!it.重复数){Vue.set(it,"重复数",0)};
+      if(!it.重复间隔){Vue.set(it,"重复间隔",'天')};
+      if(!it.已完成){Vue.set(it,"已完成",'未完成')};
+      if(!it.数量){Vue.set(it,"数量",1)};
+      this.$bvModal.show('edittargetmodal')
+    },
+    saveedittgt: function () {
+      var a = document.getElementById("edittgtitem词向量描述");
+      var vecarr = [];for (let index = 0; index < a.childNodes.length; index++) {
+        const element = a.childNodes[index];
+        vecarr.push(element.querySelector("input").value)
+      }
+      this.edittgtitem.词向量描述 = vecarr;
+      // ↑workaround to vue v-for动态嵌套vmodel的bug。
+      var a2 = document.getElementById("edittgtitem句向量描述");
+      var vecarr2 = [];for (let index = 0; index < a2.childNodes.length; index++) {
+        const element = a2.childNodes[index];
+        vecarr2.push(element.querySelector("textarea").value)
+      }
+      this.edittgtitem.句向量描述 = vecarr2;
+      // still workaround
+      axios.post('/storageManager/save-items', {level:this.edittgtitem.ind,stuff:this.edittgtitem,warehs:this.CurWarehouse,baseInd:this.baseInd}).then(function (response) {
+        resptext = response.data;
+        console.log(resptext)
+        let x = new Date();
+        let currentTimeZoneOffsetInHours = - x.getTimezoneOffset() / 60;
+        var day = new Date(); day.setHours(day.getHours() + currentTimeZoneOffsetInHours); var str = day.toISOString();
+        app.edittgtitem.modify = str.slice(0,10)+' '+str.slice(11,19);
+        if(resptext.startsWith("Exception")) {if(window.confirm("您输入的公式有误，或词语不支持。请重新输入词向量表示，否则搜索效果不佳！报错代码："+resptext)){app.$bvModal.show('edittargetmodal');}}
+        app.$bvToast.toast('已保存位于程序数据结构['+app.edittgtitem.ind+']处的信息~', {title: `已保存~`, autoHideDelay: 2500, appendToast: true, variant: "info", solid: true, toaster: 'b-toaster-bottom-right'})
+        if(app.edittgtitem.ind.length==1){if(app.isTimeManagement){app.TimeSortAsc();}} // 若todolist则自动排序
+      }).catch(function (error) {console.log(error);})
+      // 向后端保存信息
+    },
+    tgtitemDeleteFile: function (i) {
+      axios.post('/storageManager/delete-file', {level:this.edittgtitem.ind,stuff:this.edittgtitem,rmid:i,file:this.edittgtitem.files[i],warehs:this.CurWarehouse,baseInd:this.baseInd}
+          ).then(function (response) {app.edittgtitem.files.splice(i,1)})
+    },
+    initEditFileInfo: function () {
+      this.fileUploaded=false;
+      this.edittgtfile=['','','','attachment'];
+      this.uploadPercentCompleted=0;
+      this.$bvModal.show('editFileInfo');
+    },
+    uploadFile: function (file2) {
+      var data = new FormData();
+      console.log(file2)
+      if(file2){var ext = file2.type.split('/').pop();
+        if(file2.type=='text/plain'){ext='txt'}
+        if(file2.type=='video/x-msvideo'){ext='avi'}
+        if(file2.type=='application/octet-stream'){ext='bin'}
+        if(file2.type=='application/msword'){ext='doc'}
+        if(file2.type=='application/vnd.openxmlformats-officedocument.wordprocessingml.document'){ext='docx'}
+        if(file2.type=='application/epub+zip'){ext='epub'}
+        if(file2.type=='audio/mpeg'){ext='mp3'}
+        if(file2.type=='application/vnd.ms-powerpoint'){ext='ppt'}
+        if(file2.type=='application/vnd.openxmlformats-officedocument.presentationml.presentation'){ext='pptx'}
+        if(file2.type=='application/vnd.rar'){ext='rar'}
+        if(file2.type=='application/vnd.ms-excel'){ext='xls'}
+        if(file2.type=='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){ext='xlsx'}
+        data.append('file', file2);
+        let x = new Date();
+        let currentTimeZoneOffsetInHours = - x.getTimezoneOffset() / 60;
+        var day = new Date(); day.setHours(day.getHours() + currentTimeZoneOffsetInHours); var str = day.toISOString();
+        this.edittgtfile[0] = 'Clipboard File '+str.slice(0,10)+' '+str.slice(11,19)+'.'+ext;
+      }
+      else{
+        tgtfile = document.getElementById('uploadFilePortal').files[0];
+        this.edittgtfile[0] = tgtfile.name;
+        data.append('file', tgtfile);
+      }
+
+      var config = {
+        onUploadProgress: function(progressEvent) {
+          app.uploadPercentCompleted = progressEvent.loaded / progressEvent.total;
+        },
+        cancelToken: new axios.CancelToken(function executor(c) {
+          cancelUploadFunc = c;
+        })
+      };
+
+      axios.put('/storageManager/upload-file', data, config)
+        .then(function (res) {
+          var fileProposedSaveRoute = res.data;
+          app.edittgtfile[2] = fileProposedSaveRoute;
+          app.fileUploaded = true;
+        })
+        .catch(function (err) {
+          console.log( err.message );throw err;
+        });
+    },
+    cancelEditFileInfoIfUploaded: function () {
+      if(app.uploadPercentCompleted == 0){return;}
+      else{
+        cancelUploadFunc();
+        axios.post('/storageManager/cancel-upload-file', {proposedfile:this.edittgtfile[2]}
+          // 先与服务器后端通信，确认上传，并获取文件储存路径。
+          ).then(function (response) {window.alert("成功退出，请注意退出后文件无法保留，需重新上传文件。");console.log("取消成功")})
+      }
+    },
+    saveEditFileInfo: function () {
+      axios.post('/storageManager/confirm-upload-file', {level:this.edittgtitem.ind, stuff:this.edittgtitem, proposedfile:this.edittgtfile,warehs:this.CurWarehouse,baseInd:this.baseInd}
+      // 先与服务器后端通信，确认上传，并获取文件储存路径。
+      ).then(function (response) {
+        app.edittgtitem.files.push(  JSON.parse(JSON.stringify(app.edittgtfile))  );
+        app.uploadPercentCompleted=0;
+        app.$bvModal.hide('editFileInfo');
+      })
+    },
+    getfile: function (path) {
+      window.open(encodeURI("/storageManager/get-file?dlname="+path[0]+'&path='+path[2]))
+      // axios.post('/storageManager/get-file', {path:path}
+      // // 先与服务器后端通信，确认上传，并获取文件储存路径。
+      // ).then(function (response) {
+      //   window.alert("还没开发呢！~")
+      // })
+    },
+    generateThumbnail: function (path) {
+      文件后缀 = path[0].substring(path[0].lastIndexOf("."));
+      文件名 = path[0].substring(0,path[0].lastIndexOf("."));
+      if(文件名==''){文件名 = path[0];}
+      this.edittgtfile=['缩略图 of '+文件名+'.jpg','','','thumbnail'];
+      if(['.png','.jpg','.jpeg','.svg','.tiff','.bmp','.gif'].indexOf(文件后缀)==-1){if(!window.confirm("不是图片文件！确认要继续吗？")){return}}
+      axios({
+          url: encodeURI("/storageManager/get-file?dlname="+path[0]+'&path='+path[2]), // url
+          method: 'GET',
+          responseType: 'blob', // important
+      }).then((response) => {
+        // 图片压缩：查询“前端 canvas 压缩图片”
+        const imgBlob = new Blob([response.data]);
+        var reader = new FileReader(), img = new Image();
+        var file = null;
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+
+        reader.onload = function(e) {
+          img.onload = function () {
+            var originWidth = this.width;
+            var originHeight = this.height;
+            var maxWidth = 800, maxHeight = 800;
+            var targetWidth = originWidth, targetHeight = originHeight;
+            if (originWidth > maxWidth || originHeight > maxHeight) {
+                if (originWidth / originHeight > maxWidth / maxHeight) {
+                    // 更宽，按照宽度限定尺寸
+                    targetWidth = maxWidth;
+                    targetHeight = Math.round(maxWidth * (originHeight / originWidth));
+                } else {
+                    targetHeight = maxHeight;
+                    targetWidth = Math.round(maxHeight * (originWidth / originHeight));
+                }
+            }
+                
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            context.clearRect(0, 0, targetWidth, targetHeight);
+            context.drawImage(img, 0, 0, targetWidth, targetHeight);
+            canvas.toBlob(function (blob) {
+              var imageUrl = URL.createObjectURL(blob);
+              var data = new FormData();
+              data.append('file', blob);
+              axios.put('/storageManager/upload-file', data).then(function (res) {
+                var fileProposedSaveRoute = res.data;
+                app.edittgtfile[2] = fileProposedSaveRoute;
+                axios.post('/storageManager/confirm-upload-file', {level:app.edittgtitem.ind, stuff:app.edittgtitem, proposedfile:app.edittgtfile,warehs:app.CurWarehouse,baseInd:app.baseInd}
+                // 先与服务器后端通信，确认上传，并获取文件储存路径。
+                ).then(function (response) {
+                  app.edittgtitem.files.unshift(  JSON.parse(JSON.stringify(app.edittgtfile))  );
+                  // app.$bvModal.hide('edittargetmodal');
+                })
+              })   
+            }, 'image/jpeg');
+          };
+
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(imgBlob);
+      });
+    },
+    previewImg: function (path) {
+      this.$bvModal.show('previewImgModal');
+      this.previewImgURL = encodeURI("/storageManager/get-file?dlname="+path[0]+'&path='+path[2])
+    },
+    changeDir: function (path) {
+      var tgt = [...app.baseInd,...path]
+      if(path=='../'){tgt = [...app.baseInd].slice(0,app.baseInd.length-1)}
+      if(path=='root'){tgt = []}
+      window.location = window.location.href.split('/').slice(0,4).join('/')+'/'+app.CurWarehouse+'/'+JSON.stringify(tgt)
+    },
+    copyItemLink: function (param) {
+      if (param=='ind'){
+      copyStringToClipboard(window.location.href.split('/').slice(0,4).join('/')+'/'+app.CurWarehouse+'/'+JSON.stringify([...app.baseInd,...app.edittgtitem.ind]));
+      window.alert('已复制链接。请注意当您移动树结构时，这个链接指向的元素会变动，非永久链接。')
+      }
+      else if(param=='stable'){
+      copyStringToClipboard(window.location.href.split('/').slice(0,4).join('/')+'/'+app.CurWarehouse+'/'+JSON.stringify(app.edittgtitem.名称+'|'+app.edittgtitem.setup));
+      window.alert('已复制链接。请注意当您移动树结构时，这个链接指向的元素会变动，非永久链接。')
+      }
+    },
+    addBatchSentences: function () {
+      var text = this.batchSentences+ "。";
+      this.batchSentences = '';
+      text = text.replace("  ", " ").replace("  ", " ").replace("  ", " ").replace("　", "").replace('；', "。").replace('……', "…").replace("\n", "").replace("。。", "。").replace("！。", "！").replace("？。", "？").replace("…。", "…").replace("；。", "；");
+      console.log(text)
+      text = text.replace(/([0-9a-zA-Z\.\n\!\?…\~？。｡！—] *)。/g,(match,p1)=>{return p1})
+      const arr = [...text.matchAll(new RegExp(".*?(｡|。|？|！|…|;|!|\\?|(No\\.(?=[^ a-z0-9]))|No\\. +(?=[^a-z])|\\. *$|\\!|\\! *$)",'g'))];
+      for (const match of arr) {
+        if (match[0].replace("。", "").length>1){ 
+          this.edittgtitem.句向量描述.push(match[0].replace(".。", ".")); 
+        }
+      }
+    },
+    copyPasteMgmt: function () {
+      this.$bvModal.show('copyPasteModal');
+    },
+    genCopyLink: function () {
+      axios.post('/storageManager/gen-copy-link', {ind:this.edittgtitem.ind, wh:this.CurWarehouse}
+      // 先与服务器后端通信，确认上传，并获取文件储存路径。
+      ).then(function (response) {
+        resptext = response.data;
+        copyStringToClipboard(resptext)
+        window.alert("已将链接复制到您的剪贴板~")
+      })
+    },
+    submitPasteLink: function () {
+      axios.post('/storageManager/submit-paste-link', {ind:this.edittgtitem.ind, wh:this.CurWarehouse, auth:this.copyPaste1}
+      // 先与服务器后端通信，确认上传，并获取文件储存路径。
+      ).then(function (response) {
+        window.alert("已粘贴至本元素子树中~")
+      })
+    },
+    editProgram: function () {
+      const LoadScriptPromise = new Promise((resolve, reject) => {
+
+if(!app.loadedJsLibs.hljs){
+var newScript = document.createElement('link');
+newScript.rel = 'stylesheet';
+// newScript.href = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/default.min.css";
+newScript.href = "/static/仓储管理/style.css";
+document.getElementsByTagName('head')[0].appendChild(newScript);
+// 脚本加载完毕
+newScript.onload = function () {
+
+var newScript = document.createElement('script');
+newScript.type = 'text/javascript';
+newScript.src = '/static/仓储管理/highlight.min.js';
+document.getElementsByTagName('head')[0].appendChild(newScript);
+
+newScript.onload = function () {
+var newScript = document.createElement('script');
+newScript.type = 'text/javascript';
+newScript.src = '/static/仓储管理/mathematica.min.js';
+document.getElementsByTagName('head')[0].appendChild(newScript);
+newScript = document.createElement('script');
+newScript.type = 'text/javascript';
+newScript.src = '/static/仓储管理/applescript.min.js';
+document.getElementsByTagName('head')[0].appendChild(newScript);
+newScript = document.createElement('script');
+newScript.type = 'text/javascript';
+newScript.src = '/static/仓储管理/vba.min.js';
+document.getElementsByTagName('head')[0].appendChild(newScript);
+// 脚本加载完毕
+app.loadedJsLibs.hljs = true;
+newScript.onload = function () {
+
+// 引入vue plugin
+Vue.directive('highlightjs', {
+  deep: true,
+  bind: function (el, binding) {
+    // on first bind, highlight all targets
+    let targets = el.querySelectorAll('code')
+    targets.forEach((target) => {
+      // if a value is directly assigned to the directive, use this
+      // instead of the element content.
+      if (binding.value) {
+        target.textContent = binding.value
+      }
+      hljs.highlightBlock(target)
+    })
+  },
+  componentUpdated: function (el, binding) {
+    // after an update, re-fill the content and then highlight
+    let targets = el.querySelectorAll('code')
+    targets.forEach((target) => {
+      if (binding.value) {
+        target.textContent = binding.value
+        hljs.highlightBlock(target)
+      }
+    })
+  }
+})
+
+app.tmpProgType = app.edittgtitem.program[0];
+app.tmpProgText = app.edittgtitem.program[1];
+app.tmpProgText2 = app.edittgtitem.program[2];
+app.tmpProgLang = app.edittgtitem.program[3];
+
+  resolve('foo');
+}
+
+}
+
+}
+}else{resolve('foo');}
+
+      });
+      // 第一次编辑时需要load script(Highlight.js)。
+      LoadScriptPromise.then(()=>{app.$bvModal.show('ProgramModal');})
+    },
+    editProgramShown: function () {
+      hljs.highlightAll();
+      app.tmpProgTextRealtime = app.tmpProgText;
+      app.tmpProgText2Realtime = app.tmpProgText2;
+      app.renderProg();
+    },
+    changeProgType: function (e) {
+      console.log(app.edittgtitem.program[0],e);
+      app.tmpProgText = app.tmpProgTextRealtime;
+      app.tmpProgText2 = app.tmpProgText2Realtime;
+      if(!window.confirm("您确定要换类型吗？之前的数据会丢失。")){
+        app.tmpProgType = app.edittgtitem.program[0];
+        return;
+      }
+      if(e=='clip'){app.tmpProgLang = 'Language-Mathematica'; app.tmpProgText = 'RandomInstance[\n GeometricScene[{a, b, c, d, e, f, g, h, i, j}, {Line[{a, b, c, d}], \n   Line[{d, e, f, g}], Line[{g, h, b, i}], Line[{i, c, e, j}], \n   Line[{j, f, h, a}], \n   PlanarAngle[{b, c, e}, "Counterclockwise"] == 100 \[Degree], \n   PlanarAngle[{f, h, b}, "Counterclockwise"] == 110 \[Degree], \n   PlanarAngle[{h, a, b}, "Counterclockwise"] == 35 \[Degree]}], \n RandomSeeding -> 1234]';}
+      if(e=='template'){
+        app.tmpProgText = '请输入文本模板~例如，{{公司名}}公司即将发行零息债券，面值{{faceValue}}，利率{{rate}}，期限{{year}}年\n  ∴则{{公司名}}零息债价格为{{price}}。';
+        app.tmpProgText2 = 'var app = new Vue({el: "#app",\ndata: { /*↓初始数据*/\n\n公司名: "神御中华",\nfaceValue: 1000,\nrate: 0.03,\nyear: 3,\nprice: 0\n\n},mounted() {/*↓加载后执行*/\n\nthis.price = this.faceValue/((1+this.rate)**this.year)\n\n},methods: {}\n});';
+      }
+      if(e=='bvapp'){
+        app.tmpProgText = '<h2>即时的HTML编辑器是伟大的！{{randnum}}</h2>\n<button @click="update()">生成新的随机数！</button>\n<div id="test" v-html="output"></div>';
+        app.tmpProgText2 = 'var app = new Vue({\n    el: "#app",\n    data: {\n      msg: "hello world",\n      randnum: 0,\n      output: ""\n    },\n    mounted() {\n      var output = "";\n      for (var i = 0; i < 3; i++) { output += "JavaScript的作品呢！<br>"; }\n      document.getElementById("test").innerHTML = output;\n    },\n    methods: {\n      update: function () {\n        this.randnum = Math.random();\n        this.output  = "";\n        for (var i = 0; i < Math.round(this.randnum*10); i++) { this.output  += "JavaScript的作品呢！<br>"; }\n      },\n    }\n  });';
+      }
+      if(e=='htmljs'){
+        app.tmpProgText = '<html lang="zh">\n<head>\n<meta charset="UTF-8">\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"\n  integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"\n  integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">\n<style>*{font-family:"Sarasa Term SC";}body{white-space:pre-wrap}</style>\n</head>\n<body><div id="app"><!-- vue instance -->\n<h2>即时的HTML编辑器是伟大的！{{randnum}}</h2>\n<button @click="update()">生成新的随机数！</button>\n<div id="test" v-html="output"></div>\n<!-- vue instance end --></div></body>\n<sc'+'ript src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"\n  integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></sc'+'ript>\n<sc'+'ript src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"\n  integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></sc'+'ript>\n<sc'+'ript>\nvar app = new Vue({\n  el: "#app",\n  data: {\n    msg: "hello world",\n    randnum: 0,\n    output: ""\n  },\n  mounted() {\n    var output = "";\n    for (var i = 0; i < 3; i++) { output += "JavaScript的作品呢！<br>"; }\n    document.getElementById("test").innerHTML = output;\n  },\n  methods: {\n    update: function () {\n      this.randnum = Math.random();\n      this.output  = "";\n      for (var i = 0; i < Math.round(this.randnum*10); i++) { this.output  += "JavaScript的作品呢！<br>"; }\n    },\n  }\n});\n</sc'+'ript>\n</html>';
+      }
+      app.tmpProgTextRealtime = app.tmpProgText;
+      app.tmpProgText2Realtime = app.tmpProgText2;
+      app.edittgtitem.program[0] = e;
+      app.$forceUpdate();setTimeout(()=>{app.renderProg()}, 300);
+      hljs.highlightAll();
+    },
+    renderProg: function () {
+      本次input的时间 = new Date();
+      setTimeout(function(){ 
+      当前时间 = new Date();
+      if((当前时间 - 上次刷新的时间 > 499)&&( 当前时间 - 本次input的时间 > 499)){ // 这是最后一次输入。
+        var html, encodedHtml
+        if(app.tmpProgType=='template'){
+          html = 前缀str + app.tmpProgTextRealtime.replace(/\\{/g,'{{ "\\{" }}').replace(/\\}/g,'{{ "\\}" }}') + 中缀str + app.tmpProgText2Realtime.replace(/\\{/g,'{{ "\\{" }}').replace(/\\}/g,'{{ "\\}" }}') + 后缀str;
+          encodedHtml = encodeURIComponent(html);
+        }
+        if(app.tmpProgType=='bvapp'){
+          html = 前缀str + app.tmpProgTextRealtime + 中缀str + app.tmpProgText2Realtime + 后缀str;
+          encodedHtml = encodeURIComponent(html);
+        }
+        if(app.tmpProgType=='htmljs'){encodedHtml = encodeURIComponent(app.tmpProgTextRealtime)}
+        if(app.tmpProgType!='clip'){
+          var viewEl = document.getElementById('ProgIframeView');
+          viewEl.style.height = '700px';
+          viewEl.src = 'data:text/html,' + encodedHtml;
+          上次刷新的时间 = new Date();
+        }
+      }
+      }, 500);
+    },
+    saveProgram: function (e) {
+      if(app.tmpProgType=='clip'){
+        this.tmpProgText=getProgText('#P1_ProgramClipCode')
+        this.tmpProgText2=''
+      }
+      if(app.tmpProgType=='template'){
+        this.tmpProgText=getProgText('#P2_html')
+        this.tmpProgText2=getProgText('#P2_js')
+      }
+      if(app.tmpProgType=='bvapp'){
+        this.tmpProgText=getProgText('#P3_html')
+        this.tmpProgText2=getProgText('#P3_js')
+      }
+      if(app.tmpProgType=='htmljs'){
+        this.tmpProgText=getProgText('#P4_ProgramCode')
+        this.tmpProgText2=''
+      }
+      this.edittgtitem.program = [this.tmpProgType, this.tmpProgText, this.tmpProgText2, this.tmpProgLang];
+      setTimeout(() => {app.$bvModal.hide('ProgramModal');app.saveedittgt();}, 200);
+    },
+    editRTF: function () {
+      const LoadScriptPromise = new Promise((resolve, reject) => {
+
+if(!app.loadedJsLibs.kindeditor){
+var newScript = document.createElement('link');
+newScript.rel = 'stylesheet';
+newScript.href = "/editor/themes/default/default.css";
+document.getElementsByTagName('head')[0].appendChild(newScript);
+// 脚本加载完毕
+newScript.onload = function () {
+
+var newScript = document.createElement('script');
+newScript.type = 'text/javascript';
+newScript.src = '/editor/kindeditor-all-min.js';
+document.getElementsByTagName('head')[0].appendChild(newScript);
+// 脚本加载完毕
+app.loadedJsLibs.kindeditor = true;
+newScript.onload = function () {
+
+var newScript = document.createElement('script');
+newScript.type = 'text/javascript';
+newScript.src = '/editor/lang/zh-CN.js';
+document.getElementsByTagName('head')[0].appendChild(newScript);
+// 脚本加载完毕
+app.loadedJsLibs.kindeditor = true;
+newScript.onload = function () {
+resolve('foo');
+}
+
+}
+
+}
+}else{resolve('foo');}
+
+      });
+      // 第一次编辑时需要load script(KindEditor)。
+      LoadScriptPromise.then(()=>{app.$bvModal.show('RTFModal');})
+    },
+    editRTFShown: function () {
+      // KindEditor.ready(function(K) {
+      //   window.editor = K.create('#editor_id');
+      // });
+      KindEditor.options.filterMode = false;
+      editor = KindEditor.create('#editor_id');
+      document.querySelector("#RTFModal___BV_modal_body_ > div").style.width = '100%';
+      document.querySelector("#RTFModal___BV_modal_body_ > div > div.ke-edit").style.height = '800px';
+      document.querySelector("#RTFModal___BV_modal_body_ > div > div.ke-edit > iframe").style.height = '800px';
+      document.querySelector("#RTFModal___BV_modal_body_ > div > div.ke-edit > textarea").style.height = '798px';
+      this.editorText = ''
+      if(this.edittgtitem.rtf){this.editorText = this.edittgtitem.rtf}
+      editor.html(this.editorText)
+    },
+    saveRTF: function (e) {
+      this.ConfirmText = "请问是否要把纯文本的rtf放到简介描述中呢~ 是选确认or直接点击背景关闭modal；否选取消。（会覆盖。但不用担心误操作，您原先的描述文本会被复制到剪贴板。）";
+      this.$bvModal.show('ConfirmModal');
+      var ConfirmPromise = new Promise((resolve, reject) => {app.ConfirmPromiseResolve = resolve});
+      ConfirmPromise.then(()=>{
+        if(app.ConfirmResult){
+          copyStringToClipboard(app.edittgtitem.描述);
+          app.edittgtitem.描述 = editor.text().replace(/\t+/g,'').replace(/\n+/g,'\n');
+        }
+        app.editorText=editor.html();
+        app.edittgtitem.rtf = app.editorText;
+        setTimeout(() => {app.$bvModal.hide('RTFModal');app.saveedittgt();}, 200);
+      })
+    },
+    simpleExample: function () {
+      if (this.query_txt == "") {
+        this.query_txt = "[<洗发露>]+[<飘柔>]*0.5+[<清爽>]*0.3"
+      } else {
+        if (window.confirm("您的搜索栏中有文字。继续操作将清空您之前输入的内容。真的要继续吗？")) {
+          this.query_txt = "[<洗发露>]+[<飘柔>]*0.5+[<清爽>]*0.3"
+        }
+      }
+    },
+    rebuildNGT: function () {
+      this.isQueryingBackend = true;
+      axios.post('/storageManager/rebuildNGT', {warehs:this.CurWarehouse}).then(function (response) {
+        app.$bvToast.toast('已重构搜索数据结构，请重试搜索~', {title: `已rebuild NGT~`, appendToast: true, variant: "info", solid: true, toaster: 'b-toaster-bottom-right'})
+        app.isQueryingBackend = false;
+      }).catch(function (error) {console.log(error);})
+    },
+    rebuildNGTReloadVec: function () {
+      this.isQueryingBackend = true;
+      axios.post('/storageManager/rebuildNGTReloadVec', {warehs:this.CurWarehouse}).then(function (response) {
+        app.$bvToast.toast('已重构搜索数据结构ReloadVec，请重试搜索~', {title: `已rebuild NGT~`, appendToast: true, variant: "info", solid: true, toaster: 'b-toaster-bottom-right'})
+        app.isQueryingBackend = false;
+      }).catch(function (error) {console.log(error);})
+    },
+    searchSubtree: function (tgt) {
+      if (isLoading == false) {
+        if (this.query_txt.length > 300) {window.alert("QUERY TOO LONG!!"); return;}
+        if (this.query_txt.length == 0) {window.alert("您尚未输入搜索字符串！"); return;}
+        isLoading = true;
+        this.isQueryingBackend = true;
+        setTimeout(() => { isLoading = false; }, 2000);
+        axios.post('/storageManager/query-subtree', {
+          query: this.query_txt,
+          tgt: tgt,
+          resnumber: this.resnumber,
+          warehs:this.CurWarehouse,baseInd:this.baseInd
+        }).then(function (response) {
+          if (app.page_history<2) {window.history.pushState({page: app.page_history}, "", "");}  // 浏览器返回
+          app.page_history=Math.min(app.page_history+1,2);
+          
+          resptext = response.data;
+          if (resptext == 'nope') {window.alert("您尚未登录哟~"); app.isQueryingBackend = false; return;}
+          tmpobj = eval(resptext);founderr=false;
+          tmpobj.forEach(element => {
+            if(element=="notfound"&&!founderr){founderr=true;window.alert("后端搜索出错！已经帮助您重新搭建搜索NGT结构了~ 请您刷新页面，稍等再试！");app.isQueryingBackend = false;app.rebuildNGT();return;}
+          });
+          app.search_result = tmpobj;
+          app.show_search_result_mode = true;
+          app.isQueryingBackend = false;
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 270);
+        }).catch(function (error) {
+          console.log(error);app.isQueryingBackend = false;
+        })
+      } else {
+        console.log("TOO MANY CLICKS!!")  // 防止多重点击！！
+        window.alert("搜索过于频繁!!!仔细等结果2秒啊。")  // 防止多重点击！！
+      }
+    },
+    GetTodayStr: function () {
+      var x = new Date();
+      currentTimeZoneOffsetInHours = - x.getTimezoneOffset() / 60;
+      var day = new Date();
+      day.setHours(day.getHours() + currentTimeZoneOffsetInHours); 
+      var str=day.toISOString().slice(0,10);
+      var arr=str.split('-').map(Math.abs);
+      return arr[0]+'年'+arr[1]+'月'+arr[2]+'日'+' '+this.weekDayMap[day.getDay()]
+    },
+    GetDateDescription: function (item) {
+      try {
+      var x = new Date();
+      currentTimeZoneOffsetInHours = - x.getTimezoneOffset() / 60;
+      var day = new Date();
+      day.setHours(day.getHours() + currentTimeZoneOffsetInHours); 
+      var str=day.toISOString();
+      var pred = '';
+      var splitted = item.截止日期.split('-');
+      if(splitted && splitted[0] != str.slice(0,4)){pred = item.截止日期.split('-')[0] + '年' }
+      if(item.截止日期 == str.slice(0,10)){pred = '今天 ' + pred }
+      if(item.截止日期 < str.slice(0,10)){pred = '已过期 ' + pred }
+      return pred+item.截止日期.split('-').slice(1).map(Math.abs).join('月')+'日'+' '+this.weekDayMap[new Date(item.截止日期).getDay()]
+      } catch (error) {
+      return '未知日期'
+      }
+    },
+    timeMgmtClick: function (level) {
+      console.log("edittarget",level)
+      if(level.length==0){this.edittgtitem=this.fullitems;return}
+      target = app.fullitems;
+      for (const i of level.slice(0,-1)) {
+        target = target[i].内容
+      }
+      this.edittgtitem=target[level[level.length-1]];
+      var et = this.edittgtitem;
+      if(et.重复数 <= 0) {
+        // 没有重复，直接删除。
+        this.deleteitems(level)
+      }
+      else {
+        // 有重复，只需更改时间，直接save-items。
+        var x = new Date();
+        currentTimeZoneOffsetInHours = - x.getTimezoneOffset() / 60;  
+        var old = new Date(et.截止日期+' '+et.截止时间);
+        if(et.重复间隔=="日"){old.setDate(old.getDate()+parseInt(et.重复数));}
+        if(et.重复间隔=="周"){old.setDate(old.getDate()+parseInt(et.重复数)*7);}
+        if(et.重复间隔=="月"){old.setMonth(old.getMonth()+parseInt(et.重复数));}
+        if(et.重复间隔=="季度"){old.setMonth(old.getMonth()+parseInt(et.重复数)*3);}
+        if(et.重复间隔=="年"){old.setFullYear(old.getFullYear()+parseInt(et.重复数));}
+        if(et.重复间隔=="小时"){old.setHours(old.getHours()+parseInt(et.重复数));}
+        old.setHours(old.getHours() + currentTimeZoneOffsetInHours); var str = old.toISOString();
+        et.截止日期 = str.slice(0,10); et.截止时间 = str.slice(11,16); 
+        axios.post('/storageManager/save-items', {level:et.ind,stuff:et,warehs:this.CurWarehouse,baseInd:this.baseInd}).then(function (response) {
+          resptext = response.data;
+          console.log(resptext)
+          var day = new Date(); day.setHours(day.getHours() + currentTimeZoneOffsetInHours); var str = day.toISOString();
+          app.edittgtitem.modify = str.slice(0,10)+' '+str.slice(11,19);
+          app.$bvToast.toast('已保存位于程序数据结构['+app.edittgtitem.ind+']处的信息~', {title: `已保存~`, autoHideDelay: 2500, appendToast: true, variant: "info", solid: true, toaster: 'b-toaster-bottom-right'})
+          if(app.edittgtitem.ind.length==1){if(app.isTimeManagement){app.TimeSortAsc();}} // 若todolist则自动排序
+        }).catch(function (error) {console.log(error);})
+      }
+    },
+    dateClass(ymd, date) {
+      const day = date.getDate()
+      if(daysMap.has(ymd)){
+        if(daysMap.get(ymd)==1){return 'table-success'}
+        if(daysMap.get(ymd)==2){return 'table-primary'}
+        if(daysMap.get(ymd)==3){return 'table-warning'}
+        if(daysMap.get(ymd)>3){return 'table-danger'}
+        return ''
+      }
+    },
+    TimeSortAsc: function () {
+app.finishedTimeAsc=false;
+if(app.fullitems.length<=1){app.finishedTimeAsc=true;} app.$forceUpdate();
+//对todolist，自动调用move-item给底层排序。
+daysMap = new Map()// 用于决定dateClass给日历上色，统计事件数量
+var 原现ind记录 = []
+
+for (let i = 0; i < app.fullitems.length; i++) {
+  var ddl = app.fullitems[i].截止日期;
+  if(daysMap.has(ddl)){daysMap.set(ddl, daysMap.get(ddl)+1)}
+  else{daysMap.set(ddl, 1)}
+  原现ind记录.push({后端初始ind: i, 截止日期:ddl, 截止时间:app.fullitems[i].截止时间})
+}
+var 原ind复制 = [...原现ind记录]
+原现ind记录.sort(function (e1, e2) {
+  try {
+    return new Date(e1.截止日期+' '+e1.截止时间) - new Date(e2.截止日期+' '+e2.截止时间);
+  } catch (error) {
+    return 0
+  }
+});
+for (let i = 0; i < 原现ind记录.length; i++) {
+  原现ind记录[i].后端目标ind = i
+}
+
+console.log("更新顺序")
+
+var action = (i) => {
+  const myPromise = new Promise((resolve, reject) => {
+
+    let 目前移动到的ind = i.i
+    i.i = i.i+1
+    for (let i = 目前移动到的ind; i < 原ind复制.length; i++) {
+      var element = 原ind复制[i];
+      if(element.后端目标ind == 目前移动到的ind){srci=i;tgti=element.后端目标ind;break}
+    }
+    // 若src在tgt后1位，则移动tgt元素，以节省可能的换序操作
+    if(srci==tgti+1){srci=tgti;tgti=原ind复制[tgti].后端目标ind;}
+    // 因为是从tgt为0开始逐渐增加，因此 src 必>= tgt
+    srcitem = 原ind复制.splice(srci,1) // 删除srci
+    原ind复制.splice(tgti,0,srcitem[0]) // tgti处插入srcitem
+    // 现在 原ind复制 里面表述的是后端的存放信息，下一步是要把 原ind复制 中需要挪动到下一个tgt的元素找到。
+    // console.log(srci, tgti, srcitem)
+    if(srci!=tgti){
+      axios.post('/storageManager/move-items', {src:[srci],tgt:[tgti],warehs:app.CurWarehouse,baseInd:app.baseInd}).then(function (response) {
+        resptext = response.data; resvals = eval(resptext);
+        app.fullitems= resvals[0];
+        if(i.i==原现ind记录.length-1){app.finishedTimeAsc=true}
+        app.$forceUpdate();
+        resolve(i);
+      }).catch(function (error) {
+        console.log(error);window.alert("获取后端信息出错，为了保证数据结构不受损害，请刷新页面！！")
+      })
+    }
+    else{
+    if(i.i==原现ind记录.length-1){app.finishedTimeAsc=true};
+    resolve(i);}
+
+  });
+  return myPromise
+}
+
+const promiseFor = (i, n) => {
+  var whilst = (i) => {
+    return i.i<n ?
+      action(i).then(whilst) :
+      Promise.resolve(i);
+  }
+  return whilst(i);
+};
+i = {i:0}
+promiseFor(i, 原现ind记录.length).then(console.log("finish."))
+
+    }
+  }
+})
+
+document.addEventListener("keydown", function(event) {
+  if (event.keyCode === 13  && ((!app.entershoulddefault) || event.shiftKey) ) { 
+    event.preventDefault();
+    app.searchSubtree([]);
+  }
+  if (event.keyCode === 112) {
+    event.preventDefault();
+    app.executeCmdCommand();
+  }
+  if (event.keyCode === 113) {
+    app.consoleCmd = "";
+    document.getElementById("cmdcommand").focus();
+  }
+  if (event.keyCode === 114) {
+    document.getElementById("mainsearchbox").focus();
+  }
+});
+document.onpaste = (evt) => {
+  const dT = evt.clipboardData || window.clipboardData;
+  const file = dT.files[ 0 ];
+  if(file){app.uploadFile(file)}
+};
+
+window.addEventListener("beforeunload", function(event) { if(reload_upload_focus_flip) {reload_upload_focus_flip=false;} });
+window.onpopstate = function(event) {
+  console.log(event);
+  if (app.page_history == 2) {
+    app.page_history = 1;
+    app.show_search_result_mode=false;
+    app.$bvToast.toast(`本网站回退功能并不完善，如果多次搜索，会导致之前的搜索结果丢失，无法通过历史浏览记录复原。 因此请注意保存结果！          您上一次搜索的内容可以通过点击前进按钮恢复。`, {
+      title: '⚠️请注意保存结果！',
+      autoHideDelay: 10000,
+      appendToast: true,
+      variant: "danger",
+      solid: true,
+      toaster: 'b-toaster-bottom-right'
+    })
+  } else {
+    app.page_history = 2;app.show_search_result_mode=true;
+  }
+}
+</script>
+</body>
+
+</html>

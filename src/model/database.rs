@@ -117,6 +117,7 @@ pub async fn add_user(client: &Client, user: &User) -> Result<(), Box<dyn std::e
 mod tests {
     use futures::stream::TryStreamExt;
     use mongodb::bson::{doc, Document};
+    use tokio::runtime::Runtime;
 
     // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
     // 注意私有的函数也可以被测试！
@@ -131,7 +132,7 @@ mod tests {
             let client = create_client().await;
             list_database_names(&client).await
         };
-        let res = tokio_test::block_on(a());
+        let res = Runtime::new().unwrap().block_on(a());
         assert_eq!(res, vec!["admin", "config", "local"])
     }
 
@@ -156,7 +157,7 @@ mod tests {
             collection.insert_many(docs, None).await.expect("msg");
             list_database_names(&client).await
         };
-        let res = tokio_test::block_on(a());
+        let res = Runtime::new().unwrap().block_on(a());
         assert!(res.contains(&name.to_string()));
         let b = || async {
             let client = create_client().await;
@@ -167,7 +168,7 @@ mod tests {
                 .expect("no such database");
             list_database_names(&client).await
         };
-        let res = tokio_test::block_on(b());
+        let res = Runtime::new().unwrap().block_on(b());
         assert!(!res.contains(&name.to_string()));
     }
 
@@ -240,7 +241,7 @@ mod tests {
 
             res
         };
-        let res = tokio_test::block_on(a());
+        let res = Runtime::new().unwrap().block_on(a());
         assert!(res.contains(&item));
     }
 
@@ -273,7 +274,7 @@ mod tests {
             let res3 = verify_user(&client, &user).await.unwrap();
             (res1, res2, res3)
         };
-        let res = tokio_test::block_on(a());
+        let res = Runtime::new().unwrap().block_on(a());
         assert_eq!(res, (false, true, false));
     }
 }

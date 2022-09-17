@@ -1,0 +1,245 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>逐字词列表查询-第二大脑</title>
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon-大集合！（搭建桌面用）/白井黑子&食蜂操祈/apple-touch-icon9.png">
+  <link rel="shortcut icon" href="/static/逐字词列表查询/favicon.ico">
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+  <style>
+    .input_box {
+      border: none;
+      background-color: #ffd231;
+    }
+    searchbox {background-color: #ffa631;padding: 8px 16px;display: inline-block;width: 100%;}
+    par {white-space: pre-wrap;display: block;border: 3px solid rgb(255, 169, 165);border-radius: 10px;line-height: 18pt;font-size: 11pt;padding: 7px;font-family: "Georgia";color: #6a0033;}
+    .btn {font-weight: bold;}
+    oneitemshow {border: 4px solid rgb(255, 233, 165);border-radius: 13px;display: block;margin: 8px;padding: 6px;}
+    params {white-space: pre-wrap;border-radius: 16px;margin: 5px;padding: 4px;font: italic bold 13px "Georgia";height: 20px;background-image: linear-gradient(rgb(255, 201, 4), rgba(255, 213, 0))}
+    .word-container {
+      font-family: "Gill Sans", sans-serif;
+      display: inline-block;
+      border-radius: 14px;
+    }
+    .word-container-container {
+      font-family: "Gill Sans", sans-serif;
+      display: inline-block;
+      border-radius: 14px;
+    }
+    wordstub {
+      font: 16px solid;
+      font-family: "Gill Sans", sans-serif;
+      color: #020020;
+      line-height: 32px;
+      letter-spacing: 1px;
+      padding: 4px 2px;
+    }
+    wordstub:hover {
+      background-color: yellow;
+      text-shadow: 1px 0 0 #F74F9E, 0 0.6px 0 #F74F9E, 1px 0.6px 0 #F74F9E;
+      color: #F74F9E;
+      border-radius: 8px;
+    }
+    wordstub:active {
+      background-color: transparent;
+      margin: 0;
+      color: black;
+      text-shadow: 1px 0 0 #000, 0 0.6px 0 #000, 1px 0.6px 0 #000;
+      opacity: 1;
+      transition: 0s;
+    }
+    tabby {width: 280px;display: inline-block;font-size: 17px;font-weight: bold;}
+    tabby2 {width: 300px;display: inline-block;font-size: 17px;font-weight: bold;}
+    .custom-select,
+    .form-control,
+    .btn {padding: 0px 5px;height: auto;}
+  </style>
+</head>
+
+<body>
+  <div id="app" style="font-size: 10px;">
+    <b-overlay :show="isQueryingBackend">
+      <searchbox><textarea autofocus id="mainsearchbox" v-model="query" placeholder="在此输入要查询的内容" class="input_box"
+        style="width: 100%;line-height: 30px;font-size: 17px;" rows="4" @input="if(!user_input_regex){regex_constraint=query}">
+      </textarea><br><div class="mt-2"><tabby>词向量搜索约束：</tabby><b-form-input id="mainsearchbox2" v-model="query_txt" style="width: 400px;display: inline;" @change="queryTxtTranslate"></b-form-input>
+      这一项将与上文按逐字词文字搜索结果取交集。 按ctrl+1或alt+v focus到主搜索框；ctrl + 2 focus到词向量框。可以用#来分隔词向量搜索，以获取概念碰撞结果; {10000}[&lt;word&gt;]语法可限制词向量表达式的搜索数量。<br>
+      </div><div class="mt-2"><tabby2>词向量搜索-词数量：</tabby2><b-form-input v-model="query_txt_num" style="width: 200px;display: inline;" type="number"></b-form-input>
+      控制相似词部分结果数量<br>
+      </div><div class="mt-2"><tabby>字数约束（输入数字隔开即可）：</tabby><b-form-input v-model="word_num_constraint_str" style="width: 300px;display: inline;" @input="word_num_constraint=[];[...app.word_num_constraint_str.match(/[0-9]+/gm)].forEach(arr => {word_num_constraint.push(arr[0])});"></b-form-input>
+      该程序可用于检索现代汉语文法丰富之边界。保证返回全部符合要求词语，若您未找到想要的词，则说明2017年前的汉语中查无此词<br>
+      </div><div class="mt-2"><tabby2>尝试寻找相似发音：</tabby2><b-form-select v-model="try_find_similar_phonetic" :options="[true,false]" style="width: 120px;"></b-form-select>
+      选择该项则尝试变换读音，寻找谐音。
+      </div><div class="mt-2"><tabby>regex(若选相似发音则此项无效)</tabby><b-form-input v-if="!try_find_similar_phonetic" v-model="regex_constraint" style="width: 400px;display: inline;" @input="user_input_regex=true"></b-form-input>
+      该项将使用python regex语法筛选词语。<br>
+      </div><div class="mt-2"><tabby2>按regex串 / 相似发音限制字顺序</tabby2><b-form-select v-model="constraint_order" :options="[true,false]" style="width: 120px;"></b-form-select>
+      选择此项才能控制字顺序严格相等 & 启用regex。
+      </div><div class="mt-2"><tabby>设regex串 / 相似发音为起始</tabby><b-form-select v-model="start_str_cons" :options="[true,false]" style="width: 120px;"></b-form-select>
+      对regex实质上是于前附上^字符串开始mark。对谐音，控制谐音在字符串开始处（可用.通配任意音）。
+      <!-- </div><div class="mt-2"><tabby2>起始字符串尝试寻找相似发音：</tabby2><b-form-select v-model="start_str_similar_phonetic" :options="[true,false]" style="width: 120px;"></b-form-select> -->
+      </div><div class="mt-2"><tabby>设regex串 / 相似发音为结束</tabby><b-form-select v-model="end_str_cons" :options="[true,false]" style="width: 120px;"></b-form-select>
+      对regex实质上是于后附上$字符串结束mark。对谐音，控制谐音在字符串结束处（可用.通配任意音）。
+      <!-- </div><div class="mt-2"><tabby2>结束字符串尝试寻找相似发音：</tabby2><b-form-select v-model="end_str_similar_phonetic" :options="[true,false]" style="width: 120px;"></b-form-select> -->
+      最长搜索时长2分钟。regex字符{n}可限制固定重复n次；.为通配符；*为重复任意次。若想要查找相似发音，请用[]包裹需要查找相似发音的字。
+      </div><b-button variant="danger" @click="queryF()" style="width: 66%;" class="mt-2">——搜索！——</b-button>URLparam:site/findwords/?q1="sth"&q2="sth"
+      </searchbox>
+    </b-overlay>
+
+    <div id="resultScrollMark">
+      <div v-for="item in responseResult">
+        <oneitemshow>
+          <b-button-group>
+            <b-button variant="danger" @click="item.mode=0">展开</b-button>
+            <b-button variant="light" @click="item.mode=1">收起</b-button>
+            <b-button variant="info" @click="app.responseResult=[]">清除全部结果</b-button>
+          </b-button-group>
+          <params>  词语：{{item.word}}  </params>
+          <par v-if="item.mode==0">
+            <par v-for="(foundNum, i) in item.foundTil">相似词筛选删去字符数：{{foundNum}}<div>
+                <span v-for="(terminalWord, j) in item.set[i]" class="word-container-container" @click="copyStringToClipboard(terminalWord)">
+                  <span class="word-container">"<wordstub>{{terminalWord}}</wordstub>"</span><span>,&nbsp;&nbsp;</span>
+                </span>
+              </div>
+            </par>
+          </par>
+        </oneitemshow>
+      </div>
+    </div>
+
+
+    <b-modal id="bv-modal-login" hide-footer @show="entershoulddefault = true" @hide="entershoulddefault = false">
+      <b-overlay :show="isQueryingBackend" rounded="sm">
+        <template #modal-title><code>用户登录</code></template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎登录~~~</h3>
+          <br>
+          <!-- <b-form-input v-model="signup_username" type="username" placeholder="输入用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br> -->
+        </div>
+        <!-- <b-button class="mt-3" block @click="login">登录</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-login')">取消</b-button> -->
+      </b-overlay>
+    </b-modal>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
+    integrity="sha256-JLmknTdUZeZZ267LP9qB+/DT7tvxOOKctSKeUC2KT6E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+    integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+    integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    function err503(txt) {app.$bvToast.toast(''+txt, {title:`Server Error`, autoHideDelay: 2500, variant: "danger", toaster: 'b-toaster-bottom-right'});}
+    function copyStringToClipboard (str) {
+      try { // Remove temporary element
+        document.body.removeChild(textarea_copy_el);
+      } catch (error) {console.error(error);}
+      // Create new element
+      textarea_copy_el = document.createElement('textarea');
+      // Set value (string to be copied)
+      textarea_copy_el.value = str;
+      // Set non-editable to avoid focus and move outside of view
+      textarea_copy_el.setAttribute('readonly', '');
+      textarea_copy_el.style.position="absolute"
+      textarea_copy_el.style.left="-9999px"
+      document.body.appendChild(textarea_copy_el);
+      // Select text inside element
+      textarea_copy_el.select();
+      // Copy text to clipboard
+      document.execCommand('copy');
+      app.$bvToast.toast('已复制'+str+'至剪贴板。', {title:`复制成功！`, autoHideDelay: 2500, variant: "warning", toaster: 'b-toaster-bottom-right'});
+    }
+var cumulativeOffset=function(element){var top=0,left=0;
+do{top+=element.offsetTop||0;left+=element.offsetLeft||0;element=element.offsetParent;}while(element);
+return{top: top,left: left};};
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isQueryingBackend: false,
+        entershoulddefault: false,
+        {{{URLPARAMS}}},
+        // query: '',
+        // query_txt: '',
+        query_txt_num: 50000,
+        word_num_constraint_str: '',
+        word_num_constraint: [],
+        constraint_order: false,
+        try_find_similar_phonetic: false,
+        regex_constraint: '', user_input_regex: false,
+        start_str_cons: false,
+        // start_str_similar_phonetic: false,
+        end_str_cons: false,
+        // end_str_similar_phonetic: false,
+        signup_username: '',
+        signup_password: '',
+        responseResult: [],
+      },
+      mounted() {
+        document.getElementById("mainsearchbox").focus();
+        if(this.query!=''||this.query_txt!=''){this.queryF()}
+      },
+      methods: {
+        queryTxtTranslate: function () {
+          var qs = this.query_txt.toLowerCase().split("#"); var translatedQ = "";
+          qs.forEach(p => {
+            if(p.startsWith('/')&&p.endsWith('/')){translatedQ+=(p+'#');p=p.slice(1,p.length-1)}
+            else if(p.startsWith('【')&&p.endsWith('】')) {translatedQ+=(p+'#')}
+            else { // translate
+              p = p.replace(/(\[\<(.+?)(?=\>\])\>\])|(([^\+\-\*\/＋－×➕✖️➖0-9\.{}\(\)\>]+))/gm,function () {return '[<'+(arguments[2]||arguments[4])+'>]'});
+              translatedQ+=(p+'#')
+            }
+          });
+          this.query_txt = translatedQ.slice(0,translatedQ.length-1);
+        },
+        queryF: function () {
+          this.queryTxtTranslate()
+          if(this.query.replace(/[a-zA-Z0-9]/gm,'').length>9){if(!window.confirm("您输入的词语长度≥10，确认继续？")){return}}
+          this.isQueryingBackend = true
+          axios.post('/findwords/query', {
+            query: this.query,
+            query_txt: this.query_txt, // 词向量筛选近邻
+            query_txt_num: this.query_txt_num,
+            word_num_constraint: this.word_num_constraint,
+            constraint_order: this.constraint_order,
+            try_find_similar_phonetic: this.try_find_similar_phonetic,
+            regex_constraint: this.regex_constraint,
+            start_str_cons: this.start_str_cons,
+            // start_str_similar_phonetic: this.start_str_similar_phonetic,
+            end_str_cons: this.end_str_cons,
+            // end_str_similar_phonetic: this.end_str_similar_phonetic
+          }).then(function (response) {
+            app.responseResult = response.data.concat(app.responseResult);
+            app.isQueryingBackend = false;
+            app.$forceUpdate();
+            setTimeout(() => {
+              window.scrollTo(0, cumulativeOffset(document.getElementById("resultScrollMark")).top);
+            }, 400);
+          }).catch(function (error) {
+            console.log(error);
+            app.isQueryingBackend = false;
+            err503(error)
+          })
+        },
+      }
+    })
+// window.addEventListener("beforeunload", function(event) { });
+    document.addEventListener("keydown", function(event) {
+    switch (event.keyCode) {
+      case 49:if(event.ctrlKey == true||event.metaKey||event.altKey||event.shiftKey){event.preventDefault();var e=document.getElementById("mainsearchbox");
+      window.scrollTo(0,0);e.value='';e.focus();e.select();}return; // focus搜索框。
+      case 86:if(event.altKey||event.shiftKey){event.preventDefault();var e=document.getElementById("mainsearchbox");
+      window.scrollTo(0,0);e.value='';e.focus();e.select();}return; // focus搜索框。
+      case 50:if(event.ctrlKey == true||event.metaKey||event.altKey||event.shiftKey){event.preventDefault();
+      window.scrollTo(0,0);var e=document.getElementById("mainsearchbox2");e.focus();e.select();}return;
+    }
+    if (event.keyCode === 13 && (!app.entershoulddefault)) {
+      event.preventDefault();
+      app.queryF();
+    }
+    });
+  </script>
+</body>
+
+</html>

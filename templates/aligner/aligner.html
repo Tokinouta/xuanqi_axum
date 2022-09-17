@@ -1,0 +1,37 @@
+<div style="white-space: pre-wrap">
+
+尚未开发。2022-03-05晚20：08，开发者突然意识到storageManagement的query-subtree-Viewonly已经可以用于自动按照词向量分类。且get-avail-words已经可以用于生成可行词向量。黑白名单可在本地实现。
+实际部署分类时，可以新建一个用户，然后在里面建库，以提升分类效率。
+以下是示例代码。
+
+
+# 这是需要在服务器电脑本地运行的代码，因此url是127.0.0.1开头。
+import requests
+requests.packages.urllib3.disable_warnings()
+
+def 生成text描述包含词列表(text):
+    response = requests.post("https://127.0.0.1:5000/simwords/get-avail-words-secret-entry", json={'text':text}, verify=False).json()
+    # >>> response
+    # ['shit', '武器', '集团', '爱', '美国', '情', '阿拉', '爱情']
+    trimmed_response = []
+    for word in response:
+        if len(word) > 1: trimmed_response.append(word)
+        else:
+            isContained = False
+            for wordContainer in response:
+                if len(wordContainer) > 1 and word in wordContainer: isContained = True
+            if not isContained:
+                trimmed_response.append(word)
+    # 此处加入自定义的黑名单白名单。
+    return trimmed_response
+
+
+生成text描述包含词列表('这是需要在服务器电脑本地运行的代码，因此url是127.0.0.1开头')
+# https://lanig8kpv8.xuduan.vip/storageManager/viewOnly/喵喵喵喵喵/研究生毕业要求and经济学习/"2017行业分类检索|2022-02-19 11:28:27"/e6b0be1bf34a448964c67eaf2a03f35826a1eb07e89ac5399c8cb56f1652dce2?auth2=kZpXkPFct+Q7[.}Me(@1
+# "e6b0be1bf34a448964c67eaf2a03f35826a1eb07e89ac5399c8cb56f1652dce2" 
+params = {'fullTxtMode':'n', 'authentication':"e6b0be1bf34a448964c67eaf2a03f35826a1eb07e89ac5399c8cb56f1652dce2",
+'userName':"喵喵喵喵喵", 'viewUrlPath':'研究生毕业要求and经济学习', 'baseInd':[2],
+'query': "[<燃煤>]#[<电力燃料>]", 'tgt':[], 'warehs':'研究生毕业要求and经济学习', 'resnumber':500}
+response = requests.post("https://127.0.0.1:5000/storageManager/query-subtree-ViewOnly", json=params, verify=False).json()
+
+</div>

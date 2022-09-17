@@ -1,0 +1,235 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>GPT续写-第二大脑</title>
+  <link rel="shortcut icon" href="/static/GPT续写/favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .NOBORDER {
+      box-shadow: none;
+      padding: 0px 10px 0px 0px;
+    }
+
+    .vertical_center {
+      margin-top: 25px;
+      transform: translateY(-50%);
+    }
+
+    /* ↑navbar需要 */
+    .input_box {
+      border: none;
+      margin: 10px;
+      border-radius: 8px;
+      background-color: #fff8bb;
+      color: #470700;
+    }
+
+    .c-scrollbox {
+      box-shadow: 0px 6px 9px rgb(218, 180, 109);
+    }
+    .form-control {border-top: 5px solid rgb(255, 212, 120)}
+
+    par {white-space: pre-wrap;display: block;border: 3px solid rgb(255, 169, 165);border-radius: 10px;line-height: 22pt;font-size: 14pt;padding: 9px;}
+    .btn {font-weight: bold;}
+    oneitemshow {border: 5px solid rgb(255, 233, 165);border-radius: 16px;display: block;margin: 10px;padding: 8px;}
+    params {white-space: pre-wrap;border-radius: 16px;margin: 6px;padding: 5px;font: italic bold 16px "Georgia";height: 24px;background-image: linear-gradient(rgb(255, 201, 4), rgba(255, 213, 0))}
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ↓标题栏。 -->
+    <div style="border-bottom: 5px solid #e87b00;">
+      <b-navbar toggleable="lg" type="light" variant="warning" class="NOBORDER">
+        <b-navbar-brand href="/GPTwrite" class="NOBORDER ml-3" style="font-weight: bold;font-size: 24pt;color: rgb(111, 46, 0);">GPT-J-6B 续写网站</b-navbar-brand>
+        <b-navbar-nav>
+          <b-nav-item><b-button variant="danger" @click="showSidebar=!showSidebar">管理任务栏</b-button></b-nav-item>
+          <!-- <b-form-input v-model="resnumber" type="number" placeholder="200" style="width: 100px;display: inline-block;"></b-form-input> -->
+        </b-navbar-nav>
+      </b-navbar>
+    </div>
+
+    <b-sidebar id="sidebar-1" title="管理批量续写任务" right shadow v-model="showSidebar">
+      <div class="px-3 py-2" style="white-space: pre-wrap;font-family: Georgia, serif;"><par style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;">当前续写prompt：{{query_txt}}</par><br>
+        <b-form-input v-model="batchsize" type="number" min="1" max="10"></b-form-input><br>
+        <b-button variant="warning" @click="batchsearch()">开始批量续写</b-button><br><br>
+        <par>当前任务池中续写任务数量：{{backendQueryPool.length}}</par>
+      </div>
+    </b-sidebar>
+    
+    <div class="m-3">
+      按shift+回车键，可以直接进行一次续写。点击"管理批量续写任务"可以对同一文本进行多次续写。
+      模型选择：<b-form-select v-model="service" :options="['文本生成','智能问答','人设对话','对仗文案','广告文案','古诗创作','短文本润色','其它服务请访问悟道','ada','babbage','curie','davinci','vicgalle']" style="width: 100px;display: inline-block;"></b-form-select>
+      max_tokens：<b-form-input v-model="max_tokens" type="number" placeholder="128" style="width: 100px;display: inline-block;"></b-form-input>
+      temperature：<b-form-input v-model="temp" type="number" placeholder="1" style="width: 100px;display: inline-block;"></b-form-input>
+      top-P自顶向下筛选可能性概率：<b-form-input v-model="topp" type="number" placeholder="0.96" style="width: 100px;display: inline-block;"></b-form-input>
+      top-K自顶向下筛选可能性个数：<b-form-input v-model="topk" type="number" placeholder="3" style="width: 100px;display: inline-block;"></b-form-input>
+      <b-overlay :show="isQueryingBackend">
+        <span class="input_box" style="display: inline-block;width: calc(100% - 20px);">
+          <span>
+            <textarea rows="9" cols="33" autofocus id="mainsearchbox" v-model="query_txt" placeholder="在此输入要进行续写的段落" class="input_box"
+              style="width: calc(100% - 20px);resize:none;" @focus="entershoulddefault=true" @blur="entershoulddefault=false">
+            </textarea>
+          </span>
+          <div>
+            <b-button-group style="width: 100%;">
+              <b-button variant="warning" @click="search()">开始续写（当前发散程度: {{temp}} ）</b-button>
+              <b-dropdown id="dropdown-dropup" dropup text="选择续写思维发散程度" variant="danger">
+                <b-dropdown-item @click="temp=0.83">不发散//Temp=0.83</b-dropdown-item>
+                <b-dropdown-item @click="temp=0.92">较不发散//Temp=0.92</b-dropdown-item>
+                <b-dropdown-item @click="temp=1">默认//Temp=1.0</b-dropdown-item>
+                <b-dropdown-item @click="temp=1.13">思路开阔//Temp=1.13</b-dropdown-item>
+                <b-dropdown-item @click="temp=1.28">思路极度开阔//Temp=1.28</b-dropdown-item>
+              </b-dropdown>
+            </b-button-group>
+          </div>
+        </span>
+      </b-overlay>
+      <h1 v-if="service=='其它服务请访问悟道'">短文本摘要、人设对话、情感分析、文本纠错、关键词生成标题、描述生成标题、生成关键词等，请访问悟道体验中心！</h1>
+      <div v-for="item in predicts">
+        <oneitemshow>
+          <b-button-group>
+            <b-button variant="danger" @click="item.mode=0">只看中文翻译</b-button>
+            <b-button variant="warning" @click="item.mode=1">只看英文续写原文</b-button>
+            <b-button variant="success" @click="item.mode=2">中英对应</b-button>
+            <b-button variant="light" @click="item.mode=3">收起</b-button>
+            <b-button variant="info" @click="copyStringToClipboard(item.zh+item.zh2)">复制中文至剪贴板</b-button>
+          </b-button-group>
+          <params>  所用服务：{{item.service}} | 续写发散程度：{{item.temp}}  </params>
+          <par v-if="item.mode==0"><span style="color: rgb(150, 0, 30);font-weight: bold;">{{item.zh}}</span>{{item.zh2}}</par>
+          <par v-if="item.mode==1"><span style="color: rgb(150, 0, 30);font-weight: bold;">{{item.ctx}}</span>{{item.text}}</par>
+          <par v-if="item.mode==2">
+            <p v-for="kk,ind in item.tclzh"><span style="color: rgb(88, 2, 20);font-weight: bold;background-color: rgb(255, 207, 230);">{{kk}}</span> <span style="color: rgb(137, 80, 0);font-family: Arial, Helvetica, sans-serif;">{{item.tclen[ind]}}</span></p>
+          </par>
+        </oneitemshow>
+      </div>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
+    integrity="sha256-JLmknTdUZeZZ267LP9qB+/DT7tvxOOKctSKeUC2KT6E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+    integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+    integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    function copyStringToClipboard (str) {
+      try { // Remove temporary element
+        document.body.removeChild(textarea_copy_el);
+      } catch (error) {console.error(error);}
+      // Create new element
+      textarea_copy_el = document.createElement('textarea');
+      // Set value (string to be copied)
+      textarea_copy_el.value = str;
+      // Set non-editable to avoid focus and move outside of view
+      textarea_copy_el.setAttribute('readonly', '');
+      textarea_copy_el.style.position="absolute"
+      textarea_copy_el.style.left="-9999px"
+      document.body.appendChild(textarea_copy_el);
+      // Select text inside element
+      textarea_copy_el.select();
+      // Copy text to clipboard
+      document.execCommand('copy');
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {
+        busy_connecting_backend: false,
+        entershoulddefault: false,
+        query_txt: '',
+        service: '文本生成',
+        predicts: [],
+        showSidebar:false,
+        isQueryingBackend:false,
+        temp:1,
+        max_tokens:128,
+        topp:0.97,topk:0,
+        backendQueryPool:[],
+        isQueryAgentRunning:false,
+        batchsize:3
+      },
+      mounted() {
+        document.getElementById("mainsearchbox").focus();
+      },
+      methods: {
+        queryAgent: function () {
+          if (this.backendQueryPool.length == 0) {this.isQueryingBackend = false;return;} // 完成了所有查询任务。
+          tmpqry = this.backendQueryPool.pop()
+          axios.post('/GPTwrite/query', {
+            query: tmpqry.query,
+            temp: tmpqry.temp,
+            service: tmpqry.service,
+            max_tokens: tmpqry.max_tokens,topp:tmpqry.topp,topk:tmpqry.topk
+          }).then(function (response) {
+            resptext = response.data;
+            app.predicts.unshift(eval(resptext));
+            if (app.backendQueryPool.length == 0) {app.isQueryingBackend = false;return;} // 完成了所有查询任务。
+            setTimeout(() => { app.queryAgent(); }, 1000);
+          }).catch(function (error) {
+            console.log(error);
+            setTimeout(() => { app.queryAgent(); }, 1000);
+          })
+        },
+        search: function () {
+          if (this.query_txt.length > 1000) { //防止query过长
+            window.alert("QUERY TOO LONG!!查询语句过长请重试"); return;
+          }
+          this.isQueryingBackend = true;
+          console.log(this.query_txt);
+          this.backendQueryPool.unshift({
+            query: this.query_txt,
+            temp: this.temp,
+            service: this.service,
+            max_tokens: this.max_tokens,topp:this.topp,topk:this.topk
+          });
+          this.queryAgent();
+        },
+        batchsearch: function () {
+          if (this.query_txt.length > 1000) { //防止query过长
+            window.alert("QUERY TOO LONG!!查询语句过长请重试"); return;
+          }
+          if (this.batchsize > 10) {
+            window.alert("数量过多！建议调整多个prompt、分多次批量生成，这样生成效果更好哦~（也是为了节省免费资源使用量）"); return;
+          }
+          this.isQueryingBackend = true;
+          console.log(this.query_txt);
+          for (let index = 0; index < this.batchsize; index++) {
+            this.backendQueryPool.unshift({
+              query: this.query_txt,
+              temp: this.temp,
+              service: this.service,
+              max_tokens: this.max_tokens,topp:this.topp,topk:this.topk
+            });
+          }
+          console.log("batch task set up");
+          this.queryAgent();
+        },
+      }
+    });
+    window.addEventListener("beforeunload", function(event) { if(reload_upload_focus_flip) {app.uploadLastFocusToPool(app.last_query_txt);reload_upload_focus_flip=false;} });
+    document.addEventListener("keydown", function(event) {
+      if (event.keyCode === 13 && (!app.entershoulddefault)) {
+        event.preventDefault();
+        app.search();
+        return;
+      }
+      if (event.keyCode === 13 && event.shiftKey == true) {
+        event.preventDefault();
+        app.search();
+        return;
+      }
+    });
+  </script>
+</body>
+
+</html>

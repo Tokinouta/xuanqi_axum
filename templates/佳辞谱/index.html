@@ -1,0 +1,837 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>佳辞谱-第二大脑</title>
+  <link rel="shortcut icon" href="/static/佳辞谱/favicon.ico">
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .NOBORDER {
+      box-shadow: none;
+      padding: 0px 10px 0px 0px;
+    }
+
+    .vertical_center {
+      margin-top: 25px;
+      transform: translateY(-50%);
+    }
+
+    /* ↑navbar需要 */
+    .input_box {
+      border: none;
+      border-radius: 300px;
+      background-color: #ffd231;
+      color: #a83b00;
+    }
+
+    ::placeholder {
+      font-weight: bold;
+      color: #cf8212;
+      opacity: 1;
+    }
+
+    .carousel-indicators li {
+      background-color: #e87b00;
+    }
+
+    .carousel-indicators li :active {
+      opacity: 0.67;
+    }
+
+    .carousel-control-next-icon {
+      background-color: #f74b13;
+      border-radius: 5px;
+    }
+
+    .carousel-control-prev-icon {
+      background-color: #f74b13;
+      border-radius: 5px;
+    }
+
+    #searchButton:hover {
+      border-radius: 25px;
+      box-shadow: 1px 1px 10px rgb(228, 80, 0);
+    }
+
+    #searchButton:active {
+      border-radius: 25px;
+      box-shadow: 1px 1px 10px rgb(155, 0, 155);
+    }
+
+    .wordpanel {
+      font: 20px solid;
+      font-family: "Gill Sans", sans-serif;
+      font-weight: normal;
+      color: #F74F9E;
+      line-height: 1.56;
+    }
+
+    .wordpaneltitle {
+      font-weight: bold;
+      font-size: 25px !important;
+      color:#fa9f00 !important;
+    }
+
+    wordstub {
+      font: 20px solid;
+      font-family: "Gill Sans", sans-serif;
+      color: #020020;
+      line-height: 40px;
+      letter-spacing: 1px;
+      padding: 5px 2px;
+    }
+
+    wordstub:hover {
+      background-color: yellow;
+      text-shadow: 1px 0 0 #F74F9E, 0 0.6px 0 #F74F9E, 1px 0.6px 0 #F74F9E;
+      color: #F74F9E;
+      border-radius: 8px;
+    }
+
+    wordstub:active {
+      background-color: transparent;
+      margin: 0;
+      color: black;
+      text-shadow: 1px 0 0 #000, 0 0.6px 0 #000, 1px 0.6px 0 #000;
+      opacity: 1;
+      transition: 0s;
+    }
+
+    .word-container {
+      font-family: "Gill Sans", sans-serif;
+      display: inline-block;
+      border-radius: 17px;
+    }
+    .word-container-container {
+      font-family: "Gill Sans", sans-serif;
+      display: inline-block;
+      border-radius: 17px;
+    }
+    .word-container:active {
+      background-color: rgb(0, 255, 251);
+      color: black;
+    }
+    .tlb3s {width: 100% !important;}
+    hr {border-top: 3px solid rgb(255, 120, 80)}
+    .form-control {border-top: 3px solid rgb(255, 120, 80)}
+    .card-body {padding: 15px;}
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ↓标题栏。 -->
+    <div style="border-bottom: 5px solid #e87b00;">
+      <b-navbar toggleable="lg" type="light" variant="warning" class="NOBORDER">
+        <b-navbar-brand href="/simwords/" class="NOBORDER"><img src="/static/佳辞谱/topleftVision.svg" class="d-inline-block align-top"
+            height="50px" /></b-navbar-brand>
+
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav style="padding: 0px 10px 0px 10px;">
+
+          <!-- Right aligned nav items -->
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item href="/simwords/about">关于</b-nav-item>
+            <b-nav-item href="/simwords/pop-science-words">近义词/反义词科普</b-nav-item>
+
+            <b-nav-item-dropdown text="使用说明" right>
+              <b-dropdown-item href="/simwords/usage">本网站能用来干啥</b-dropdown-item>
+              <b-dropdown-item href="/simwords/method">使用方法</b-dropdown-item>
+              <b-dropdown-item href="/simwords/fee">费用</b-dropdown-item>
+              <b-dropdown-item href="/simwords/notes">注意事项</b-dropdown-item>
+            </b-nav-item-dropdown>
+
+            <b-nav-item-dropdown right>
+              <!-- Using 'button-content' slot -->
+              <template #button-content>
+                <em>
+                  <span v-if="! isLoggedIn">登录/注册</span>
+                  <span v-if="isLoggedIn">已登录 | 我的账户</span>
+                  <svg viewBox="785 321 40 40" width="19px" height="19px" class="align-text-bottom">
+                    <g id="Canvas_1" stroke="none" stroke-opacity="1" fill="none" stroke-dasharray="none"
+                      fill-opacity="1">
+                      <title>Canvas 1</title>
+                      <g id="Canvas_1_Layer_1">
+                        <title>Layer 1</title>
+                        <g id="Graphic_2">
+                          <title>Account Circle</title>
+                          <path
+                            d="M 805 321 C 793.96 321 785 329.96 785 341 C 785 352.04 793.96 361 805 361 C 816.04 361 825 352.04 825 341 C 825 329.96 816.04 321 805 321 Z M 805 327 C 808.32 327 811 329.68 811 333 C 811 336.32 808.32 339 805 339 C 801.68 339 799 336.32 799 333 C 799 329.68 801.68 327 805 327 Z M 805 355.4 C 800 355.4 795.58 352.84 793 348.96 C 793.06 344.98 801 342.8 805 342.8 C 808.98 342.8 816.94 344.98 817 348.96 C 814.42 352.84 810 355.4 805 355.4 Z"
+                            fill="#633" />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </em>
+              </template>
+              <b-dropdown-item v-if="isLoggedIn" href="/simwords/account-info">基本信息</b-dropdown-item>
+              <b-dropdown-item v-if="isLoggedIn" @click="logout">退出登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-login')">登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-signup')">注册新用户</b-dropdown-item>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
+    </div>
+
+    <div v-if="! show_search_result_mode">
+      <!-- 这部分是初始界面。搜索后的界面是不同的 -->
+      <div class="row" style="padding: 16px 0 0;">
+        <div class="col-md-8 order-md-2 col-xl-6" style="background-color:#fff;">
+          <!-- 最核心的。搜索功能、展示demo都在这里。 -->
+          <center><span style="color: #b35c00;font-size: large;">
+              <h1 style="color: #b62b00;font-family: Georgia, serif;">佳 辞 谱</h3>
+                <h4>&nbsp;&nbsp;&nbsp;这是一个相似词查询网站！<br><em
+                    style="color: #e87b00;font-family: Georgia, serif;">www.zh-word.ink</em></h4><br
+                  style="line-height: 10pt;">↓一些有趣的使用范例↓
+            </span></center>
+          <!-- 搜索框 -->
+          <b-overlay :show="isQueryingBackend">
+          <div style="padding: 10px;">
+            <!-- ↓输入公式helper。 -->
+            <span>
+              <b-dropdown id="dropdown-dropup" dropup text="公式" variant="warning" class="m-2"
+                style="transform: translateY(-19.2px);z-index:1039;">
+                <b-dropdown-item v-b-modal.modal-notes>【查看公式/押韵限制等输入规则】</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item @click="addSearchConstraints">▶诗词曲神器：限制词语长度/押韵</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item @click="simpleExample">▶简单的计算公式模板</b-dropdown-item>
+                <b-dropdown-item @click="addWordMarkToLastOfSearchBar">▶输入末尾添加[&lt;词语&gt;]占位符</b-dropdown-item>
+              </b-dropdown>
+            </span>
+            <span class="input_box" style="display: inline-block;height: 50px;width: calc(100% - 100px);">
+              <span>
+                <input autofocus id="mainsearchbox" v-model="query_txt" placeholder="在此输入要查询的相似词" class="input_box vertical_center" @focus="detectEmptyBrace"
+                  style="width: calc(100% - 84px);margin-left: 9px;line-height: 33px;">
+                </input>
+                <span style="position: relative;"><a style="position: absolute;top:-23px;line-height: 27px;left:-25px;font-size: 27px;color: #da994f;" @click="app.query_txt=''">×</a></span>
+              </span>
+              <span>
+                <img id="searchButton" src="/static/佳辞谱/searchbutton.svg" v-on:click="search()"
+                style="height: 41px; float: right;margin-right: 4px;" class="vertical_center">
+              </span>
+            </span>
+          </div>
+          </b-overlay>
+          <!-- note一下收费规则。 -->
+          <div>
+            <center>
+              <p style="color: #a54a19;">
+                <span style="font: bold 17pt sans-serif;">本网站收费规则：</span><br>
+                每周每个ip可以享用5次免费试用的查询机会。<br>
+                免费查询次数用完后需登录充值方可继续使用。<br>
+                0.6元可查询10次。2元可查36次。10元可查200次。【推荐充值10元档~】100元可查2500次。<br>
+                本站不提供不限次数的包年包月永久套餐。收费次数以后端实际接收的计算请求为准。由于用户网络不稳定导致的结果丢失，本网站概不负责。
+                【注：目前本网站仍处于公测阶段，不收费。等网站使用量超过一定水平后，再考虑收费~ 当前每月查询次数：{{{MonthlyUsage}}}】
+              </p>
+            </center>
+          </div>
+        </div>
+        <div class="col-md-2 order-md-0 col-xl-3" style="background-color:ffffff;">
+          广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+        </div>
+        <div class="col-md-2 order-md-10 col-xl-3" style="background-color:ffffff;">
+          广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+        </div>
+      </div>
+      <!-- ↓展示其他人喜欢的搜索词 -->
+      <center>
+        <span id="othersScrollMark"
+          style="color: #f74b13;font: italic large serif;background-color: #ffe893;border-radius: 6pt;padding: 3pt;">
+          灵感不足？来看看其他人搜索得出的相似词是什么吧~~↓
+        </span>
+      </center>
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <b-card-group columns style="padding: 20px;">
+            <b-card v-for="item in others_search" border-variant="warning" header-tag="header"
+              header-bg-variant="warning" align="left">
+              <template #header>{{item.keyword}}<span style="float: right;">
+                  <b-button variant="danger" style="padding: 0;" v-b-tooltip.hover title="试着搜一搜" @click="searchOthersPrompt(item.keyword)"> 🔍 </b-button>&nbsp;<b-button
+                    variant="danger" style="padding: 0;" v-b-tooltip.hover title="赞一个" @click="likeOthersPrompt(item.id,item.strata);item.id=-1"> ❤️ </b-button>
+                </span></template>
+              <b-card-text>{{item.search_result}}</b-card-text>
+              <b-card-text class="small text-muted">查询日期 @ {{item.date}} &nbsp; 赞 {{item.likes}}</b-card-text>
+            </b-card>
+          </b-card-group>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+      <center>
+        <b-button variant="danger" @click="refreshOthersCard">↑刷新搜索推荐！</b-button>
+      </center>
+
+    </div>
+
+    <div v-if="show_search_result_mode">
+      <div class="row" style="padding: 16px 0 0;">
+        <div class="col-md-8 col-xl-6">
+          <!-- 搜索框 -->
+          <b-overlay :show="isQueryingBackend">
+          <div style="padding: 10px;">
+            <!-- ↓输入公式helper。 -->
+            <span>
+              <b-dropdown id="dropdown-dropup" dropup text="公式" variant="warning" class="m-2"
+                style="transform: translateY(-19.2px);z-index:1039;">
+                <b-dropdown-item v-b-modal.modal-notes>【查看公式/押韵限制等输入规则】</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item @click="addSearchConstraints">▶诗词曲神器：限制词语长度/押韵</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item @click="simpleExample">▶简单的计算公式模板</b-dropdown-item>
+                <b-dropdown-item @click="addWordMarkToLastOfSearchBar">▶输入末尾添加[&lt;词语&gt;]占位符</b-dropdown-item>
+              </b-dropdown>
+            </span>
+            <span class="input_box" style="display: inline-block;height: 50px;width: calc(100% - 100px);">
+              <span>
+                <input v-model="query_txt" id="mainsearchbox" placeholder="在此输入要查询的相似词" class="input_box vertical_center" @focus="detectEmptyBrace"
+                  style="width: calc(100% - 84px);margin-left: 9px;line-height: 33px;">
+                </input>
+              </span>
+              <span>
+                <img id="searchButton" src="/static/佳辞谱/searchbutton.svg" v-on:click="search()"
+                style="height: 41px; float: right;margin-right: 4px;" class="vertical_center">
+              </span>
+            </span>
+          </div>
+          </b-overlay>
+        </div>
+      </div>
+      <!-- 展示搜索结果and点赞 -->
+      <!-- ↓1.焦点行 -->
+      <b-row><div class="col-md-10 col-xl-8" style="margin: 0px 30px; font-weight: 700;">
+        <span style="font-size: 33px;font-family: serif;">
+          {{last_query_txt}}
+          <img src="/static/佳辞谱/focusarrow.svg" style="height: 47px;margin: 3px 3px;">
+        </span>
+        <span>
+          <li v-for="tag in focus_result" :key="tag" class="list-inline-item">
+            <template>
+              <b-form-tag pill style="font-size: large;background-color: #f9e6a5; font-weight: 700;margin: 3px 3px !important;"
+                @remove="removeTag(tag)"
+                :title="tag"
+                variant="warning"
+              >{{ tag }}</b-form-tag>
+            </template> 
+          </li>
+        </span>
+      </div></b-row>
+      <div class="row" style="padding: 16px;">
+        <!-- ↓点赞等按钮 -->
+        <div class="col-xl-2 order-xl-10 d-none d-sm-block">
+          <b-card style="padding: 0px;border: 1px solid rgb(253, 211, 72)"><b-row style="padding: 0px;">
+            <div class="col-sm-4 col-md-2 col-lg-2 col-xl-12"><p><b-button pill variant="warning" class="tlb3s" @click="likecurrentfocus">❤️点赞</b-button></p></div>
+            <div class="col-sm-4 col-md-3 col-lg-2 col-xl-12"><p><b-button pill variant="primary" class="tlb3s" @click="copyfocuswords">📋复制焦点</b-button></p></div>
+            <div class="col-sm-4 col-md-3 col-lg-2 col-xl-12"><p><b-button pill variant="danger" class="tlb3s" @click="copyallwords">🗄复制全部</b-button></p></div>
+          </b-row></b-card>
+        </div>
+        <div class="col-xl-2 order-xl-10 d-block d-sm-none">
+          <b-card style="padding: 0px;border: 1px solid rgb(253, 211, 72)"><b-row style="padding: 0px;">
+            <div class="col-4"><b-button pill variant="warning" class="tlb3s" @click="likecurrentfocus">❤️点赞</b-button></div>
+            <div class="col-4"><b-button pill variant="primary" class="tlb3s" @click="copyfocuswords">📋复制焦点</b-button></div>
+            <div class="col-4"><b-button pill variant="danger" class="tlb3s" @click="copyallwords">🗄复制全部</b-button></div>
+          </b-row></b-card>
+        </div>
+        <div class="col-md-3 col-xl-2 wordpanel">
+          <p class="mt-4 wordpaneltitle">前10位</p>
+          <hr/>
+          <span v-for="(item, i) in search_result[0]" class="word-container-container" @click="pushWordToLight($event)">
+            <span class="word-container">"<wordstub>{{item}}</wordstub>"</span><span v-if="i<9">,&nbsp;&nbsp;</span>
+          </span>
+        </div>
+        <div class="col-md-4 col-xl-4 wordpanel">
+          <p class="mt-4 wordpaneltitle">相似词</p>
+          <hr/>
+          <span v-for="(item, i) in search_result[1]" class="word-container-container" @click="pushWordToLight($event)">
+            <span class="word-container">"<wordstub>{{item}}</wordstub>"</span><span v-if="i<199">,&nbsp;&nbsp;</span>
+          </span>
+        </div>
+        <div class="col-md-4 col-xl-4 wordpanel">
+          <p class="mt-4 wordpaneltitle">相关概念联想</p>
+          <hr/>
+          <span v-for="(item, i) in search_result[2]" class="word-container-container" @click="pushWordToLight($event)">
+            <span class="word-container">"<wordstub>{{item}}</wordstub>"</span><span v-if="i<199">,&nbsp;&nbsp;</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+    <b-modal id="modal-notes" ok-only scrollable title="【查看公式/押韵限制等输入规则】">
+      <h5>【公式规则】</h5>
+      用[&#60;&#62;]包裹词语。<br>
+      可输入数学计算公式+-*/()及数字。<br>
+      我们会预处理您输入，并尝试自动翻译至词向量表达式，例如您可输入“可爱+猫猫”获取正确表达式。若您想强行控制表达式不被翻译，可以用斜杠//包裹您的查询。（注：翻译只在前端进行。）
+      <br><br>
+      <h5>【押韵等规则】</h5>
+      查询末尾输入//[n,韵母x,声调d]<br>
+      可限制长度为n、末字带韵母x、末字声调为d。<br>
+      （例如 //[3,ang,4] 可查询[末字韵母ang且四声]的三字词。）<br>
+      支持用||作为多选分隔符，例如 //[3||4,ang||iang||uang,1||2||3||4||5]。
+      代表筛选长度为3或4、末字韵母ang或iang或uang、不限末字声调。<br>
+      若对某一项规则不加入限制条件，则留空即可。
+      <br><br>
+      <h5>【韵母与音调支持列表】</h5>
+      音调支持6种，韵母支持40种。<br>
+      支持的韵母：["a", "o", "e", "i", "u", "v", "er", "ai", "ei", "ao", "ou", "ia", "ie", "ua", "uo", "ve",
+      "iao", "iou", "uai", "uei", "an", "en", "in", "un", "vn", "ang", "eng", "ing", "ong", "ian", "uan", "van",
+      "uen", "iang", "uang", "ueng", "iong", "无韵母"]<br>
+      支持的音调：["1"代表阴平, "2"代表阳平, "3"代表上声, "4"代表去声, "5"是轻声, "无音调"表示非汉字无音调概念]。
+      <br><br>
+      <h5>【其它要点】</h5>
+      若输入英文，请输入小写字母。<br>
+    </b-modal>
+    <!-- ↓注册modal。 -->
+    <b-modal id="bv-modal-signup" hide-footer @show="entershoulddefault = true" @hide="entershoulddefault = false">
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          注册<code>新用户</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎来到佳辞谱~~~</h3>
+          <span style="color: #e87b00;">本网站支持用户名密码注册登录。<br>用户名密码注册需保存妥善密码，网站不提供找回，密码丢失账户余额将无法追回。</span>
+          <br>
+          <b-form-input v-model="signup_username" type="username" placeholder="输入独一无二的 用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+          <b-form-input v-model="signup_pwdconfirm" type="password" placeholder="再次确认 密码"></b-form-input>
+        </div>
+        <b-button class="mt-3" block @click="signup">注册</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-signup')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+    <!-- ↓登录modal。 -->
+    <b-modal id="bv-modal-login" hide-footer @show="entershoulddefault = true" @hide="entershoulddefault = false">
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          <code>用户登录</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎登录佳辞谱~~~</h3>
+          <br>
+          <b-form-input v-model="signup_username" type="username" placeholder="输入用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+        </div>
+        <b-button class="mt-3" block @click="login">登录</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-login')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+  </div>
+  <div style="padding: 20px;">
+    佳辞谱网站&nbsp;&nbsp;&nbsp;&nbsp;www.zh-words.ink&nbsp;&nbsp;&nbsp;&nbsp;京ICP备 2333333号。
+  </div>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
+    integrity="sha256-JLmknTdUZeZZ267LP9qB+/DT7tvxOOKctSKeUC2KT6E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+    integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+    integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jssha@2.3.1/src/sha256.js"
+    integrity="sha256-NyuvLfsvfCfE+ceV6/W19H+qVp3M8c9FzAgj72CW39w=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    isLoading = false
+    carousel_orig_pos = ["", "", ""]
+    function hasDuplicates(arr, appendelem) {s=new Set(arr);s.add(appendelem);return s.size !== arr.length+1;}
+    function copyStringToClipboard (str) {
+      try { // Remove temporary element
+        document.body.removeChild(textarea_copy_el);
+      } catch (error) {console.error(error);}
+      // Create new element
+      textarea_copy_el = document.createElement('textarea');
+      // Set value (string to be copied)
+      textarea_copy_el.value = str;
+      // Set non-editable to avoid focus and move outside of view
+      textarea_copy_el.setAttribute('readonly', '');
+      textarea_copy_el.style.position="absolute"
+      textarea_copy_el.style.left="-9999px"
+      document.body.appendChild(textarea_copy_el);
+      // Select text inside element
+      textarea_copy_el.select();
+      // Copy text to clipboard
+      document.execCommand('copy');
+    }
+    var cumulativeOffset = function (element) {
+      var top = 0, left = 0;
+      do {
+        top += element.offsetTop || 0;
+        left += element.offsetLeft || 0;
+        element = element.offsetParent;
+      } while (element);
+      return {
+        top: top,
+        left: left
+      };
+    };
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isLoggedIn: {[{is_Logged_In}]},
+        busy_connecting_backend: false,
+        isQueryingBackend: false,
+        entershoulddefault: false,
+        query_txt: '',
+        last_query_txt: '',
+        signup_username: '',
+        signup_password: '',
+        signup_pwdconfirm: '',
+        others_search: [],
+        show_search_result_mode: false,
+        page_history: 2,
+        search_result: [[], [], []],  // should be 3 arrays.
+        focus_result: [],
+        is_current_focus_liked: false
+      },
+      mounted() {
+        axios.post('/simwords/get-others-search', {
+          // hi: "hi"
+        }).then(function (response) {
+          // console.log(response);
+          // console.log(response.data);
+          app.others_search = response.data;
+        }).catch(function (error) {
+          console.log(error);
+        })
+        window.history.pushState({page: 1}, "", "");  // 浏览器返回
+        document.getElementById("mainsearchbox").focus();
+      },
+      methods: {
+        signup: function () {
+          if (this.signup_username.length < 2) { window.alert("用户名长度不得小于2位，请重新输入！"); return; }
+          if (this.signup_password.length < 5) { window.alert("密码长度不得小于5位，请重新输入！"); return; }
+          if (this.signup_password != this.signup_pwdconfirm) { window.alert("两次密码输入不一致，请检查输入！"); return; }
+          this.busy_connecting_backend = true
+          console.log("sign up.", this.signup_username, this.signup_password, this.signup_pwdconfirm);
+          var hashObj = new jsSHA("SHA-256", "TEXT", { numRounds: 1 });
+          hashObj.update(this.signup_username + this.signup_password + "salter2333");
+          var hash = hashObj.getHash("HEX");
+          console.log('generated login auth:', hash);
+          axios.post('/simwords/sign-up', {
+            username: this.signup_username,
+            auth: hash,
+          }).then(function (response) {
+            // console.log(response);
+            // console.log(response.data);
+            signup_state = response.data;
+            app.busy_connecting_backend = false;
+            if (signup_state == 'conflict_username') { window.alert("您的用户名已被他人占用，请重新输入！\n（推荐使用微信登录避免用户名冲突）"); return; }
+            app.$bvModal.hide('bv-modal-signup');
+            window.alert("已注册成功！\n请等待自动登录");
+            app.login();
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        login: function () {
+          if (this.signup_username.length < 2) { window.alert("用户名长度不得小于2位，请重新输入！"); return; }
+          if (this.signup_password.length < 5) { window.alert("密码长度不得小于5位，请重新输入！"); return; }
+          console.log("log in.");
+          var hashObj = new jsSHA("SHA-256", "TEXT", { numRounds: 1 });
+          hashObj.update(this.signup_username + this.signup_password + "salter2333");
+          var hash = hashObj.getHash("HEX");
+          console.log('generated login auth:', hash, 'connecting to backend...');
+          this.busy_connecting_backend = true;
+          axios.post('/simwords/log-in', {
+            username: this.signup_username,
+            auth: hash,
+          }).then(function (response) {
+            // console.log(response);
+            // console.log(response.data);
+            login_state = response.data;
+            app.busy_connecting_backend = false;
+            if (login_state != 'ok') {
+              if (login_state == 'already_logged_in') { window.alert("当前用户已经登录。出现此提示应为前端错误，请您刷新网页。"); return; }
+              if (login_state == 'nosignup') { window.alert("当前用户尚未注册。请您先注册哟~"); return; }
+              window.alert("登录失败，应是用户名或密码错误。请检查输入~\n未注册需先注册。"); return;
+            }
+            app.$bvModal.hide('bv-modal-login');
+            app.isLoggedIn = true;
+            window.alert("登录成功！");
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        logout: function () {
+          console.log("log out.");
+          axios.post('/simwords/log-out', {}).then(function (response) {
+            app.isLoggedIn = false;
+            window.alert("退出登录成功！");
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        search: function () {
+          if (isLoading == false) {
+            var plus = /＋/gm;
+            var plus2 = /➕/gm;
+            var minus = /－/gm;
+            var minus2 = /➖/gm;
+            var times = /×/gm;
+            var times2 = /✖️/gm;
+            var lq = / \(/gm;
+            var rq = /\) /gm;
+            this.query_txt = this.query_txt.replace(plus, "+").replace(plus2, "+").replace(minus, "-").replace(minus2, "-").replace(times, "*").replace(times2, "*").replace(lq, "(").replace(rq, ")");
+            if (this.query_txt.length > 170) { //防止query过长
+              console.log("QUERY TOO LONG!!"); return;
+            }
+            isLoading = true;
+            console.log(this.query_txt);
+            setTimeout(() => { isLoading = false; }, 1000);
+
+            // do some preliminary check to reduce backend load.
+            var preprocstr = this.query_txt.toLowerCase();
+            var p = preprocstr; var specStr = '';
+            var regex = /\[<(.+?)>\]/g; var regex2 = /\/\/\[(.*?),(.*?),(.*?)\]/g;
+            specArr = [];
+            err = false;
+            function replacer2(match, p1, p2, p3, offset, string) {specStr = match;
+              crit2vals = ["a", "o", "e", "e", "i", "u", "v", "i", "er", "ai", "ei", "ao", "ou", "ia", "ie", "ua", "uo", "ve", "iao", "iou", "uai", "uei", "an", "en", "in", "un", "vn", "ang", "eng", "ing", "ong", "ian", "uan", "van", "uen", "iang", "uang", "ueng", "iong", "无韵母"];
+              crit3vals = ["1", "2", "3", "4", "5", "无音调"]
+              tmp = p1.split("||")
+              var numbers = /[0-9]*$/g;
+              tmp.forEach(e => {if(!e.match(numbers)){err=true}});
+              if(err){window.alert("您的输入查词长度限制条件有误，请检查后再输入！");return "";}
+              specArr.push(tmp)
+              tmp = p2.split("||")
+              tmp.forEach(e => {if(e!=''&&crit2vals.indexOf(e)==-1){err=true}});
+              if(err){window.alert("您的输入查词韵母限制条件有误，请检查后再输入！");return "";}
+              specArr.push(tmp)
+              tmp = p3.split("||")
+              tmp.forEach(e => {if(e!=''&&crit3vals.indexOf(e)==-1){err=true}});
+              if(err){window.alert("您的输入查词音调限制条件有误，请检查后再输入！");return "";}
+              specArr.push(tmp)
+              return "";
+            }
+            p = p.replace(regex2, replacer2);
+            if(err){return}
+            if(!p.startsWith('/')&&!p.endsWith('/')){ // translate
+              p = p.replace(/(\[\<(.+?)(?=\>\])\>\])|(([^\+\-\*\/＋－×➕✖️➖0-9\.\(\)\>]+))/gm,function () {return '[<'+(arguments[2]||arguments[4])+'>]'});
+              this.query_txt = p + specStr
+            } else {p=p.slice(1,p.length-1)}
+            wordId = -1;
+            wordArr = [];
+            function replacer3(match, p1, offset, string) {return p1;}
+            lp = p.replace(regex, replacer3);
+            function replacer(match, p1, offset, string) {
+              wordId ++;
+              wordArr.push(p1)
+              return "vecs["+wordId+"]";
+            }
+            p = p.replace(regex, replacer);
+            p = p.replace(/ /g,"");
+            if(wordId == -1){wordArr.push(p);p="vecs[0]"}
+            err = false;
+            console.log("p",p);
+            p = p.replace(/[^vecs\[.0-9\]\+\-\*\/\(\)]/g,()=>{err=true;return ""});
+            if(err){window.alert("您的输入查词公式有误，请检查后再输入！");return;}
+            this.uploadLastFocusToPool(this.last_query_txt);
+            this.focus_result = [];
+            this.is_current_focus_liked=false;
+            // console.log(specArr);
+            // console.log(p);
+            // console.log(wordArr);
+
+            this.isQueryingBackend = true;
+            axios.post('/simwords/query', {
+              query: p,
+              words: wordArr,
+              specs: specArr,
+            }).then(function (response) {
+              resptext = response.data;
+              if (resptext == 'capped') {
+                window.alert("您的ip地本周5次免费查词额度已用尽~ \n 觉得本网站挺有意思？客官充值支持一下吧~~\n物美价廉，登录即可充值哟~");app.isQueryingBackend = false;return;
+              }
+              if (resptext == 'exhausted') {
+                window.alert("您的账户余额已用尽~ \n 相似词查询结果让您如虎添翼？客官充值支持一下吧~~\n物美价廉，充值补充能量哟~");app.isQueryingBackend = false;return;
+              }
+              if ((typeof resptext === 'string' || resptext instanceof String) && resptext.startsWith('err:')) {
+                window.alert(resptext+"\n 由于查询出错，本次查询仅消耗您0.2次查询余额。请您调整查询参数再试。");app.isQueryingBackend = false;return;
+              }
+              app.search_result = eval(resptext);
+              app.show_search_result_mode = true;  // 开始展示搜索结果。
+              // history.replaceState({page: 2}, "title 3", "?page=3")
+              if (app.page_history==2) {window.history.pushState({page: app.page_history}, "", "");}  // 浏览器返回
+              app.page_history++;
+              app.last_query_txt = lp.replace(/\*/g, '×').replace(/\+/g, '＋').replace(/-/g, '－').replace(/\(/g, ' (').replace(/\)/g, ') ');
+              app.isQueryingBackend = false;
+            }).catch(function (error) {app.isQueryingBackend = false;console.log(error);})
+
+          } else {
+            console.log("TOO MANY CLICKS!!")  // 防止多重点击！！
+            window.alert("搜索过于频繁!!!仔细等结果2秒啊。")  // 防止多重点击！！
+          }
+        },
+        searchOthersPrompt: function (qry) {
+          var rep = /[^()－×＋\+\-\*/ 0-9.]+/gm;
+          function repf(match, p1, offset, string){return "[<"+match+">]";}
+          if (this.query_txt != '') {
+            if(!window.confirm("是否搜索这位用户的查询词？您的搜索框中有输入，若搜索将消耗您的搜索次数、并覆盖您的输入~")){return}
+          } else {if(!window.confirm("是否搜索这位用户的查询词？(若搜索将消耗您的搜索次数)")){return}}
+          var plus = /＋/gm;
+          var plus2 = /➕/gm;
+          var minus = /－/gm;
+          var minus2 = /➖/gm;
+          var times = /×/gm;
+          var times2 = /✖️/gm;
+          var lq = / \(/gm;
+          var rq = /\) /gm;
+          this.query_txt = qry.replace(rep, repf).replace(plus, "+").replace(plus2, "+").replace(minus, "-").replace(minus2, "-").replace(times, "*").replace(times2, "*").replace(lq, "(").replace(rq, ")");
+          this.search();
+        },
+        likeOthersPrompt: function (ind, strata) {
+          if(ind == -1) {return;}
+          axios.post('/simwords/like-others-search', {id: ind, stt: strata});
+          this.$bvToast.toast(`已收到反馈！感谢您的支持~`, {
+            title: '点赞成功~~',
+            autoHideDelay: 2500,
+            appendToast: true,
+            variant: "info",
+            solid: true,
+            toaster: 'b-toaster-bottom-right'
+          })
+        },
+        simpleExample: function () {
+          if (this.query_txt == "") {
+            this.query_txt = "([<可爱>]-[<普通>])*0.9+[<妹子>]"
+          } else {
+            if (window.confirm("您的搜索栏中有文字。继续操作将清空您之前输入的内容。真的要继续吗？")) {
+              this.query_txt = "([<可爱>]-[<普通>])*0.9+[<妹子>]"
+            }
+          }
+        },
+        refreshOthersCard: function () {
+          if (isLoading == false) {
+            isLoading = true
+            axios.post('/simwords/get-others-search', {
+              // hi: "hi"
+            }).then(function (response) {
+              console.log(response);
+              console.log(response.data);
+              app.others_search = response.data;
+              // app.$forceUpdate();
+            }).catch(function (error) {
+              console.log(error);
+            })
+            window.scrollTo(0, cumulativeOffset(document.getElementById("othersScrollMark")).top);
+            setTimeout(() => { isLoading = false; }, 2000);
+          } else {
+            window.alert("点击过于频繁!!!仔细看2秒啊。")  // 防止多重点击！！
+          }
+        },
+        addSearchConstraints: function () {
+          if (this.query_txt.indexOf('//[') != -1) {
+          if (!window.confirm("您的搜索栏中有//[序列出现，说明可能已经输入过了搜索限制条件。真的要继续吗？")) {return} }
+          this.query_txt = this.query_txt + "//[词长度n,韵母x,声调d]"
+        },
+        addWordMarkToLastOfSearchBar: function () {
+          this.query_txt = this.query_txt + "[<>]"
+        },
+        detectEmptyBrace: function () {
+          if (this.query_txt.indexOf('[<>]') != -1) {
+            var bar = document.getElementById("mainsearchbox")
+            setTimeout(() => {
+              if(bar.setSelectionRange) {bar.setSelectionRange(this.query_txt.indexOf('[<>]')+2, this.query_txt.indexOf('[<>]')+2)}
+            }, 233);
+            // iphone上的实现机制是，你点击的时候会有一个事件来移动光标到你点的位置。所以，这里我延迟一下，以免被覆盖。
+          }
+        },
+        pushWordToLight: function (event) {
+          txt = event.currentTarget.querySelector("wordstub").innerText;
+          copyStringToClipboard (txt);
+          this.$bvToast.toast(`已复制"${txt}"至剪贴板`, {
+            title: '复制成功！',
+            autoHideDelay: 3500,
+            appendToast: true,
+            variant: "warning",
+            solid: true,
+            toaster: 'b-toaster-bottom-right'
+          })
+          if(! hasDuplicates(this.focus_result, txt)){this.focus_result.push(txt)}
+          console.log(event, event.currentTarget, txt);
+        },
+        removeTag: function (tag) {
+          const index = this.focus_result.indexOf(tag);
+          if (index > -1) {
+            this.focus_result.splice(index, 1);
+          }
+        },
+        likecurrentfocus: function () {
+          this.is_current_focus_liked = true;
+          this.$bvToast.toast(`已收到反馈！感谢您的支持~`, {
+            title: '点赞成功~~',
+            autoHideDelay: 3000,
+            appendToast: true,
+            variant: "info",
+            solid: true,
+            toaster: 'b-toaster-bottom-right'
+          })
+        },
+        uploadLastFocusToPool: function (lqt) {
+          if(lqt.length == 0){return}
+          fcsres = (this.focus_result.slice(0,10).concat(this.search_result[0].slice(0,3),this.search_result[1].slice(0,4),this.search_result[2].slice(0,3)));
+          if(fcsres.length == 0){return}
+          today = new Date();
+          axios.post('/simwords/upload-new-focus-words', {
+              query: lqt,
+              resstr: fcsres.join(", "),
+              like: this.is_current_focus_liked,
+              date: today.toISOString().slice(0,10)
+            }).then(function (response) {
+              console.log("fcsres uploaded.", fcsres)
+            }).catch(function (error) {
+              console.log(error);
+            })
+        },
+        copyfocuswords: function () {
+          txt = this.focus_result.join(", ");
+          copyStringToClipboard (txt);
+        },
+        copyallwords: function () {
+          txt = "---前10位相似词---\n"+this.search_result[0].join(", ")+"\n---相似词200条---\n"+this.search_result[1].join(", ")+"\n---相关概念联想词---\n"+this.search_result[1].join(", ");
+          copyStringToClipboard (txt);
+        },
+      }
+    })
+    reload_upload_focus_flip = true;
+    window.addEventListener("beforeunload", function(event) { if(reload_upload_focus_flip) {app.uploadLastFocusToPool(app.last_query_txt);reload_upload_focus_flip=false;} });
+    document.addEventListener("keydown", function(event) {
+      if (event.keyCode === 13 && (!app.entershoulddefault)) {
+        event.preventDefault();
+        app.search();
+      }
+    });
+    window.onpopstate = function(event) {
+      console.log(event);
+      if (event.state == null) {history.back()}
+      if (event.state.page == 2) {app.show_search_result_mode=true;} else {
+        app.show_search_result_mode=false;
+        if(reload_upload_focus_flip) {app.uploadLastFocusToPool(app.last_query_txt);reload_upload_focus_flip=false;}
+        app.$bvToast.toast(`本网站回退功能并不完善，如果多次搜索，会导致之前的搜索结果丢失，无法通过历史浏览记录复原。 因此请注意保存结果！          您上一次搜索的内容可以通过点击前进按钮恢复。`, {
+            title: '⚠️请注意保存结果！',
+            autoHideDelay: 10000,
+            appendToast: true,
+            variant: "danger",
+            solid: true,
+            toaster: 'b-toaster-bottom-right'
+          })
+      }
+    }
+
+  </script>
+</body>
+
+</html>

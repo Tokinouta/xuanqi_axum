@@ -1,0 +1,78 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .NOBORDER {
+      box-shadow: none;
+      padding: 0px 10px 0px 0px;
+    }
+
+    .vertical_center {
+      margin-top: 25px;
+      transform: translateY(-50%);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ↓标题栏。 -->
+    <div style="border-bottom: 5px solid #e87b00;">
+      <b-navbar toggleable="lg" type="light" variant="warning" class="NOBORDER">
+        <b-navbar-brand href="/Shared-Editing-Proposal" class="NOBORDER ml-3" style="font-weight: bold;font-size: 24pt;color: rgb(111, 46, 0);">网站管理接口</b-navbar-brand>
+      </b-navbar>
+    </div>
+
+    <div class="m-3">
+      可以备份数据库/恢复数据库。.每次重装之前,记得运行这个网站的备份数据库哟~
+      <br>
+      <b-button variant="warning" @click="generateBackup">备份数据库</b-button><br>
+      pg_dumpall -U postgres > '/home/infinite-loop/Downloads/zh-words各种功能整合/postgres_backup.sql'<br>
+      xz '/home/infinite-loop/Downloads/zh-words各种功能整合/postgres_backup.sql' -8e<br>
+      # ↑ 备份整个数据库集群。中间文件会自动删除.<br>
+      <br><br>
+      <b-button variant="warning" @click="restoreBackup">恢复数据库</b-button><br>
+      xzcat '/home/infinite-loop/Downloads/zh-words各种功能整合/postgres_backup.sql.xz' | psql -U postgres -h localhost -p 1233<br>
+      # psql恢复.<br><br>
+      nice！！
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"
+    integrity="sha256-JLmknTdUZeZZ267LP9qB+/DT7tvxOOKctSKeUC2KT6E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+    integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+    integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {},
+      mounted() {},
+      methods: {
+        generateBackup: function () {
+          axios.post('/Website-Manage-Interface/generate_backup').then(function (response) {
+            if(response.data=='Kinsoku jikou desu! ~'){app.$bvToast.toast('您可能未登录，或无权限。', {autoHideDelay: 5000, variant: "danger", toaster: 'b-toaster-bottom-right'});}
+          }).catch(function (error) {console.log(error);})
+        },
+        restoreBackup: function () {
+          axios.post('/Website-Manage-Interface/restore_backup').then(function (response) {
+            if(response.data=='Kinsoku jikou desu! ~'){app.$bvToast.toast('您可能未登录，或无权限。', {autoHideDelay: 5000, variant: "danger", toaster: 'b-toaster-bottom-right'});}
+          }).catch(function (error) {console.log(error);})
+        },
+      }
+    })
+  </script>
+</body>
+
+</html>

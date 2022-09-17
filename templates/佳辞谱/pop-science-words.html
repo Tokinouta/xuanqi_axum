@@ -1,0 +1,254 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="/static/佳辞谱/favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha256-93wNFzm2GO3EoByj9rKZCwGjAJAwr0nujPaOgwUt8ZQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-cAyk5KZc7P6j7j/uL7MOoN4PRsZYp+BN9yo03Y6Qk38=" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .NOBORDER {
+      box-shadow: none;
+      padding: 0px 10px 0px 0px;
+    }
+
+    .vertical_center {
+      margin-top: 25px;
+      transform: translateY(-50%);
+    }  
+    /* ↑navbar需要 */
+
+    h3 {color: #e87b00;}
+    h5 {color: #e87b00;}
+    p {color: #933300;}
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ↓标题栏。 -->
+    <div style="border-bottom: 5px solid #e87b00;">
+      <b-navbar toggleable="lg" type="light" variant="warning" class="NOBORDER">
+        <b-navbar-brand href="/simwords/" class="NOBORDER"><img src="/static/佳辞谱/topleftVision.svg" class="d-inline-block align-top"
+            height="50px" /></b-navbar-brand>
+
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav style="padding: 0px 10px 0px 10px;">
+
+          <!-- Right aligned nav items -->
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item href="/simwords/about">关于</b-nav-item>
+            <b-nav-item href="/simwords/pop-science-words">近义词/反义词科普</b-nav-item>
+
+            <b-nav-item-dropdown text="使用说明" right>
+              <b-dropdown-item href="/simwords/usage">本网站能用来干啥</b-dropdown-item>
+              <b-dropdown-item href="/simwords/method">使用方法</b-dropdown-item>
+              <b-dropdown-item href="/simwords/fee">费用</b-dropdown-item>
+              <b-dropdown-item href="/simwords/notes">注意事项</b-dropdown-item>
+            </b-nav-item-dropdown>
+
+            <b-nav-item-dropdown right>
+              <!-- Using 'button-content' slot -->
+              <template #button-content>
+                <em>
+                  <span v-if="! isLoggedIn">登录/注册</span>
+                  <span v-if="isLoggedIn">已登录 | 我的账户</span>
+                  <svg viewBox="785 321 40 40" width="19px" height="19px" class="align-text-bottom">
+                    <g id="Canvas_1" stroke="none" stroke-opacity="1" fill="none" stroke-dasharray="none"
+                      fill-opacity="1">
+                      <title>Canvas 1</title>
+                      <g id="Canvas_1_Layer_1">
+                        <title>Layer 1</title>
+                        <g id="Graphic_2">
+                          <title>Account Circle</title>
+                          <path
+                            d="M 805 321 C 793.96 321 785 329.96 785 341 C 785 352.04 793.96 361 805 361 C 816.04 361 825 352.04 825 341 C 825 329.96 816.04 321 805 321 Z M 805 327 C 808.32 327 811 329.68 811 333 C 811 336.32 808.32 339 805 339 C 801.68 339 799 336.32 799 333 C 799 329.68 801.68 327 805 327 Z M 805 355.4 C 800 355.4 795.58 352.84 793 348.96 C 793.06 344.98 801 342.8 805 342.8 C 808.98 342.8 816.94 344.98 817 348.96 C 814.42 352.84 810 355.4 805 355.4 Z"
+                            fill="#633" />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </em>
+              </template>
+              <b-dropdown-item v-if="isLoggedIn" href="/simwords/account-info">基本信息</b-dropdown-item>
+              <b-dropdown-item v-if="isLoggedIn" @click="logout">退出登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-login')">登录</b-dropdown-item>
+              <b-dropdown-item v-if="! isLoggedIn" @click="$bvModal.show('bv-modal-signup')">注册新用户</b-dropdown-item>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
+    </div>
+
+
+    <div class="row" style="padding: 16px 0 0;">
+      <div class="col-md-8 order-md-2 col-xl-6" style="background-color:#fff;">
+        <div style="padding: 15px;">
+        <!-- 中间栏。 -->
+        <br><br>
+        <h3>💡近义词/反义词科普</h3><br>
+        <b-list-group style="color: #933300; border-color: #e87b00;">
+          <b-list-group-item><h5>近义词的定义</h5>词向量相近的词语称为近义词。词向量越接近，词语的意义就越为相近。<br><br>词向量所蕴含的信息不仅包括词语含义，还包含风格。<br><br>例如，在佳辞谱网站中搜索“可爱”，可以得到可爱的同义词为：“软萌”“呆萌”“甜美感”“傲娇”等。如果搜索“酷睿”，近义词为“amd速龙”“奔腾”“cortexa53”等与CPU有关的词语。搜索“玉袍”，得到“雪袍”“劲衣”“黄衫”“玄裳”“甲铠”“衣袂飘飘”等相似古风风格词语。</b-list-group-item>
+          <b-list-group-item><h5>反义词的定义</h5>反义词的定义稍复杂，且不同词性的“反义词”指不同的概念。例如，「形容词」反义词是指两个完全相反的概念；而「名词」的反义词则通常在很多概念维度上相同，仅有少数几个特定概念维度相反。<br><br>上一句话比较难懂，我们来举一个例子。<br><br>
+            <b-card title="两种不同的“反义词”" sub-title="反义词至少可以分为名词和形容词两种，甚至还有更多种">
+              <h5>①  形容词反义词：高 - 矮，大 - 小</h5>
+              <b-card-text>
+                ↑上述反义词对，属于形容词反义词，他们的意义比较纯粹，用于描述一个特征的不同方向（高矮描述高度的方向；大小描述尺寸的方向）。一般来说形容词所描述的特征偏移方向是单一的，其反义词较好确定。（除了同时描述多种特征的形容词可能存在多类反义词）
+              </b-card-text>
+              <h5>②  名词反义词：火海 - 洪涝，火海 - 焰苗</h5>
+              <b-card-text>
+                ↑上述反义词对，都是名词反义词，且都包含“火海”。只不过，第一对反义词 “火海 - 洪涝” 的反义部分在于物质的属性是水or火，而第二对反义词 “火海 - 焰苗” 的反义部分在于规模的大与小。可见，名词的反义词并非唯一，名词具有多重属性，而每一种属性的不同描述都可能产生一种反义词。
+              </b-card-text>
+              <h5>③  其它类型的多种反义词：响亮 - 低沉，响亮 - 呢喃</h5>
+              <b-card-text>
+                ↑上述两个反义词对展现了即使形容词也可能存在多种反义词对，分别对应的是“音调高低”和“音量高低”两个维度。反义词对的两个词语都描述的是声音，互相之间只有一个维度的偏移方向相反，其它维度特征相似。
+              </b-card-text>
+            </b-card><br>可见，实际词语中，很难将同义词与反义词的概念完全割裂开来，因为很多所谓反义词其实是意思相近、仅有少数几个维度相反的同义词。
+          </b-list-group-item>
+          <b-list-group-item><h5>词向量化的原理，及其效果</h5>目前通用的词向量算法为Word2Vec。<br><br>词向量word2Vec的实现效果是，词语间词向量可以加减表示特征方向的偏移（see this blog <a href="https://andyljones.tumblr.com/post/111299309808/why-word2vec-works">https://andyljones.tumblr.com/post/111299309808/why-word2vec-works</a>）。词向量作为神经网络中间层的特征表示，其几何意义虽然明确，但却并没有“反义形容词的对称中心点为原点”的特性。<br><br>//此外，为了提升训练效果，常用算法还对词向量进行了L2-norm，相当于word2vec算法被强迫在高维球面上进行优化，这更加限制了词向量的几何意义。<br><br>笔者也进行了试验，采用多对所谓反义形容词，尝试找到形容词的中心点，但是尝试结果表明这个中心点的效果并不佳。<br><br>因此，建议大家只通过词向量加减来进行目标词语的搜索。网站首页的翻页示例已经将使用模式很清晰地展示了，按照所展示的办法去搜索相似词，效果都是不错的。</b-list-group-item>
+        </b-list-group>
+        </div>
+      </div>
+      <div class="col-md-2 order-md-0 col-xl-3" style="background-color:ffffff;">
+        广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+      </div>
+      <div class="col-md-2 order-md-10 col-xl-3" style="background-color:ffffff;">
+        广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+      </div>
+    </div>
+    <!-- ↓注册modal。 -->
+    <b-modal id="bv-modal-signup" hide-footer>
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          注册<code>新用户</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎来到佳辞谱~~~</h3>
+          <span style="color: #e87b00;">本网站支持用户名密码注册登录。<br>用户名密码注册需保存妥善密码，网站不提供找回，密码丢失账户余额将无法追回。</span>
+          <br><b-form-input v-model="signup_username" type="username" placeholder="输入独一无二的 用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+          <b-form-input v-model="signup_pwdconfirm" type="password" placeholder="再次确认 密码"></b-form-input>
+        </div>
+        <b-button class="mt-3" block @click="signup">注册</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-signup')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+    <!-- ↓登录modal。 -->
+    <b-modal id="bv-modal-login" hide-footer>
+      <b-overlay :show="busy_connecting_backend" rounded="sm">
+        <template #modal-title>
+          <code>用户登录</code>
+        </template>
+        <div class="d-block text-center">
+          <h3>Hello! 欢迎登录佳辞谱~~~</h3>
+          <br><b-form-input v-model="signup_username" type="username" placeholder="输入用户名~"></b-form-input><br>
+          <b-form-input v-model="signup_password" type="password" placeholder="密码"></b-form-input><br>
+        </div>
+        <b-button class="mt-3" block @click="login">登录</b-button>
+        <b-button class="mt-3" variant="danger" block @click="$bvModal.hide('bv-modal-login')">取消</b-button>
+      </b-overlay>
+    </b-modal>
+  </div>
+  <div style="padding: 20px;">
+    京ICP备 2333333号。
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js" integrity="sha256-JLmknTdUZeZZ267LP9qB+/DT7tvxOOKctSKeUC2KT6E=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+    integrity="sha256-kXTEJcRFN330VirZFl6gj9+UM6gIKW195fYZeR3xDhc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"
+    integrity="sha256-duDNIhfVrUK7HB/57nPLxN/j92aM3rhTUFzVI/H5ex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jssha@2.3.1/src/sha256.js" integrity="sha256-NyuvLfsvfCfE+ceV6/W19H+qVp3M8c9FzAgj72CW39w=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    isLoading = false
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isLoggedIn: {[{is_Logged_In}]},
+        busy_connecting_backend: false,
+        query_txt: '',
+        signup_username: '',
+        signup_password: '',
+        signup_pwdconfirm: '',
+        others_search: []
+      },
+      mounted() {},
+      methods: {
+        signup: function () {
+          if (this.signup_username.length < 2) {window.alert("用户名长度不得小于2位，请重新输入！"); return;}
+          if (this.signup_password.length < 5) {window.alert("密码长度不得小于5位，请重新输入！"); return;}
+          if (this.signup_password != this.signup_pwdconfirm) {window.alert("两次密码输入不一致，请检查输入！"); return;}
+          this.busy_connecting_backend = true
+          console.log("sign up.", this.signup_username, this.signup_password, this.signup_pwdconfirm);
+          var hashObj = new jsSHA("SHA-256", "TEXT", {numRounds: 1});
+          hashObj.update(this.signup_username+this.signup_password+"salter2333");
+          var hash = hashObj.getHash("HEX");
+          console.log('generated login auth:', hash);
+          axios.post('/simwords/sign-up',{
+            username: this.signup_username,
+            auth: hash,
+          }).then(function (response) {
+            // console.log(response);
+            // console.log(response.data);
+            signup_state = response.data;
+            app.busy_connecting_backend = false;
+            if (signup_state == 'conflict_username') {window.alert("您的用户名已被他人占用，请重新输入！\n（推荐使用微信登录避免用户名冲突）"); return;}
+            app.$bvModal.hide('bv-modal-signup');
+            window.alert("已注册成功！\n请等待自动登录"); 
+            app.login();
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        login: function () {
+          if (this.signup_username.length < 2) {window.alert("用户名长度不得小于2位，请重新输入！"); return;}
+          if (this.signup_password.length < 5) {window.alert("密码长度不得小于5位，请重新输入！"); return;}
+          console.log("log in.");
+          var hashObj = new jsSHA("SHA-256", "TEXT", {numRounds: 1});
+          hashObj.update(this.signup_username+this.signup_password+"salter2333");
+          var hash = hashObj.getHash("HEX");
+          console.log('generated login auth:', hash, 'connecting to backend...');
+          this.busy_connecting_backend = true;
+          axios.post('/simwords/log-in',{
+            username: this.signup_username,
+            auth: hash,
+          }).then(function (response) {
+            // console.log(response);
+            // console.log(response.data);
+            login_state = response.data;
+            app.busy_connecting_backend = false;
+            if (login_state != 'ok') {
+              if (login_state == 'already_logged_in') {window.alert("当前用户已经登录。出现此提示应为前端错误，请您刷新网页。");return;}
+              if (login_state == 'nosignup') {window.alert("当前用户尚未注册。请您先注册哟~");return;}
+              window.alert("登录失败，应是用户名或密码错误。请检查输入~\n未注册需先注册。");return;
+            }
+            app.$bvModal.hide('bv-modal-login');
+            app.isLoggedIn = true;
+            window.alert("登录成功！"); 
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+        logout: function () {
+          console.log("log out.");
+          axios.post('/simwords/log-out',{}).then(function (response) {
+            app.isLoggedIn = false;
+            window.alert("退出登录成功！"); 
+          }).catch(function (error) {
+            console.log(error);
+          })
+        },
+      }
+    })
+  </script>
+</body>
+
+</html>
