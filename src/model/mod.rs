@@ -8,7 +8,17 @@ pub mod database;
 pub struct User {
     _id: Option<ObjectId>,
     pub name: String,
-    pub password: String
+    pub password: String,
+}
+
+impl User {
+    pub fn new(name: String, password: String) -> Self {
+        User {
+            _id: None,
+            name,
+            password,
+        }
+    }
 }
 
 bitflags! {
