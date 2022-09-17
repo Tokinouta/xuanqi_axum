@@ -6,14 +6,13 @@ pub mod web_service;
 // use actix_session::{SessionMiddleware, storage::RedisSessionStore};
 // use actix_web::{cookie::Key, web, App, HttpServer};
 use axum::{
-    http::Method,
     routing::get,
     Router, Extension,
 };
 use std::net::SocketAddr;
 use tower_http::cors::{Any, CorsLayer};
 
-use crate::web_service::{hello, hello_html, echo};
+use crate::web_service::{hello};
 
 
 #[tokio::main]
@@ -30,11 +29,11 @@ async fn main() {
             // or see this issue https://github.com/tokio-rs/axum/issues/849
             CorsLayer::new()
                 .allow_origin(Any)
-                .allow_methods([Method::GET]),
+                .allow_methods(Any),
         )
         .route("/", get(hello))
-        .route("/hello_html", get(hello_html))
-        .route("/echo", get(echo))
+        // .route("/hello_html", get(hello_html))
+        // .route("/echo", get(echo))
         .layer(Extension(client));
 
     // run it

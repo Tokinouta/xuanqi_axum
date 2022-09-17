@@ -153,13 +153,13 @@
     </div>
     <!-- <div class="row" style="padding: 206px 0 0;">
       <div class="col-4" style="background-color:ffffff;">
-        广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+        {% include "广告代码.html" %}
       </div>
       <div class="col-4" style="background-color:ffffff;">
-        广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+        {% include "广告代码.html" %}
       </div>
       <div class="col-4" style="background-color:ffffff;">
-        广告。注意，bootstrap-vue支持动态随着屏幕大小调整位置。
+        {% include "广告代码.html" %}
       </div>
     </div> -->
 
@@ -210,11 +210,11 @@
   <script src="https://cdn.jsdelivr.net/npm/jssha@2.3.1/src/sha256.js"
     integrity="sha256-NyuvLfsvfCfE+ceV6/W19H+qVp3M8c9FzAgj72CW39w=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-    isLoading = false
+        isLoading = false
     var app = new Vue({
       el: '#app',
       data: {
-        isLoggedIn: {{ self.is_Logged_In }},
+        isLoggedIn: {{ self.is_logged_in }},
         busy_connecting_backend: false,
         isQueryingBackend: false,
         entershoulddefault: false,
