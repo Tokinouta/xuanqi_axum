@@ -1,5 +1,6 @@
 pub mod model;
 pub mod web_service;
+pub mod entities;
 
 // use actix_cors::Cors;
 // use actix_identity::{CookieIdentityPolicy, IdentityService};
@@ -11,6 +12,8 @@ use axum::{
 };
 use std::net::SocketAddr;
 use tower_http::cors::{Any, CorsLayer};
+use axum_database_sessions::{AxumPgPool, AxumSession, AxumSessionConfig, AxumSessionLayer, AxumSessionStore};
+use axum_sessions_auth::{AuthSession, AuthSessionLayer, Authentication, AxumAuthConfig};
 
 use crate::web_service::{hello};
 
@@ -18,7 +21,21 @@ use crate::web_service::{hello};
 #[tokio::main]
 async fn main() {
     let client = model::database::create_client().await;
-    // build our application with a route
+    // build our application with a
+
+    // let poll = connect_to_database().await.unwrap();
+
+    // let session_config = AxumSessionConfig::default()
+    //     .with_table_name("test_table");
+    // let auth_config = AxumAuthConfig::<i64>::default().with_anonymous_user_id(Some(1));
+    // let session_store = AxumSessionStore::<AxumPgPool>::new(Some(poll.clone().into()), session_config);
+
+    // Build our application with some routes
+    // let app = Router::new()
+        // .route("/greet/:name", get(greet))
+        // .layer(AxumSessionLayer::new(session_store))
+        // .layer(AuthSessionLayer::<User, i64, AxumPgPool, PgPool>::new(Some(poll)).with_config(auth_config));
+
     let app = Router::new()
         .layer(
             // see https://docs.rs/tower-http/latest/tower_http/cors/index.html
