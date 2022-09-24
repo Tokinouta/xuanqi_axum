@@ -4,8 +4,8 @@ use mongodb::{
     Client, Database,
 };
 
-use super::User;
-use futures::stream::StreamExt;
+use crate::entities::User;
+use futures::StreamExt;
 
 pub const DB_NAME: &str = "myApp";
 pub const USERS_COLL: &str = "users";
@@ -119,9 +119,10 @@ mod tests {
     use mongodb::bson::{doc, Document};
     use tokio::runtime::Runtime;
 
+    use crate::entities::{Authority, Item, ItemType, PublicStatus, Repo};
+
     // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
     // 注意私有的函数也可以被测试！
-    use super::super::*;
     use super::*;
 
     #[test]
@@ -248,11 +249,7 @@ mod tests {
     #[test]
     fn test_verify_suer() {
         // 生成测试数据
-        let user = User {
-            _id: None,
-            name: "rarara".to_string(),
-            password: "rarara".to_string(),
-        };
+        let user = User::new("rarara".to_string(), "rarara".to_string());
 
         let a = || async {
             // let name = "rarara";
