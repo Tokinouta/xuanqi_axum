@@ -48,9 +48,9 @@ pub async fn login1(
 // When called auth is loaded in the background for you.
 // TODO add remaining time support
 pub async fn login(
-    Form(input): Form<UserForm>,
     // session: AxumSession<AxumRedisPool>,
     auth: AuthSession<UserInSession, i64, AxumRedisPool, redisClient>,
+    Form(input): Form<UserForm>,
 ) -> impl IntoResponse {
     if input.remember_mins != 3 && input.remember_mins != 10080 {
         return (StatusCode::OK, "Error: wrong remaining time").into_response();

@@ -67,8 +67,8 @@ pub fn router() -> Router {
     // let category_router = Router::new();
     // let topic_router = Router::new();
     Router::new()
-        .route("/login", post(login))
-        .route("/logout", post(logout))
+        // .route("/login", post(login))
+        // .route("/logout", post(logout))
     // .nest("/topic", topic_router)
 }
 
