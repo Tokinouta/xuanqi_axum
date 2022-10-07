@@ -2540,6 +2540,7 @@ dependencies = [
  "chrono",
  "futures",
  "hyper",
+ "lazy_static",
  "mongodb",
  "redis",
  "serde",

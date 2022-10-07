@@ -1,5 +1,6 @@
 use crate::model::database::{add_user, verify_user, DB_NAME, USERS_COLL};
 use crate::web_service::authentication::redisClient;
+use axum::extract::State;
 use axum::{
     extract::{Extension, Path},
     http::{Method, StatusCode},
@@ -13,21 +14,21 @@ use mongodb::Client;
 use super::{UserForm, UserInSession};
 
 pub async fn login1(
-    Form(input): Form<UserForm>,
-    Extension(client): Extension<Client>,
+    // Form(input): Form<UserForm>,
+    // State(client): State<redisClient>,
 ) -> impl IntoResponse {
-    let user = crate::entities::User::new(input.username, input.auth);
+    // let user = crate::entities::User::new(input.username, input.auth);
 
-    let id = match verify_user(&client, &user).await {
-        Ok(r) => {
-            if r {
-                user.name
-            } else {
-                return (StatusCode::INTERNAL_SERVER_ERROR, "no such user").into_response();
-            }
-        }
-        Err(_) => return (StatusCode::INTERNAL_SERVER_ERROR, "database error").into_response(),
-    };
+    // let id = match verify_user(&client, &user).await {
+    //     Ok(r) => {
+    //         if r {
+    //             user.name
+    //         } else {
+    //             return (StatusCode::INTERNAL_SERVER_ERROR, "no such user").into_response();
+    //         }
+    //     }
+    //     Err(_) => return (StatusCode::INTERNAL_SERVER_ERROR, "database error").into_response(),
+    // };
     // session.insert("user_id", &id)?;
     // session.renew();
 
@@ -98,7 +99,7 @@ pub async fn login(
 }
 
 pub async fn logout(
-    session: AxumSession<AxumRedisPool>,
+    // session: AxumSession<AxumRedisPool>,
     auth: AuthSession<UserInSession, i64, AxumRedisPool, redisClient>,
 ) -> impl IntoResponse {
     if auth.is_authenticated() {
