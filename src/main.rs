@@ -8,17 +8,17 @@ pub mod web_service;
 // use actix_web::{cookie::Key, web, App, HttpServer};
 use axum::{extract::FromRef, routing::get, Extension, Router};
 use axum_database_sessions::{
-    AxumPgPool, AxumSession, AxumSessionConfig, AxumSessionLayer, AxumSessionStore, AxumRedisPool,
+    AxumPgPool, AxumRedisPool, AxumSession, AxumSessionConfig, AxumSessionLayer, AxumSessionStore,
 };
 use axum_sessions_auth::{AuthSession, AuthSessionLayer, Authentication, AxumAuthConfig};
+use lazy_static::lazy_static;
 use redis::Client;
-use sqlx::{postgres::PgPoolOptions, Pool, Postgres, PgPool};
+use sqlx::{postgres::PgPoolOptions, PgPool, Pool, Postgres};
 use std::net::SocketAddr;
 use std::time::Duration;
 use tower_http::cors::{Any, CorsLayer};
-use lazy_static::lazy_static;
 
-use crate::{web_service::{hello}, entities::User};
+use crate::{entities::User, web_service::hello};
 
 #[derive(Clone)]
 struct AppState {
@@ -71,20 +71,21 @@ async fn main() {
     // let session_store =
     //     AxumSessionStore::<AxumPgPool>::new(Some(pool.clone().into()), session_config);
 
-    let app = Router::with_state(AppState {
-        client,
-        database: pool,
-    })
-    .layer(
-        // see https://docs.rs/tower-http/latest/tower_http/cors/index.html
-        // for more details
-        //
-        // pay attention that for some request types like posting content-type: application/json
-        // it is required to add ".allow_headers([http::header::CONTENT_TYPE])"
-        // or see this issue https://github.com/tokio-rs/axum/issues/849
-        CorsLayer::new().allow_origin(Any).allow_methods(Any),
-    )
-    .route("/", get(hello));
+    let app = Router::new()
+        .layer(
+            // see https://docs.rs/tower-http/latest/tower_http/cors/index.html
+            // for more details
+            //
+            // pay attention that for some request types like posting content-type: application/json
+            // it is required to add ".allow_headers([http::header::CONTENT_TYPE])"
+            // or see this issue https://github.com/tokio-rs/axum/issues/849
+            CorsLayer::new().allow_origin(Any).allow_methods(Any),
+        )
+        .route("/", get(hello))
+        .with_state(AppState {
+            client,
+            database: pool,
+        });
     // .merge(web_service::authentication::router())
     // .layer(AxumSessionLayer::new(session_store))
     // .layer(

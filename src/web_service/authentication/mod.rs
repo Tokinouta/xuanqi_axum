@@ -12,8 +12,8 @@ use axum::{
     routing::get,
     RequestPartsExt, Router,
 };
-use axum_extra::extract::cookie::Cookie;
-// use axum_sessions_auth::{Authentication, HasPermission};
+// use axum_extra::extract::cookie::Cookie;
+use axum_sessions_auth::{Authentication, HasPermission};
 use chrono::{DateTime, Local};
 
 use redis::Client as redisClient;
@@ -45,141 +45,141 @@ pub struct UserInSession {
     pub username: String,
 }
 
-struct FreshUserId {
-    pub user_id: UserId,
-    pub cookie: HeaderValue,
-}
+// struct FreshUserId {
+//     pub user_id: UserId,
+//     pub cookie: HeaderValue,
+// }
 
-enum UserIdFromSession {
-    FoundUserId(UserId),
-    CreatedFreshUserId(FreshUserId),
+// enum UserIdFromSession {
+//     FoundUserId(UserId),
+//     CreatedFreshUserId(FreshUserId),
+// }
+
+// #[async_trait]
+// impl<S> FromRequestParts<S> for UserIdFromSession
+// where
+//     MemoryStore: FromRef<S>,
+//     S: Send + Sync,
+// {
+//     type Rejection = (StatusCode, &'static str);
+
+//     async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
+//         let store = RedisSessionStore::from_ref(state);
+
+//         let cookie: Option<TypedHeader<Cookie>> = parts.extract().await.unwrap();
+
+//         let session_cookie = cookie
+//             .as_ref()
+//             .and_then(|cookie| cookie.get(AXUM_SESSION_COOKIE_NAME));
+
+//         // return the new created session cookie for client
+//         if session_cookie.is_none() {
+//             let user_id = UserId::new();
+//             let mut session = Session::new();
+//             session.insert("user_id", user_id).unwrap();
+//             let cookie = store.store_session(session).await.unwrap().unwrap();
+//             return Ok(Self::CreatedFreshUserId(FreshUserId {
+//                 user_id,
+//                 cookie: HeaderValue::from_str(
+//                     format!("{}={}", AXUM_SESSION_COOKIE_NAME, cookie).as_str(),
+//                 )
+//                 .unwrap(),
+//             }));
+//         }
+
+//         tracing::debug!(
+//             "UserIdFromSession: got session cookie from user agent, {}={}",
+//             AXUM_SESSION_COOKIE_NAME,
+//             session_cookie.unwrap()
+//         );
+//         // continue to decode the session cookie
+//         let user_id = if let Some(session) = store
+//             .load_session(session_cookie.unwrap().to_owned())
+//             .await
+//             .unwrap()
+//         {
+//             if let Some(user_id) = session.get::<UserId>("user_id") {
+//                 tracing::debug!(
+//                     "UserIdFromSession: session decoded success, user_id={:?}",
+//                     user_id
+//                 );
+//                 user_id
+//             } else {
+//                 return Err((
+//                     StatusCode::INTERNAL_SERVER_ERROR,
+//                     "No `user_id` found in session",
+//                 ));
+//             }
+//         } else {
+//             tracing::debug!(
+//                 "UserIdFromSession: err session not exists in store, {}={}",
+//                 AXUM_SESSION_COOKIE_NAME,
+//                 session_cookie.unwrap()
+//             );
+//             return Err((StatusCode::BAD_REQUEST, "No session found for cookie"));
+//         };
+
+//         Ok(Self::FoundUserId(user_id))
+//     }
+// }
+
+// #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+// struct UserId(Uuid);
+
+// impl UserId {
+//     fn new() -> Self {
+//         Self(Uuid::new_v4())
+//     }
+// }
+// fn a() {
+//     let store = RedisSessionStore::new("redis://127.0.0.1/").unwrap();
+
+//     let store = async_session::MemoryStore::new();
+//     let secret = b"..."; // MUST be at least 64 bytes!
+//     let session_layer = SessionLayer::new(store, secret);
+
+//     async fn handler(mut session: WritableSession) {
+//         session
+//             .insert("foo", 42)
+//             .expect("Could not store the answer.");
+//     }
+// }
+
+// This is only used if you want to use Token based Authentication checks
+#[async_trait]
+impl HasPermission<redisClient> for UserInSession {
+    async fn has(&self, _perm: &str, _pool: &Option<&redisClient>) -> bool {
+        false
+        // match perm {
+        //     "Token::UseAdmin" => true,
+        //     "Token::ModifyUser" => true,
+        //     _ => false,
+        // }
+    }
 }
 
 #[async_trait]
-impl<S> FromRequestParts<S> for UserIdFromSession
-where
-    MemoryStore: FromRef<S>,
-    S: Send + Sync,
-{
-    type Rejection = (StatusCode, &'static str);
+impl Authentication<UserInSession, i64, redisClient> for UserInSession {
+    async fn load_user(userid: i64, _pool: Option<&redisClient>) -> Result<UserInSession> {
+        Ok(UserInSession {
+            id: userid,
+            anonymous: true,
+            username: "Guest".to_string(),
+        })
+    }
 
-    async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
-        let store = RedisSessionStore::from_ref(state);
+    fn is_authenticated(&self) -> bool {
+        !self.anonymous
+    }
 
-        let cookie: Option<TypedHeader<Cookie>> = parts.extract().await.unwrap();
+    fn is_active(&self) -> bool {
+        !self.anonymous
+    }
 
-        let session_cookie = cookie
-            .as_ref()
-            .and_then(|cookie| cookie.get(AXUM_SESSION_COOKIE_NAME));
-
-        // return the new created session cookie for client
-        if session_cookie.is_none() {
-            let user_id = UserId::new();
-            let mut session = Session::new();
-            session.insert("user_id", user_id).unwrap();
-            let cookie = store.store_session(session).await.unwrap().unwrap();
-            return Ok(Self::CreatedFreshUserId(FreshUserId {
-                user_id,
-                cookie: HeaderValue::from_str(
-                    format!("{}={}", AXUM_SESSION_COOKIE_NAME, cookie).as_str(),
-                )
-                .unwrap(),
-            }));
-        }
-
-        tracing::debug!(
-            "UserIdFromSession: got session cookie from user agent, {}={}",
-            AXUM_SESSION_COOKIE_NAME,
-            session_cookie.unwrap()
-        );
-        // continue to decode the session cookie
-        let user_id = if let Some(session) = store
-            .load_session(session_cookie.unwrap().to_owned())
-            .await
-            .unwrap()
-        {
-            if let Some(user_id) = session.get::<UserId>("user_id") {
-                tracing::debug!(
-                    "UserIdFromSession: session decoded success, user_id={:?}",
-                    user_id
-                );
-                user_id
-            } else {
-                return Err((
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "No `user_id` found in session",
-                ));
-            }
-        } else {
-            tracing::debug!(
-                "UserIdFromSession: err session not exists in store, {}={}",
-                AXUM_SESSION_COOKIE_NAME,
-                session_cookie.unwrap()
-            );
-            return Err((StatusCode::BAD_REQUEST, "No session found for cookie"));
-        };
-
-        Ok(Self::FoundUserId(user_id))
+    fn is_anonymous(&self) -> bool {
+        self.anonymous
     }
 }
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-struct UserId(Uuid);
-
-impl UserId {
-    fn new() -> Self {
-        Self(Uuid::new_v4())
-    }
-}
-fn a() {
-    let store = RedisSessionStore::new("redis://127.0.0.1/").unwrap();
-
-    let store = async_session::MemoryStore::new();
-    let secret = b"..."; // MUST be at least 64 bytes!
-    let session_layer = SessionLayer::new(store, secret);
-
-    async fn handler(mut session: WritableSession) {
-        session
-            .insert("foo", 42)
-            .expect("Could not store the answer.");
-    }
-}
-
-// This is only used if you want to use Token based Authentication checks
-// #[async_trait]
-// impl HasPermission<redisClient> for UserInSession {
-//     async fn has(&self, _perm: &str, _pool: &Option<&redisClient>) -> bool {
-//         false
-//         // match perm {
-//         //     "Token::UseAdmin" => true,
-//         //     "Token::ModifyUser" => true,
-//         //     _ => false,
-//         // }
-//     }
-// }
-
-// #[async_trait]
-// impl Authentication<UserInSession, i64, redisClient> for UserInSession {
-//     async fn load_user(userid: i64, _pool: Option<&redisClient>) -> Result<UserInSession> {
-//         Ok(UserInSession {
-//             id: userid,
-//             anonymous: true,
-//             username: "Guest".to_string(),
-//         })
-//     }
-
-//     fn is_authenticated(&self) -> bool {
-//         !self.anonymous
-//     }
-
-//     fn is_active(&self) -> bool {
-//         !self.anonymous
-//     }
-
-//     fn is_anonymous(&self) -> bool {
-//         self.anonymous
-//     }
-// }
 
 pub fn router() -> Router {
     // let category_router = Router::new();

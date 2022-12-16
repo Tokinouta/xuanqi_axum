@@ -7,10 +7,10 @@ edition = "2021"
 
 [dependencies]
 # axum and relavent
-axum = {version = "0.6.0-rc.2", features = ["headers"]}
-axum-extra = "0.3.7"
-axum_database_sessions = { version = "4.1.0", features = ["redis-db"] }
-axum_sessions_auth = { version = "4.0.0", features = ["redis-db"] }
+axum = {version = "0.6", features = ["headers"]}
+axum-extra = "0.4"
+axum_database_sessions = { version = "5", features = ["redis-db"] }
+axum_sessions_auth = { version = "5", features = ["redis-db"] }
 async-redis-session = "0.2.2"
 axum-sessions = "0.3.1"
 tokio = { version = "1", features = ["full"] }
