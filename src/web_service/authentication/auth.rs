@@ -57,12 +57,12 @@ pub async fn login(
         return (StatusCode::OK, "Error: wrong remaining time").into_response();
     }
 
-    let mut count: usize = auth.session.get("count").await.unwrap_or(0);
+    let mut count: usize = auth.session.get("count").unwrap_or(0);
     count += 1;
 
     // Session is Also included with Auth so no need to require it in the function arguments if your using
     // AuthSession.
-    auth.session.set("count", count).await;
+    auth.session.set("count", count);
     if let Some(_) = auth.current_user {
         // if !Auth::<User, i64, redisClient>::build([Method::GET], false)
         //     .requires(Rights::any([
@@ -77,7 +77,7 @@ pub async fn login(
 
         if !auth.is_authenticated() {
             // Set the user ID of the User to the Session so it can be Auto Loaded the next load or redirect
-            auth.login_user(input.auth.parse().unwrap_or(0)).await;
+            auth.login_user(input.auth.parse().unwrap_or(0));
             return (StatusCode::OK, "ok").into_response();
         } else {
             // If the user is loaded and is Authenticated then we can use it.
@@ -88,9 +88,9 @@ pub async fn login(
     } else {
         if !auth.is_authenticated() {
             // Set the user ID of the User to the Session so it can be Auto Loaded the next load or redirect
-            auth.login_user(input.auth.parse().unwrap_or(0)).await;
+            auth.login_user(input.auth.parse().unwrap_or(0));
             // Set the session to be long term. Good for Remember me type instances.
-            auth.remember_user(true).await;
+            auth.remember_user(true);
             // Redirect here after login if we did indeed login.
             return (StatusCode::OK, "ok").into_response();
         }
@@ -104,7 +104,7 @@ pub async fn logout(
 ) -> impl IntoResponse {
     if auth.is_authenticated() {
         // Set the user ID of the User to the Session so it can be Auto Loaded the next load or redirect
-        auth.logout_user().await;
+        auth.logout_user();
         (StatusCode::OK, "ok").into_response()
     } else {
         (StatusCode::OK, "no-need").into_response()
