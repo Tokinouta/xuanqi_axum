@@ -20,7 +20,7 @@ tower-http = { version = "0.3", features = ["cors"] }
 # databases
 sqlx = { version = "0.6", features = ["runtime-tokio-rustls", "postgres", "macros"] }
 redis = "0.22"
-mongodb = "2.0"
+# mongodb = "2.0"
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

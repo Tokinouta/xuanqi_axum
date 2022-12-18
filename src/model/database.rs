@@ -10,8 +10,8 @@ pub const ITEMS_COLL: &str = "items";
 
 #[derive(Debug)]
 pub enum DatabaseError {
-    Mongo(mongodb::error::Error),
-    Bson(mongodb::bson::ser::Error),
+    // Mongo(mongodb::error::Error),
+    // Bson(mongodb::bson::ser::Error),
 }
 
 pub async fn create_client() -> PgPool {
