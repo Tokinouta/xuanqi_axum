@@ -18,7 +18,7 @@ hyper = { version = "0.14", features = ["full"] }
 tower = "0.4"
 tower-http = { version = "0.3", features = ["cors"] }
 # databases
-sqlx = { version = "0.6", features = ["runtime-tokio-rustls", "postgres"] }
+sqlx = { version = "0.6", features = ["runtime-tokio-rustls", "postgres", "macros"] }
 redis = "0.22"
 mongodb = "2.0"
 
