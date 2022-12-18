@@ -1,29 +1,21 @@
 pub mod entities;
 pub mod model;
 pub mod web_service;
+pub mod middleware;
 
-// use actix_cors::Cors;
-// use actix_identity::{CookieIdentityPolicy, IdentityService};
-// use actix_session::{SessionMiddleware, storage::RedisSessionStore};
-// use actix_web::{cookie::Key, web, App, HttpServer};
-use axum::{extract::FromRef, routing::get, Extension, Router};
-use axum_database_sessions::{
-    AxumPgPool, AxumRedisPool, AxumSession, AxumSessionConfig, AxumSessionLayer, AxumSessionStore,
-};
-use axum_sessions_auth::{AuthSession, AuthSessionLayer, Authentication, AxumAuthConfig};
-use lazy_static::lazy_static;
+use axum::{extract::FromRef, routing::get, Router};
 use redis::Client;
 use sqlx::{postgres::PgPoolOptions, PgPool, Pool, Postgres};
 use std::net::SocketAddr;
 use std::time::Duration;
 use tower_http::cors::{Any, CorsLayer};
 
-use crate::{entities::User, web_service::hello};
+use crate::{entities::User, web_service::hello, middleware::my_middleware};
 
 #[derive(Clone)]
-struct AppState {
-    client: Client,
-    database: Pool<Postgres>,
+pub struct AppState {
+    pub client: Client,
+    pub database: Pool<Postgres>,
 }
 
 #[derive(Clone)]
@@ -66,11 +58,10 @@ async fn main() {
         .await
         .expect("can connect to database");
 
-    // let session_config = AxumSessionConfig::default().with_table_name("test_table");
-    // let auth_config = AxumAuthConfig::<i64>::default().with_anonymous_user_id(Some(1));
-    // let session_store =
-    //     AxumSessionStore::<AxumPgPool>::new(Some(pool.clone().into()), session_config);
-
+    let state = AppState {
+        client,
+        database: pool,
+    };
     let app = Router::new()
         .layer(
             // see https://docs.rs/tower-http/latest/tower_http/cors/index.html
@@ -82,10 +73,8 @@ async fn main() {
             CorsLayer::new().allow_origin(Any).allow_methods(Any),
         )
         .route("/", get(hello))
-        .with_state(AppState {
-            client,
-            database: pool,
-        });
+        .route_layer(axum::middleware::from_fn_with_state(state.clone(), my_middleware))
+        .with_state(state);
     // .merge(web_service::authentication::router())
     // .layer(AxumSessionLayer::new(session_store))
     // .layer(

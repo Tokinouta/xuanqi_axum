@@ -13,36 +13,59 @@ use axum::{
     RequestPartsExt, Router,
 };
 // use axum_extra::extract::cookie::Cookie;
-use axum_sessions_auth::{Authentication, HasPermission};
+// use axum_sessions_auth::{Authentication, HasPermission};
 use chrono::{DateTime, Local};
 
 use redis::Client as redisClient;
 use serde::{Deserialize, Serialize};
 
-use async_redis_session::RedisSessionStore;
-use axum_sessions::{async_session::{Session, SessionStore, self, MemoryStore}, SessionLayer, extractors::WritableSession};
-use sqlx::types::Uuid;
+// use async_redis_session::RedisSessionStore;
+// use axum_sessions::{
+//     async_session::{self, MemoryStore, Session, SessionStore},
+//     extractors::WritableSession,
+//     SessionLayer,
+// };
+// use sqlx::types::Uuid;
+
+use crate::entities::User;
 
 // use self::auth::{login, logout};
 
-// pub mod auth;
+pub mod auth;
 
 // static CURRENT_USER_ID: i64 = 2;
 const AXUM_SESSION_COOKIE_NAME: &str = "axum_session";
 
-#[derive(Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct UserForm {
     username: String,
     auth: String,
-    remember_mins: i32,
+    remember_mins: i64,
     time: DateTime<Local>,
 }
 
-#[derive(Clone, Debug)]
-pub struct UserInSession {
-    pub id: i64,
-    pub anonymous: bool,
-    pub username: String,
+impl Into<User> for UserForm {
+    fn into(self) -> User {
+        User {
+            name: self.username,
+            auth: self.auth,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct UserSignupForm {
+    username: String,
+    auth: String,
+}
+
+impl Into<User> for UserSignupForm {
+    fn into(self) -> User {
+        User {
+            name: self.username,
+            auth: self.auth,
+        }
+    }
 }
 
 // struct FreshUserId {
@@ -144,42 +167,6 @@ pub struct UserInSession {
 //             .expect("Could not store the answer.");
 //     }
 // }
-
-// This is only used if you want to use Token based Authentication checks
-#[async_trait]
-impl HasPermission<redisClient> for UserInSession {
-    async fn has(&self, _perm: &str, _pool: &Option<&redisClient>) -> bool {
-        false
-        // match perm {
-        //     "Token::UseAdmin" => true,
-        //     "Token::ModifyUser" => true,
-        //     _ => false,
-        // }
-    }
-}
-
-#[async_trait]
-impl Authentication<UserInSession, i64, redisClient> for UserInSession {
-    async fn load_user(userid: i64, _pool: Option<&redisClient>) -> Result<UserInSession> {
-        Ok(UserInSession {
-            id: userid,
-            anonymous: true,
-            username: "Guest".to_string(),
-        })
-    }
-
-    fn is_authenticated(&self) -> bool {
-        !self.anonymous
-    }
-
-    fn is_active(&self) -> bool {
-        !self.anonymous
-    }
-
-    fn is_anonymous(&self) -> bool {
-        self.anonymous
-    }
-}
 
 pub fn router() -> Router {
     // let category_router = Router::new();

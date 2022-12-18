@@ -4,17 +4,15 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
-    _id: Option<ObjectId>,
     pub name: String,
-    pub password: String,
+    pub auth: String,
 }
 
 impl User {
-    pub fn new(name: String, password: String) -> Self {
+    pub fn new(name: String, auth: String) -> Self {
         User {
-            _id: None,
             name,
-            password,
+            auth,
         }
     }
 }

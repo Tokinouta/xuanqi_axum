@@ -9,17 +9,17 @@ edition = "2021"
 # axum and relavent
 axum = {version = "0.6", features = ["headers"]}
 axum-extra = "0.4"
-axum_database_sessions = { version = "5", features = ["redis-db"] }
-axum_sessions_auth = { version = "5", features = ["redis-db"] }
-async-redis-session = "0.2.2"
-axum-sessions = "0.3.1"
+# axum_database_sessions = { version = "5", features = ["redis-db"] }
+# axum_sessions_auth = { version = "5", features = ["redis-db"] }
+# async-redis-session = "0.2.2"
+# axum-sessions = "0.3.1"
 tokio = { version = "1", features = ["full"] }
 hyper = { version = "0.14", features = ["full"] }
 tower = "0.4"
 tower-http = { version = "0.3", features = ["cors"] }
 # databases
 sqlx = { version = "0.6", features = ["runtime-tokio-rustls", "postgres"] }
-redis = "0.21.6"
+redis = "0.22"
 mongodb = "2.0"
 
 serde = { version = "1.0", features = ["derive"] }
@@ -30,10 +30,11 @@ futures = "0.3.21"
 askama = { version = "0.11.1", features = ["with-axum"] }
 askama_axum = "0.1.0"
 chrono = { version = "0.4.22", features = ["serde"] }
-anyhow = "1.0.65"
+anyhow = "1.0"
 lazy_static = "1.4.0"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+jsonwebtoken = "8.2"
 # actix-cors = "0.6.1"
 # actix-identity = "0.4.0"
 # actix-session = { version = "0.6.2", features = ["redis-rs-session"] }

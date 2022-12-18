@@ -1,23 +1,25 @@
+use super::{UserForm, UserSignupForm};
+use crate::entities::User;
+use crate::middleware::{Claims, AuthBody, KEY_ENCODING};
 use crate::model::database::{add_user, verify_user, DB_NAME, USERS_COLL};
-use crate::web_service::authentication::redisClient;
-use axum::extract::State;
 use axum::{
-    extract::{Extension, Path},
-    http::{Method, StatusCode},
+    extract::{State, TypedHeader},
+    headers::{authorization::Bearer, Authorization},
+    http::{StatusCode},
     response::IntoResponse,
-    Form,
+    Form, Json,
 };
-use axum_database_sessions::{AxumRedisPool, AxumSession};
-use axum_sessions_auth::AuthSession;
-use mongodb::Client;
+use chrono::{prelude::*, Duration};
+// use axum_database_sessions::{AxumRedisPool, AxumSession};
+// use axum_sessions_auth::AuthSession;
+use jsonwebtoken::{encode, Header};
+use redis::{Client, Commands};
 
-use super::{UserForm, UserInSession};
-
-pub async fn login1(
-    // Form(input): Form<UserForm>,
-    // State(client): State<redisClient>,
+pub async fn signup(
+    Form(input): Form<UserSignupForm>,
+    State(client): State<Client>,
 ) -> impl IntoResponse {
-    // let user = crate::entities::User::new(input.username, input.auth);
+    let user: User = input.into();
 
     // let id = match verify_user(&client, &user).await {
     //     Ok(r) => {
@@ -32,81 +34,36 @@ pub async fn login1(
     // session.insert("user_id", &id)?;
     // session.renew();
 
-    // let counter: i32 = session
-    //     .get::<i32>("counter")
-    //     .unwrap_or(Some(0))
-    //     .unwrap_or(0);
-
     (StatusCode::OK, "ok").into_response()
 }
 
-// #[derive(Serialize, Deserialize, Debug, PartialEq)]
-// pub struct IndexResponse {
-//     user_id: Option<String>,
-//     counter: i32,
-// }
-// We can get the Method to compare with what Methods we allow. Useful if this supports multiple methods.
-// When called auth is loaded in the background for you.
-// TODO add remaining time support
-pub async fn login(
-    // session: AxumSession<AxumRedisPool>,
-    auth: AuthSession<UserInSession, i64, AxumRedisPool, redisClient>,
-    Form(input): Form<UserForm>,
-) -> impl IntoResponse {
-    if input.remember_mins != 3 && input.remember_mins != 10080 {
-        return (StatusCode::OK, "Error: wrong remaining time").into_response();
-    }
+pub async fn login(Form(input): Form<UserForm>) -> impl IntoResponse {
+    let user: User = input.clone().into();
 
-    let mut count: usize = auth.session.get("count").unwrap_or(0);
-    count += 1;
+    // check if the user is signed-up;
 
-    // Session is Also included with Auth so no need to require it in the function arguments if your using
-    // AuthSession.
-    auth.session.set("count", count);
-    if let Some(_) = auth.current_user {
-        // if !Auth::<User, i64, redisClient>::build([Method::GET], false)
-        //     .requires(Rights::any([
-        //         Rights::permission("Token::UseAdmin"),
-        //         Rights::permission("Token::ModifyPerms"),
-        //     ]))
-        //     .validate(&cur_user, &method, None)
-        //     .await
-        // {
-        //     return format!("No Permissions! for {}", cur_user.username);
-        // }
+    let claims = Claims {
+        id: 0,
+        exp: (Local::now() + Duration::minutes(input.remember_mins)).timestamp() as u64,
+        iat: Local::now().timestamp() as u64,
+        username: user.name,
+    };
 
-        if !auth.is_authenticated() {
-            // Set the user ID of the User to the Session so it can be Auto Loaded the next load or redirect
-            auth.login_user(input.auth.parse().unwrap_or(0));
-            return (StatusCode::OK, "ok").into_response();
-        } else {
-            // If the user is loaded and is Authenticated then we can use it.
-            return (StatusCode::OK, "already_logged_in").into_response();
-        }
+    // Create the authorization token
+    // TODO: need to change this unwrap
+    let token = encode(&Header::default(), &claims, &KEY_ENCODING).unwrap();
 
-        // format!("{}-{}", username, count)
-    } else {
-        if !auth.is_authenticated() {
-            // Set the user ID of the User to the Session so it can be Auto Loaded the next load or redirect
-            auth.login_user(input.auth.parse().unwrap_or(0));
-            // Set the session to be long term. Good for Remember me type instances.
-            auth.remember_user(true);
-            // Redirect here after login if we did indeed login.
-            return (StatusCode::OK, "ok").into_response();
-        }
-        return (StatusCode::OK, "error").into_response();
-    }
+    // Send the authorized token
+    Json(AuthBody::new(token))
 }
 
 pub async fn logout(
-    // session: AxumSession<AxumRedisPool>,
-    auth: AuthSession<UserInSession, i64, AxumRedisPool, redisClient>,
+    State(state): State<Client>,
+    TypedHeader(auth): TypedHeader<Authorization<Bearer>>,
 ) -> impl IntoResponse {
-    if auth.is_authenticated() {
-        // Set the user ID of the User to the Session so it can be Auto Loaded the next load or redirect
-        auth.logout_user();
-        (StatusCode::OK, "ok").into_response()
-    } else {
-        (StatusCode::OK, "no-need").into_response()
-    }
+    // added this jwt to the redis blacklist.
+    // auth.token();
+    let mut con = state.get_connection().unwrap();
+    con.set::<&str, i32, ()>(auth.token(), 42).unwrap();
+    (StatusCode::OK, "ok").into_response()
 }
