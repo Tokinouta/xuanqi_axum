@@ -1,0 +1,11 @@
+{
+    "rust-analyzer.cargo.extraEnv": {
+        "DATABASE_URL": "postgres://postgres:mysecretpassword@localhost/xuanqi"
+    },
+    "rust-analyzer.server.extraEnv": {
+        "DATABASE_URL": "postgres://postgres:mysecretpassword@localhost/xuanqi"
+    },
+    "rust-analyzer.runnableEnv": {
+        "DATABASE_URL": "postgres://postgres:mysecretpassword@localhost/xuanqi"
+    }
+}

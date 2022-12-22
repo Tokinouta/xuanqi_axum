@@ -1,7 +1,7 @@
 use super::{UserForm, UserSignupForm};
 use crate::entities::User;
 use crate::middleware::{Claims, AuthBody, KEY_ENCODING};
-use crate::model::database::{add_user, verify_user, DB_NAME, USERS_COLL};
+use crate::database::{add_user, verify_user};
 use axum::{
     extract::{State, TypedHeader},
     headers::{authorization::Bearer, Authorization},

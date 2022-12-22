@@ -1,5 +1,5 @@
 pub mod entities;
-pub mod model;
+pub mod database;
 pub mod web_service;
 pub mod middleware;
 

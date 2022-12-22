@@ -1,5 +1,5 @@
 use bitflags::bitflags;
-use mongodb::bson::oid::ObjectId;
+// use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -31,7 +31,7 @@ bitflags! {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Repo {
-    pub _id: Option<ObjectId>,
+    // pub _id: Option<ObjectId>,
     pub name: String,
     pub owner: String,
     pub public_status: PublicStatus,
@@ -48,7 +48,7 @@ impl Repo {
 // TODO 这里可能需要改Item的定义，以嵌套方式存储可能对性能有影响。可能存储祖先节点列表回是一个比较好的选择，建索引也比较方便。
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Item {
-    pub _id: Option<ObjectId>,
+    // pub _id: Option<ObjectId>,
     pub repo: String,
     pub proposer: String,
     pub authority: Authority,
@@ -91,7 +91,7 @@ mod tests {
     #[test]
     fn create_item() {
         let repo = Repo {
-            _id: None,
+            // _id: None,
             name: "rarara".to_string(),
             owner: String::from("ra"),
             public_status: PublicStatus::Private,
@@ -100,11 +100,11 @@ mod tests {
         let j = serde_json::to_string(&repo).expect("msg");
         assert_eq!(
             j,
-            r#"{"_id":null,"name":"rarara","owner":"ra","public_status":"Private","modifiers":["ra","ra","ra"]}"#
+            r#"{"name":"rarara","owner":"ra","public_status":"Private","modifiers":["ra","ra","ra"]}"#
         );
 
         let item = Item {
-            _id: None,
+            // _id: None,
             repo: repo.name(),
             proposer: String::from("ra"),
             authority: Authority::USER_READ
@@ -120,7 +120,7 @@ mod tests {
             description_word_vector: vec!["[<厕所>]+[<小房间>]*0.3".to_string()],
             word_vector: vec![0.0, 0.0, 0.0],
             content: Some(Box::new(Item {
-                _id: None,
+                // _id: None,
                 repo: repo.name(),
                 proposer: String::from("ra"),
                 authority: Authority::USER_READ | Authority::OTHER_READ,
@@ -136,7 +136,7 @@ mod tests {
         let j = serde_json::to_string(&item).expect("msg");
         assert_eq!(
             j,
-            r#"{"_id":null,"repo":"rarara","proposer":"ra","authority":{"bits":31},"approvement":0,"itemtype":"Item","name":"Test","description":"Test Item","description_word_vector":["[<厕所>]+[<小房间>]*0.3"],"word_vector":[0.0,0.0,0.0],"content":{"_id":null,"repo":"rarara","proposer":"ra","authority":{"bits":17},"approvement":0,"itemtype":"File","name":"Test sub","description":"Test Sub Item","description_word_vector":["[<厕所>]+[<小房间>]*0.3"],"word_vector":[1.0,2.0,3.0],"content":null}}"#
+            r#"{"repo":"rarara","proposer":"ra","authority":{"bits":31},"approvement":0,"itemtype":"Item","name":"Test","description":"Test Item","description_word_vector":["[<厕所>]+[<小房间>]*0.3"],"word_vector":[0.0,0.0,0.0],"content":{"_id":null,"repo":"rarara","proposer":"ra","authority":{"bits":17},"approvement":0,"itemtype":"File","name":"Test sub","description":"Test Sub Item","description_word_vector":["[<厕所>]+[<小房间>]*0.3"],"word_vector":[1.0,2.0,3.0],"content":null}}"#
         );
     }
 }
