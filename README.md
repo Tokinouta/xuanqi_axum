@@ -13,10 +13,12 @@
 
 ```bash
 docker run -d --network  mysql-net --name some-mongo -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret -p 27017:27017 mongo
+docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d --network mysql-net -p 5432:5432 postgres
 ```
 
-创建访问用mongodb终端：
+创建访问用终端：
 
 ```bash
 docker run -it --rm --network mysql-net mongo mongo --host some-mongo -u mongoadmin -p secret --authenticationDatabase admin some-db
+docker run -it --rm postgres psql -h 172.17.0.6 -U postgres
 ```

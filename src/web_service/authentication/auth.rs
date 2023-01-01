@@ -1,11 +1,11 @@
 use super::{UserForm, UserSignupForm};
-use crate::entities::User;
-use crate::middleware::{Claims, AuthBody, KEY_ENCODING};
 use crate::database::{add_user, verify_user};
+use crate::entities::User;
+use crate::middleware::{AuthBody, Claims, KEY_ENCODING};
 use axum::{
     extract::{State, TypedHeader},
     headers::{authorization::Bearer, Authorization},
-    http::{StatusCode},
+    http::StatusCode,
     response::IntoResponse,
     Form, Json,
 };
@@ -14,33 +14,32 @@ use chrono::{prelude::*, Duration};
 // use axum_sessions_auth::AuthSession;
 use jsonwebtoken::{encode, Header};
 use redis::{Client, Commands};
+use sqlx::PgPool;
 
 pub async fn signup(
     Form(input): Form<UserSignupForm>,
-    State(client): State<Client>,
+    State(client): State<PgPool>,
 ) -> impl IntoResponse {
     let user: User = input.into();
 
-    // let id = match verify_user(&client, &user).await {
-    //     Ok(r) => {
-    //         if r {
-    //             user.name
-    //         } else {
-    //             return (StatusCode::INTERNAL_SERVER_ERROR, "no such user").into_response();
-    //         }
-    //     }
-    //     Err(_) => return (StatusCode::INTERNAL_SERVER_ERROR, "database error").into_response(),
-    // };
-    // session.insert("user_id", &id)?;
-    // session.renew();
-
-    (StatusCode::OK, "ok").into_response()
+    match add_user(&client, &user).await {
+        Ok(_) => (StatusCode::OK, "ok").into_response(),
+        Err(_) => todo!(),
+    }
 }
 
-pub async fn login(Form(input): Form<UserForm>) -> impl IntoResponse {
+pub async fn login(Form(input): Form<UserForm>, State(client): State<PgPool>) -> impl IntoResponse {
     let user: User = input.clone().into();
 
     // check if the user is signed-up;
+    match verify_user(&client, &user).await {
+        Ok(r) => {
+            if !r {
+                return (StatusCode::INTERNAL_SERVER_ERROR, "no such user").into_response();
+            }
+        }
+        Err(_) => return (StatusCode::INTERNAL_SERVER_ERROR, "database error").into_response(),
+    };
 
     let claims = Claims {
         id: 0,
@@ -54,7 +53,7 @@ pub async fn login(Form(input): Form<UserForm>) -> impl IntoResponse {
     let token = encode(&Header::default(), &claims, &KEY_ENCODING).unwrap();
 
     // Send the authorized token
-    Json(AuthBody::new(token))
+    Json(AuthBody::new(token)).into_response()
 }
 
 pub async fn logout(

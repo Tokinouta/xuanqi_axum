@@ -1,8 +1,16 @@
-use axum::{extract::State, TypedHeader, headers::{Authorization, authorization::Bearer}, response::IntoResponse, middleware::Next, http::Request};
-use redis::{Client, Commands};
-use serde::{Serialize, Deserialize};
-use lazy_static::lazy_static;
+use axum::{
+    extract::State,
+    headers::{authorization::Bearer, Authorization},
+    http::Request,
+    middleware::Next,
+    response::IntoResponse,
+    TypedHeader,
+};
+use chrono::Local;
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+use lazy_static::lazy_static;
+use redis::{Client, Commands};
+use serde::{Deserialize, Serialize};
 
 lazy_static! {
     pub static ref KEY_ENCODING: EncodingKey = EncodingKey::from_secret("rarara".as_bytes());
@@ -42,12 +50,24 @@ pub async fn my_middleware<B>(
     let action = req.method().clone().to_string();
     let path = req.uri().path().to_string();
 
+    let mut con = state.get_connection().unwrap();
+
     /*验证token有效性*/
     let token_data = decode::<Claims>(auth.token(), &KEY_DECODING, &Validation::default()).unwrap();
+    if token_data.claims.exp < Local::now().timestamp() as u64 {
+        match con.sadd::<&str, &str, ()>("expired_xuanqi_jwt", auth.token()) {
+            Ok(_) => (),
+            Err(_) => (),
+        };
+        return "Please login again".into_response()
+    }
 
     // check if the token is in the blacklist
-    let mut con = state.get_connection().unwrap();
-    con.get::<&str, ()>(auth.token()).unwrap();
+    // con.get::<&str, ()>(auth.token()).unwrap();
 
     /*token为空提示登录*/
+    // do something with `req`...
+    let res = next.run(req).await;
+    // do something with `res`...
+    res
 }

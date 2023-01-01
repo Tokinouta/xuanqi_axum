@@ -64,7 +64,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_mongodb() {
+    fn test_db() {
         // 这里注意client和使用它的函数需要在同一个运行环境里，不能由两个block_on函数分别执行
         // 否则第二个block_on可能获取不到第一个的一些信息，导致报错“Server selection timeout: No available servers.”。
         let a = || async {
