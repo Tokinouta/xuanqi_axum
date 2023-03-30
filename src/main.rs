@@ -2,66 +2,18 @@ pub mod entities;
 pub mod database;
 pub mod web_service;
 pub mod middleware;
+pub mod states;
 
-use axum::{extract::FromRef, routing::get, Router};
-use redis::Client;
-use sqlx::{postgres::PgPoolOptions, PgPool, Pool, Postgres};
 use std::net::SocketAddr;
-use std::time::Duration;
+use axum::{Router, routing::get};
 use tower_http::cors::{Any, CorsLayer};
 
-use crate::{entities::User, web_service::hello, middleware::my_middleware};
+use crate::{states::AppState, web_service::hello, middleware::my_middleware};
 
-#[derive(Clone)]
-pub struct AppState {
-    pub client: Client,
-    pub database: Pool<Postgres>,
-}
-
-#[derive(Clone)]
-struct HttpClient {}
-
-impl FromRef<AppState> for Client {
-    fn from_ref(state: &AppState) -> Self {
-        state.client.clone()
-    }
-}
-
-#[derive(Clone)]
-struct Database {}
-
-impl FromRef<AppState> for Pool<Postgres> {
-    fn from_ref(state: &AppState) -> Self {
-        state.database.clone()
-    }
-}
 
 #[tokio::main]
 async fn main() {
-    // let client = model::database::create_client().await;
-    let client = redis::Client::open("redis://127.0.0.1/").unwrap();
-
-    // let poll = connect_to_database().await.unwrap();
-
-    // Build our application with some routes
-    // let app = Router::new()
-    // .route("/greet/:name", get(greet))
-
-    let db_connection_str = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "postgres://postgres:password@localhost".to_string());
-
-    // setup connection pool
-    let pool = PgPoolOptions::new()
-        .max_connections(5)
-        .acquire_timeout(Duration::from_secs(3))
-        .connect(&db_connection_str)
-        .await
-        .expect("can connect to database");
-
-    let state = AppState {
-        client,
-        database: pool,
-    };
+    let state = AppState::new().await;
     let app = Router::new()
         .layer(
             // see https://docs.rs/tower-http/latest/tower_http/cors/index.html
