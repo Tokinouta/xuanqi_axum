@@ -1,9 +1,3 @@
-// use actix_session::Session;
-// use actix_web::{
-//     get,
-//     http::{header::ContentType, StatusCode},
-//     post, web, HttpRequest, HttpResponse, Responder,
-// };
 use axum::{
     http::StatusCode,
     response::{Html, IntoResponse, Response},
@@ -17,6 +11,7 @@ mod clipboard;
 
 // pub use authentication::*;
 pub use index::hello;
+pub use clipboard::router as clipboard_router;
 
 struct HtmlTemplate<T>(T);
 

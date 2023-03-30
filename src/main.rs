@@ -1,15 +1,18 @@
-pub mod entities;
 pub mod database;
-pub mod web_service;
+pub mod entities;
 pub mod middleware;
 pub mod states;
+pub mod web_service;
 
+use axum::{routing::get, Router};
 use std::net::SocketAddr;
-use axum::{Router, routing::get};
 use tower_http::cors::{Any, CorsLayer};
 
-use crate::{states::AppState, web_service::hello, middleware::my_middleware};
-
+use crate::{
+    middleware::my_middleware,
+    states::AppState,
+    web_service::{clipboard_router, hello},
+};
 
 #[tokio::main]
 async fn main() {
@@ -25,8 +28,9 @@ async fn main() {
             CorsLayer::new().allow_origin(Any).allow_methods(Any),
         )
         .route("/", get(hello))
-        .route_layer(axum::middleware::from_fn_with_state(state.clone(), my_middleware))
-        .with_state(state);
+        // .route_layer(axum::middleware::from_fn_with_state(state.clone(), my_middleware))
+        .with_state(state)
+        .merge(clipboard_router());
     // .merge(web_service::authentication::router())
     // .layer(AxumSessionLayer::new(session_store))
     // .layer(
@@ -43,10 +47,4 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
-    // model::database::list_database_names(&client).await;
-
-    // The secret key would usually be read from a configuration file/environment variables.
-    // let secret_key = Key::generate();
-    // let redis_connection_string = "redis://127.0.0.1:6379";
-    // let store = RedisSessionStore::new(redis_connection_string).await.unwrap();
 }
