@@ -9,20 +9,51 @@ services:
       - ./data/postgresql:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  redis:
-    image: "redis:latest"
-    ports:
-      - "6379:6379"
-  mongo:
-    image: "mongo:latest"
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./data/mongodb:/data/db
-  # nginx:
-  #   image: "nginx:latest"
-  #   ports:
-  #     - "5000:443"
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
-  #     - .:/var/www
+  # redis:
+    # image: "redis:latest"
+    # ports:
+      # - "6379:6379"
+  # mongo:
+    # image: "mongo:latest"
+    # ports:
+      # - "27017:27017"
+    # volumes:
+      # - ./data/mongodb:/data/db
+#   nginx:
+#     image: "nginx:latest"
+#     ports:
+#       - "5000:443"
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#       - .:/var/www:ro
+#     networks:
+#       - xuanqi_net
+#   clipboard-server:
+#     image: "xuanqi:v1"
+#     volumes:
+#       - .:/data:ro
+#     networks:
+#       - xuanqi_net
+#     expose:
+#       - "4997"
+#     entrypoint:
+#       - python
+#       - /data/flask-server-clipboard.py 
+#   storage-server:
+#     image: "xuanqi:v1"
+#     volumes:
+#       - .:/data:ro
+#     networks:
+#       - xuanqi_net
+#     expose:
+#       - "4999"
+#     entrypoint:
+#       - python
+#       - /data/flask-server-StorageMgmt.py 
+#   inspector:
+#     image: "ubuntu"
+#     networks:
+#       - xuanqi_net
+
+# networks:
+#   xuanqi_net:
