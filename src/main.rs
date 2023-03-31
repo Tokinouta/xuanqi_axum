@@ -29,8 +29,8 @@ async fn main() {
         )
         .route("/", get(hello))
         // .route_layer(axum::middleware::from_fn_with_state(state.clone(), my_middleware))
-        .with_state(state)
-        .merge(clipboard_router());
+        .merge(clipboard_router())
+        .with_state(state);
     // .merge(web_service::authentication::router())
     // .layer(AxumSessionLayer::new(session_store))
     // .layer(

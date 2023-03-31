@@ -7,6 +7,8 @@ use axum::{
 };
 use redis::{Client, Commands};
 
+use crate::states::AppState;
+
 async fn save_text(State(client): State<Client>, Json(req): Json<String>) -> impl IntoResponse {
     let mut con = client.get_connection().unwrap();
 
@@ -18,6 +20,6 @@ async fn save_text(State(client): State<Client>, Json(req): Json<String>) -> imp
 
 fn save_file() {}
 
-pub fn router() -> Router {
+pub fn router() -> Router<AppState> {
     Router::new().route("/save-txt", post(save_text))
 }
