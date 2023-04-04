@@ -1,6 +1,6 @@
 use crate::states::AppState;
 use axum::{
-    extract::{Multipart, State},
+    extract::{Multipart, Path, State},
     http::StatusCode,
     response::IntoResponse,
     routing::{get, post, put},
@@ -38,9 +38,34 @@ async fn save_file(mut multipart: Multipart) -> impl IntoResponse {
     (StatusCode::OK, results.join(" "))
 }
 
-async fn get_file() -> impl IntoResponse {
-    (StatusCode::OK)
+async fn get_file(path: Option<Path<String>>) -> impl IntoResponse {
+    if let Some(path) = path {
+        let path = path.0;
+        // `File` implements `AsyncRead`
+        let file = match tokio::fs::File::open(path).await {
+            Ok(file) => file,
+            Err(err) => return Err((StatusCode::NOT_FOUND, format!("File not found: {}", err))),
+        };
+
+        // convert the `AsyncRead` into a `Stream`
+        let stream = ReaderStream::new(file);
+
+        // convert the `Stream` into an `axum::body::HttpBody`
+        let body = StreamBody::new(stream);
+
+        let headers = Headers([
+            (header::CONTENT_TYPE, "text/toml; charset=utf-8"), // TODO need to get the correct type
+            (
+                header::CONTENT_DISPOSITION,
+                format!("attachment; filename=\"{}\"", path).as_str(),
+            ),
+        ]);
+        Ok((headers, body))
+    } else {
+        Err((StatusCode::NOT_FOUND))
+    }
 }
+
 pub fn router() -> Router<AppState> {
     Router::new()
         .route("/save-txt", post(save_text))
