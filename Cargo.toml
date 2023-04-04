@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 # axum and relavent
-axum = {version = "0.6", features = ["headers"]}
+axum = {version = "0.6", features = ["headers", "multipart"]}
 axum-extra = "0.4"
 # axum_database_sessions = { version = "5", features = ["redis-db"] }
 # axum_sessions_auth = { version = "5", features = ["redis-db"] }
